@@ -1,0 +1,53 @@
+.archive {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgb(0, 0, 0);
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 0) 50%,
+    rgba(0, 0, 0, 1) 100%
+  );
+  pointer-events: none;
+}
+
+.archive .row {
+  width: 100%;
+  height: 100px;
+  display: flex;
+}
+
+.archive-item {
+  width: 100%;
+  height: 100%;
+}
+
+.archive-img {
+  width: 100%;
+  height: 100%;
+}
+
+.archive-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+p#archive-category {
+  text-align: right;
+}
+
+@media (max-width: 900px) {
+  .archive-item {
+    width: 100%;
+  }
+}

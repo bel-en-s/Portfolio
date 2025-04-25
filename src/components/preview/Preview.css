@@ -1,0 +1,20 @@
+.archive-preview {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 35%;
+  height: 40%;
+  border-radius: 0.5em;
+  overflow: hidden;
+  z-index: 100;
+}
+
+@media (max-width: 900px) {
+  .archive-preview {
+    width: 75%;
+    height: 35%;
+    opacity: 0.75;
+    z-index: -1;
+  }
+}
