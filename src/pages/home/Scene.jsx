@@ -14,8 +14,6 @@ const Scene = () => {
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
-
-    // Posición inicial más arriba y lejos
     camera.position.set(0, 15, -20);
 
     const blackReflectiveMaterial = new THREE.MeshPhysicalMaterial({
@@ -31,7 +29,7 @@ const Scene = () => {
     renderer.setSize(width, height);
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.2;
+    renderer.toneMappingExposure = 1.5;
     renderer.outputEncoding = THREE.sRGBEncoding;
     mount.appendChild(renderer.domElement);
 
@@ -43,109 +41,136 @@ const Scene = () => {
       .load("studio_small_09_1k.hdr", (hdr) => {
         const envMap = pmremGenerator.fromEquirectangular(hdr).texture;
         scene.environment = envMap;
-        scene.background = envMap;
+        scene.background = null;
       });
 
-    //luces
-
-    const dirLight = new THREE.DirectionalLight(0xff0000, 2);
-    dirLight.position.set(5, 10, 7.5);
-    dirLight.castShadow = true;
-    scene.add(dirLight);
-
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+    // Iluminación mejorada
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
     scene.add(ambientLight);
 
-    // SpotLight que sigue el mouse
-    const spotLight = new THREE.SpotLight(0xffffff, 20);
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+    directionalLight.position.set(5, 10, 5);
+    directionalLight.castShadow = true;
+    directionalLight.shadow.mapSize.set(2048, 2048);
+    scene.add(directionalLight);
+
+    const spotLight = new THREE.SpotLight(0xffffff, 3);
     spotLight.position.set(0, 10, 10);
     spotLight.angle = Math.PI / 6;
-    spotLight.penumbra = 0.3;
+    spotLight.penumbra = 0.5;
     spotLight.decay = 2;
     spotLight.distance = 100;
     spotLight.castShadow = true;
     scene.add(spotLight);
     scene.add(spotLight.target);
 
-    const mouse = new THREE.Vector2();
+    const mouse = new THREE.Vector2(0, 0);
+
+    let model = null;
+    let targetRotation = { x: 0, y: 0 };
 
     const onMouseMove = (event) => {
       mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
       mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-    
-      const mousePos = new THREE.Vector3(mouse.x, mouse.y, 0.5).unproject(camera);
-    
-      // Suaviza con GSAP
-      gsap.to(spotLight.position, {
-        x: mousePos.x,
-        y: mousePos.y,
-        z: mousePos.z,
-        duration: 0.5,
-        ease: "power2.out"
-      });
-    
+
+      spotLight.target.position.set(mouse.x * 5, mouse.y * 2.5, 0);
     };
-    
 
-window.addEventListener("mousemove", onMouseMove);
+    const onTouchMove = (event) => {
+      if (event.touches.length > 0) {
+        const touch = event.touches[0];
+        mouse.x = (touch.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = -(touch.clientY / window.innerHeight) * 2 + 1;
 
+        spotLight.target.position.set(mouse.x * 5, mouse.y * 2.5, 0);
+      }
+    };
 
+    window.addEventListener("mousemove", onMouseMove);
+    window.addEventListener("touchmove", onTouchMove);
 
     const loader = new GLTFLoader();
-    let model = null;
 
-    loader.load(
-      "/landing.glb",
-      (gltf) => {
-        model = gltf.scene;
+    const setupModel = (gltf) => {
+      model = gltf.scene;
 
-        if (window.innerWidth < 768) {
-          model.scale.set(5, 5, 5);
-          model.position.set(0, -1, 0);
-        } else {
-          model.scale.set(10, 10, 10);
-          model.position.set(0, -3, -1);
+      model.scale.set(10, 10, 10);
+      model.position.set(0, -3, -1);
+
+      model.traverse((child) => {
+        if (child.isMesh) {
+          child.material = blackReflectiveMaterial;
+          child.castShadow = true;
+          child.receiveShadow = true;
         }
+      });
 
-        model.traverse((child) => {
-          if (child.isMesh) {
-            child.material = blackReflectiveMaterial;
-            child.castShadow = true;
-            child.receiveShadow = true;
-          }
+      scene.add(model);
+
+      adjustCamera();
+    };
+
+    const adjustCamera = () => {
+      if (window.innerWidth < 768) {
+        gsap.to(camera.position, {
+          duration: 2,
+          x: 0,
+          y: -1,
+          z: 8,
+          ease: "power2.out",
         });
-
-        scene.add(model);
-
-        // Animar cámara al cargar modelo
+      } else {
         gsap.to(camera.position, {
           duration: 2,
           x: -0.5,
           y: -1,
           z: 8,
-          ease: "power2.out"
+          ease: "power2.out",
         });
-      },
+      }
+    };
+
+    loader.load(
+      "/landing.glb",
+      setupModel,
       undefined,
       (error) => {
         console.error("Error loading GLTF:", error);
       }
     );
 
-    let rotationDirection = 0.5;
     const animate = () => {
       requestAnimationFrame(animate);
+
       if (model) {
-        model.rotation.y += 0.0005 * rotationDirection;
-        if (model.rotation.y > Math.PI / 2 || model.rotation.y < -Math.PI / 2) {
-          rotationDirection *= -1;
-        }
+        // Parallax effect en el modelo
+        targetRotation.y = mouse.x * 0.3;
+        targetRotation.x = mouse.y * 0.15;
+
+        model.rotation.y += (targetRotation.y - model.rotation.y) * 0.05;
+        model.rotation.x += (targetRotation.x - model.rotation.x) * 0.05;
+
+        model.rotation.x = THREE.MathUtils.clamp(model.rotation.x, -0.2, 0.2);
+        model.rotation.y = THREE.MathUtils.clamp(model.rotation.y, -0.3, 0.3);
       }
+
       renderer.render(scene, camera);
     };
     animate();
 
+    window.addEventListener("resize", () => {
+      const width = mount.clientWidth;
+      const height = mount.clientHeight;
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+      renderer.setSize(width, height);
+      adjustCamera();
+    });
+
     return () => {
+      window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("touchmove", onTouchMove);
+      window.removeEventListener("resize", adjustCamera);
       mount.removeChild(renderer.domElement);
       renderer.dispose();
     };

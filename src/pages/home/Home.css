@@ -4,11 +4,13 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow-y: hidden;
 }
 
 #text {
   width: 80%;
   padding-top: 20px;
+  z-index: 2147483647;
 }
 
 @media (max-width: 900px) {
@@ -128,8 +130,9 @@ a {
   left: 50%;
   transform: translate(-50%, -50%);
   width: 100vw;
-  height: 100vh;
+  height: 80vh;
   flex-shrink: 0;
+  z-index: -100000;
   /* background-color:red; */
 }
 
