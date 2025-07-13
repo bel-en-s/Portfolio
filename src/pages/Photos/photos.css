@@ -1,0 +1,48 @@
+.photos {
+  width: 100%;
+  padding: 1em;
+  display: flex;
+  gap: 1em;
+}
+
+.photos > .photos-col {
+  flex: 1;
+}
+
+.photos-col h1 {
+  font-family: "Romie Trial";
+  font-size: 80px;
+  font-weight: 400;
+  text-transform: uppercase;
+}
+
+.photos-col:nth-child(4) {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.photos-row {
+  flex: 1;
+  display: flex;
+  gap: 1em;
+}
+
+.photo-img {
+  width: 100%;
+  height: 125px;
+  flex: 1;
+  cursor: pointer;
+  filter: grayscale(1);
+}
+
+@media (max-width: 900px) {
+  .photos {
+    flex-direction: column;
+  }
+
+  .photos-col:nth-child(2),
+  .photos-col:nth-child(3) {
+    display: none;
+  }
+}

@@ -1,0 +1,151 @@
+.project {
+  width: 100%;
+  height: 100%;
+  background: #1f1f1f;
+}
+
+.project-intro {
+  width: 75%;
+  height: max-content;
+  padding: 10em 2em 5em 2em;
+  font-family: "Romie Trial";
+  font-style: italic;
+  color: #fff;
+}
+
+.project-data {
+  width: 100%;
+  padding: 2em;
+  display: flex;
+    font-family: "Mulish", sans-serif;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  gap: 2em;
+}
+
+.project-images {
+  width: 75vw;
+  height: max-content;
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
+  padding: 2em 0;
+}
+
+.project-images .img {
+  width: 100%;
+  height: 500px;
+  overflow: hidden;
+}
+
+.project-info {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 10vw;
+  width: 25vw;
+  height: max-content;
+  padding: 2em 0;
+}
+
+.project-info p {
+  font-size: 12px;
+  color: #fff;
+  margin-bottom: 1em;
+  line-height: 150%;
+}
+
+.project-info p.copy-header {
+  font-size: 10px;
+  text-transform: uppercase;
+}
+
+.project-info ul {
+  padding-left: 1em;
+}
+
+.project-info ul li {
+  color: #fff;
+  font-size: 12px;
+  list-style: none;
+}
+
+.project-info ul li p {
+  line-height: 100%;
+  margin-bottom: 0.25em;
+}
+
+.project-nav {
+  width: 100%;
+  display: flex;
+  height: max-content;
+  justify-content: space-between;
+  padding: 4em 2em;
+}
+
+.project-nav p {
+  font-size: 12px;
+}
+
+.project-nav p span {
+  font-family: "Romie Trial";
+  font-style: italic;
+  padding-right: 1em;
+}
+
+.project-nav h1 {
+  font-family: "Romie Trial";
+  font-size: 48px;
+  font-style: italic;
+  margin: 0.25em 0;
+}
+
+.project-nav h1 a {
+  text-decoration: none;
+  color: #000;
+}
+
+.nav-next {
+  text-align: right;
+}
+
+p.link {
+  position: relative;
+  width: max-content;
+  text-transform: uppercase;
+  color: #fff;
+  font-size: 10px;
+}
+
+p a {
+  font-family: "Mulish", sans-serif;
+  color: #fff;
+  text-decoration: none;
+  font-size: 10px;
+}
+
+p.link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 120%;
+  width: 100%;
+  height: 1px;
+  background: #fff;
+}
+
+@media (max-width: 900px) {
+  .project-intro {
+    width: 100%;
+    padding: 8em 2em 2em 2em;
+  }
+
+  .project-data {
+    flex-direction: column;
+  }
+
+  .project-images,
+  .project-info {
+    position: relative;
+    width: 100%;
+  }
+}

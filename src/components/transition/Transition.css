@@ -2,23 +2,22 @@
   position: fixed;
   top: 0;
   left: 0;
-  height: 100vh;
   width: 100%;
-  background: #d8ff00;
+  height: 100vh;
+  background: rgb(0, 0, 0);
   transform-origin: bottom;
-  z-index: 10000;
   pointer-events: none;
+  z-index: 2;
 }
 
 .slide-out {
   position: fixed;
   top: 0;
   left: 0;
-  height: 100vh;
   width: 100%;
-  background: #d8ff00;
+  height: 100vh;
+  background: rgb(0, 0, 0);
   transform-origin: top;
-  z-index: 10000;
   pointer-events: none;
+  z-index: 2;
 }
-

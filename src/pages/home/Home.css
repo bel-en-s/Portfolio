@@ -1,138 +1,151 @@
-.hero-header {
-  width: 100vw;
-  height: 100vh;
+.header {
+  padding: 1em;
+}
+
+.header-1,
+.header-2 {
+  padding: 0.5em 0em;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+}
+
+.canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+.canvas::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to top, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0));
+  z-index: 0; /* Above canvas, below content */
+  pointer-events: none; /* Allows interaction with content */
+}
+
+.header h1 {
+  position: relative;
+  font-family: 'Playfair Display', serif;
+  font-size: 80px;
+  font-style: italic;
+  margin: 0;
+  line-height: 100%;
+}
+
+.header h1 span {
+  position: relative;
+  top: 120px;
+}
+
+.intro {
+  width: 100%;
+  padding: 1em 1em;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow-y: hidden;
 }
 
-#text {
-  width: 80%;
-  padding-top: 20px;
-  z-index: 2147483647;
+.intro-col {
+  flex: 1;
 }
 
-@media (max-width: 900px) {
-  #text {
-    padding-top: 300px;
-  }
-}
-
-.line {
-  display: flex;
-  justify-content: space-between;
-  z-index: 2147483647; /* max */
-}
-
-.word {
-  color: var(--color-text);
-  font-size: clamp(1rem, 4vw, 1rem);
+.intro p {
+  font-size: 11px;
   font-weight: 500;
-  line-height: 110%;
-  margin: 0rem;
   text-transform: uppercase;
-  transition: opacity 250ms ease;
+  line-height: 150%;
 }
 
-a {
-  text-decoration: none;
+.intro-col:nth-child(1) {
+  display: flex;
 }
 
-#text:has(.fancy:hover) .word:not(.fancy:hover) {
-  opacity: 0.2;
+.intro-col:nth-child(1) > div {
+  flex: 1;
 }
 
-.fancy span {
-  display: inline-block;
+p.intro-header {
+  color: rgb(160, 160, 160);
 }
 
-.fancy > .outer {
-  transition: transform 350ms ease;
+.intro-col:nth-child(2) {
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
 }
 
-.fancy:hover > .outer {
-  transition-duration: 800ms;
+.intro-img {
+  width: 75px;
+  height: 100px;
+  background-color: gray;
 }
 
-.fancy:hover > .outer > .inner {
-  animation: float 5s ease infinite;
+.intro-about {
+  width: 100%;
+  display: flex;
+  gap: 2em;
 }
 
-.fancy:hover > .outer:nth-child(1) {
-  transform: translate(-80%, 60%) rotate(8deg);
+.intro-about-col {
+  flex: 1;
 }
 
-.fancy:hover > .outer:nth-child(2) {
-  transform: translate(-40%, 20%) rotate(4deg);
+.intro-about-col p,
+.intro-data p {
+  font-size: 13px;
+  font-family: "Mulish", sans-serif;
+  font-weight: 500;
+  text-transform: none;
 }
 
-.fancy:hover > .outer:nth-child(3) {
-  transform: translate(-10%, 60%) rotate(-6deg);
-}
-
-.fancy:hover > .outer:nth-child(4) {
-  transform: translate(0%, 8%) rotate(-8deg);
-}
-
-.fancy:hover > .outer:nth-child(5) {
-  transform: translate(0%, -20%) rotate(5deg);
-}
-
-.fancy:hover > .outer:nth-child(6) {
-  transform: translate(0%, 20%) rotate(-3deg);
-}
-
-.fancy:hover > .outer:nth-child(7) {
-  transform: translate(0%, -40%) rotate(-5deg);
-}
-
-.fancy:hover > .outer:nth-child(8) {
-  transform: translate(0%, 15%) rotate(10deg);
-}
-
-.fancy:hover > .outer:nth-child(9) {
-  transform: translate(0%, -50%) rotate(8deg);
-}
-
-.fancy:hover > .outer:nth-child(10) {
-  transform: translate(0%, 15%) rotate(-6deg);
-}
-
-.fancy:hover > .outer:nth-child(11) {
-  transform: translate(50%, -10%) rotate(-3deg);
-}
-
-.fancy:hover > .outer:nth-child(12) {
-  transform: translate(120%, -30%) rotate(-10deg);
-}
-
-@keyframes float {
-  from,
-  to {
-    transform: translateY(-0%);
-  }
-
-  50% {
-    transform: translateY(-3%);
-  }
+.intro-data p.intro-header {
+  font-family: "PP Neue Montreal";
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  line-height: 150%;
+  color: #000;
 }
 
 @media (max-width: 900px) {
-  #text {
-    width: 70%;
+  .header h1 {
+    font-size: 40px;
+  }
+
+  .intro {
+    flex-direction: column-reverse;
+    gap: 4em;
+  }
+
+  .intro-about {
+    flex-direction: column;
   }
 }
 
-.cube-container {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100vw;
-  height: 80vh;
-  flex-shrink: 0;
-  z-index: -100000;
-  /* background-color:red; */
+footer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1rem;
+    color: black;
+    font-size: 0.9em;
+    position: fixed;
+    left: 1rem;
+    top: 70%;
+    mix-blend-mode: multiply;
+    transform: translateY(-50%);
+    z-index: 3;
 }
 
+@media only screen and (max-width: 768px) {
+    footer {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding-top:30px;
+    }
+}

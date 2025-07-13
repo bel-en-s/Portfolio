@@ -1,13 +1,13 @@
-import "./Transition.css";
-
+import React from "react";
 import { motion } from "framer-motion";
 
-const Transition = (Page) => {
+import "./transition.css";
+
+const Transition = (OgPage) => {
   return function WithTransition(props) {
     return (
       <>
-        <Page {...props} />
-
+        <OgPage {...props} />
         <motion.div
           className="slide-in"
           initial={{ scaleY: 0 }}
