@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import Transition from "../../components/transition/Transition";
 import Canvas from "./Canvas";
 import { gsap } from "gsap";
-import "./home.css";
+import "./Home.css";
 
 // ✅ Importación de íconos
 import emailIcon from "../../assets/favicon/message-2.svg";
