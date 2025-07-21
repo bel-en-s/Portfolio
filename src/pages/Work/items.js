@@ -16,7 +16,7 @@ import ProjectImg6 from "../../assets/work/img1.jpg";
 const workItems = [
   {
     workId: 0,
-    workName: "Rauw Alejandro",
+    workName: "Interactive Web Design",
     workImg: SerenityVideo,
     slug: "rauw",
     bgColor: "#cca459",
@@ -33,11 +33,11 @@ const workItems = [
   },
   {
     workId: 1,
-    workName: "Filoza",
+    workName: "Identity & E-commerce",
     slug: "filoza",
     workImg: TimelessVideo,
     bgColor: "#ca7f88",
-    workClient: "Heritage",
+    workClient: "Filoza",
     workRole: "Digital Designer",
     workDescription: [
       `asdgfasdfoped an immersive WebGL landing page for Rauw Alejandro’s tour...`,

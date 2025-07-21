@@ -2,17 +2,13 @@ import React, { useRef, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { gsap } from "gsap";
 
-import icon1 from "../../assets/favicon/1.png"; 
-
-import icon2 from "../../assets/favicon/2.png"; 
-
 import "./menu.css";
 
 const Menu = () => {
   const menuLinks = [
-    { path: "/", label: "Home", icon: icon1 },
-    { path: "/work", label: "Work", icon: icon2 },
-    // Podés agregar más items y más imágenes si las tenés
+    { path: "/", label: "Home" },
+    { path: "/work", label: "Work" },
+    // { path: "/photos", label: "Photos" },
   ];
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -56,17 +52,11 @@ const Menu = () => {
             <div
               key={index}
               className="menu-item"
+              ref={menuItemAnimation}
               onClick={toggleMenu}
             >
               <Link className="menu-item-link" to={link.path}>
-                <button>
-                  <img
-                    src={link.icon}
-                    alt={link.label}
-                    className="menu-icon"
-                  />
-                  <span>{link.label}</span>
-                </button>
+                <button>{link.label}</button>
               </Link>
             </div>
           ))}
