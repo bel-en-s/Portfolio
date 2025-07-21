@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import Transition from "../../components/transition/Transition";
 import Canvas from "./Canvas";
 import { gsap } from "gsap";
-import "./Home.css";
+import "./home.css";
 
 // ✅ Importación de íconos
 import emailIcon from "../../assets/favicon/message-2.svg";
@@ -55,7 +55,7 @@ const Home = () => {
       <Canvas />
       <div className="header">
         <div className="header-1">
-          {/* <h1>bel-en-s</h1> */}
+          <h1>bel-en-s</h1>
         </div>
         <div className="header-2">
           <h1>Self<span style={{color: "rgba(255, 255, 255, 0.5)"}}>*</span>design<br />studio</h1>
@@ -84,16 +84,16 @@ const Home = () => {
           <div className="intro-about">
             <div className="intro-about-col">
               <p>
-                I create digital experiences that feel like scenes from a dream—blending art direction, 
+                We create digital experiences that feel like scenes from a dream—blending art direction, 
                 fantasy, and multimedia into spaces that elevate.
-                I believe in the power of the imaginary, of building interfaces and worlds that go beyond 
+                We believe in the power of the imaginary, of building interfaces and worlds that go beyond 
                 function—toward emotion, presence, and beauty.
               </p>
             </div>
             <div className="intro-about-col">
               <p>
-                With a background in art and code, I direct and shape interactive work that feels crafted, intentional, and alive.
-                I collaborate with teams and clients across luxury, fashion, and art, delivering high-end experiences rooted in aesthetics and meaning.
+                With a background in art and code, we direct and shape interactive work that feels crafted, intentional, and alive.
+                We collaborate with teams and clients across luxury, fashion, and art, delivering high-end experiences rooted in aesthetics and meaning.
               </p>
             </div>
           </div>

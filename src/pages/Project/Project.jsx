@@ -43,8 +43,9 @@ const Project = () => {
     <>
       <div className="project">
         <div className="project-intro">
+          <Link to="/Work" className="back-btn">Back</Link>
           <h1>
-           Rauw Alejandro – Escenografía Virtual Interactiva
+            Rauw Alejandro – Escenografía Virtual Interactiva
           </h1>
         </div>
 
@@ -108,7 +109,7 @@ const Project = () => {
         </div>
       </div>
 
-      <div className="project-nav">
+      {/* <div className="project-nav">
         <div className="nav-prev">
           <p>
             <span>Previous</span> Harmony
@@ -125,7 +126,7 @@ const Project = () => {
             <Link to="/">Next</Link>
           </h1>
         </div>
-      </div>
+      </div> */}
     </>
   );
 };

@@ -132,13 +132,19 @@ const Canvas = () => {
       cursor.y = (event.clientY / window.innerHeight - 0.5);
     });
 
-    let isPageVisible = true;
-    document.addEventListener("visibilitychange", () => {
-      isPageVisible = !document.hidden;
-    });
-
     const clock = new THREE.Clock();
-    let animationProgress = 0;
+let animationProgress = 0;
+let isPageVisible = true;
+
+document.addEventListener("visibilitychange", () => {
+  isPageVisible = !document.hidden;
+  if (isPageVisible) {
+    clock.start(); // reanudar el reloj
+  } else {
+    clock.stop(); // pausa el reloj
+  }
+});
+
 
     function animate() {
       requestAnimationFrame(animate);

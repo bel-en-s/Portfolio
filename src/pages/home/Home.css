@@ -149,3 +149,18 @@ footer {
         padding-top:30px;
     }
 }
+@media screen and (max-width: 768px) {
+  .intro {
+    padding-top: 80px; /* Aumenta el espacio desde el top */
+  }
+
+  .intro-about {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  .intro-about p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+}

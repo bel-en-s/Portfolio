@@ -13,7 +13,8 @@
   font-size: 11px;
   text-transform: uppercase;
   font-weight: 500;
-  color: #000;
+  color: #000000;
+  text-decoration: none;
 }
 
 .work-carousel {
@@ -49,7 +50,6 @@
   display: block;
 }
 
-
 .slide > div {
   position: relative;
   width: 50%;
@@ -72,7 +72,6 @@
   font-family: 'Playfair Display', serif;
   font-size: 80px;
   font-weight: 400;
-  /* text-transform: uppercase; */
 }
 
 .slide-content-header h1 span {
@@ -94,7 +93,6 @@
 }
 
 .slide-info-row p {
-  position: relative;
   font-size: 10px;
   font-weight: 500;
   text-transform: uppercase;
@@ -117,26 +115,26 @@
   gap: 10px;
 }
 
-.slide-index p,
-.next-btn {
-  flex: 1;
-  font-size: 11px;
-  font-weight: 500;
-  line-height: 120%;
-}
-
-.next-btn {
+.slide-controls {
   position: absolute;
   bottom: 0;
   right: 0;
-  padding: 1.5em;
-  cursor: pointer;
+  display: flex;
+  z-index: 10;
 }
 
-.next-btn p {
+.next-btn,
+.prev-btn {
+  padding: 1.5em 1em;
+  cursor: pointer;
   font-size: 11px;
   font-weight: 500;
   text-transform: uppercase;
+  color: rgb(0, 0, 0);
+}
+.split-word {
+  display: block;
+  text-align: center;
 }
 
 @media (max-width: 900px) {
@@ -166,8 +164,13 @@
     left: 0;
   }
 
-  .next-btn {
+  .slide-controls {
+    bottom: 0;
     right: 0;
+  }
+
+  .next-btn,
+  .prev-btn {
     padding: 1.5em 1em;
   }
 }

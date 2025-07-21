@@ -1,45 +1,37 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import workItems from "./items";
 import { IoMdArrowBack } from "react-icons/io";
-
 import { gsap } from "gsap";
-
 import Transition from "../../components/transition/Transition";
 import "./work.css";
 
 const Work = () => {
   const carouselRef = useRef(null);
-  const slideCount = useRef(1);
-  const [slideIndex, SetSlideIndex] = useState(0);
+  const [slideIndex, setSlideIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const navigate = useNavigate();
 
   const handleHeaderClick = (event) => {
     event.stopPropagation();
-    navigate("/project");
+    navigate(`/project/${workItems[slideIndex].slug}`);
   };
 
   const splitHeader = (element) => {
     let text = element.innerText;
     let splitText = text
-      .split("")
-      .map(function (char) {
-        return `<span>${char === " " ? "&nbsp;&nbsp;" : char}</span>`;
-      })
+      .split(" ")
+      .map(
+        (word) =>
+          `<div class="split-word">${[...word]
+            .map((char) => `<span>${char}</span>`)
+            .join("")}</div>`
+      )
       .join("");
-
     element.innerHTML = splitText;
   };
 
-  const addNewSlide = () => {
-    if (isAnimating) return;
-    setIsAnimating(true);
-
-    const nextSlideIndex = slideCount.current % workItems.length;
-    SetSlideIndex(nextSlideIndex);
-    const newSlide = workItems[nextSlideIndex];
+  const createSlide = (newSlide) => {
     const slideDiv = document.createElement("div");
     slideDiv.className = "slide";
 
@@ -62,21 +54,33 @@ const Work = () => {
     media.className = "work-preview";
     slideImgDiv.appendChild(media);
 
-
     const slideContentDiv = document.createElement("div");
     slideContentDiv.className = "slide-content";
     slideContentDiv.style.backgroundColor = newSlide.bgColor;
+
     const contentHeader = document.createElement("div");
     contentHeader.className = "slide-content-header";
+
     const header = document.createElement("h1");
-    header.addEventListener("click", handleHeaderClick);
     header.textContent = newSlide.workName;
+    header.addEventListener("click", (event) => {
+      event.stopPropagation();
+      navigate(`/project/${newSlide.slug}`);
+    });
+
     splitHeader(header);
     const letters = header.querySelectorAll("span");
 
     contentHeader.appendChild(header);
     slideContentDiv.appendChild(contentHeader);
 
+    slideDiv.appendChild(slideImgDiv);
+    slideDiv.appendChild(slideContentDiv);
+
+    return { slideDiv, slideImgDiv, slideContentDiv, letters };
+  };
+
+  const updateInfoPanel = (slideData) => {
     const workClient = document.querySelector("#work-client");
     const workRole = document.querySelector("#work-role");
     const workType = document.querySelector("#work-type");
@@ -87,9 +91,10 @@ const Work = () => {
       duration: 0.3,
       stagger: 0.1,
       onComplete: () => {
-        workClient.textContent = newSlide.workClient;
-        workRole.textContent = newSlide.workRole;
-        workType.textContent = newSlide.workType;
+        workClient.textContent = slideData.workClient;
+        workRole.textContent = slideData.workRole;
+        workType.textContent = slideData.workType;
+
         gsap.to([workClient, workRole, workType], {
           opacity: 1,
           x: 0,
@@ -99,12 +104,23 @@ const Work = () => {
         });
       },
     });
+  };
 
-    slideDiv.appendChild(slideImgDiv);
-    slideDiv.appendChild(slideContentDiv);
+  const showSlide = (index, direction = "next") => {
+    if (isAnimating) return;
+    setIsAnimating(true);
 
-    gsap.set(letters, { top: "100px" });
+    const newIndex = (index + workItems.length) % workItems.length;
+    const newSlide = workItems[newIndex];
+    setSlideIndex(newIndex);
 
+    const { slideDiv, slideImgDiv, slideContentDiv, letters } =
+      createSlide(newSlide);
+
+    updateInfoPanel(newSlide);
+
+    // Animations
+    gsap.set(letters, { top: direction === "next" ? "100px" : "-100px" });
     gsap.to(letters, {
       top: "0px",
       duration: 0.5,
@@ -114,11 +130,14 @@ const Work = () => {
     });
 
     gsap.set([slideImgDiv, slideContentDiv], {
-      clipPath: "polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)",
+      clipPath:
+        direction === "next"
+          ? "polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)"
+          : "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)",
     });
 
     gsap.to([slideImgDiv, slideContentDiv], {
-      clipPath: "polygon(0% 100%, 100% 100%, 100% 0%, 0% 0%)",
+      clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
       duration: 1.5,
       ease: "power4.out",
       stagger: 0.125,
@@ -128,7 +147,6 @@ const Work = () => {
     });
 
     carouselRef.current.appendChild(slideDiv);
-    slideCount.current++;
 
     if (carouselRef.current.children.length > 5) {
       Array.from(carouselRef.current.children)
@@ -140,38 +158,39 @@ const Work = () => {
         });
     }
   };
+
   useEffect(() => {
     const nextBtn = document.querySelector(".next-btn");
+    const prevBtn = document.querySelector(".prev-btn");
+
     const handleClick = (event) => {
       if (
-        !document.querySelector(".menu").contains(event.target) &&
-        !document
-          .querySelector(".slide-content-header")
-          .contains(event.target) &&
-        !document
-          .querySelector(".slide-content-header h1")
-          .contains(event.target) &&
-        !document.querySelector(".back-btn").contains(event.target) &&
+        !document.querySelector(".menu")?.contains(event.target) &&
+        !document.querySelector(".slide-content-header")?.contains(event.target) &&
+        !document.querySelector(".back-btn")?.contains(event.target) &&
         !isAnimating
       ) {
-        addNewSlide();
+        showSlide(slideIndex + 1, "next");
       }
     };
 
     document.addEventListener("click", handleClick);
-    nextBtn.addEventListener("click", handleClick);
+    nextBtn?.addEventListener("click", () => showSlide(slideIndex + 1, "next"));
+    prevBtn?.addEventListener("click", () => showSlide(slideIndex - 1, "back"));
 
     return () => {
       document.removeEventListener("click", handleClick);
-      nextBtn.removeEventListener("click", handleClick);
+      nextBtn?.removeEventListener("click", () => showSlide(slideIndex + 1));
+      prevBtn?.removeEventListener("click", () => showSlide(slideIndex - 1));
     };
-  }, [isAnimating]);
+  }, [slideIndex, isAnimating]);
 
   return (
     <>
       <div className="back-btn">
         <IoMdArrowBack /> <Link to="/">Back</Link>
       </div>
+
       <div className="work-carousel" ref={carouselRef}>
         <div className="slide">
           <div className="slide-img">
@@ -203,6 +222,7 @@ const Work = () => {
           </div>
         </div>
       </div>
+
       <div className="slide-info">
         <div className="slide-info-row">
           <p>With</p>
@@ -217,13 +237,21 @@ const Work = () => {
           <p id="work-type">{workItems[0].workType}</p>
         </div>
       </div>
+
       <div className="slide-index">
         <p>{slideIndex + 1}</p>
         <p>/</p>
         <p>{workItems.length}</p>
       </div>
-      <div className="next-btn">
-        <p>Next</p>
+
+      {/* CONTROLES DE SLIDE */}
+      <div className="slide-controls">
+        <div className="prev-btn">
+          <p>Back</p>
+        </div>
+        <div className="next-btn">
+          <p>Next</p>
+        </div>
       </div>
     </>
   );
