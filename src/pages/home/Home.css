@@ -43,6 +43,12 @@
   top: 120px;
 }
 
+@media (max-width: 900px) {
+  .intro {
+    top: 1px;
+  }
+}
+
 .intro {
   width: 100%;
   padding: 1em 1em;
@@ -100,6 +106,7 @@ p.intro-header {
   font-family: "Mulish", sans-serif;
   font-weight: 500;
   text-transform: none;
+   /* mix-blend-mode: difference; */
 }
 
 .intro-data p.intro-header {
@@ -150,9 +157,6 @@ footer {
     }
 }
 @media screen and (max-width: 768px) {
-  .intro {
-    padding-top: 80px; /* Aumenta el espacio desde el top */
-  }
 
   .intro-about {
     padding-left: 1.5rem;
@@ -163,4 +167,26 @@ footer {
     font-size: 0.95rem;
     line-height: 1.6;
   }
+}
+
+
+canvas.canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1; /* O el valor que necesites para que esté detrás del texto */
+  touch-action: none; /* ✨ Previene scroll en mobile al tocar el canvas */
+}
+
+
+.canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  touch-action: none; /* desactiva gestos del sistema en mobile */
+  z-index: 0;
 }

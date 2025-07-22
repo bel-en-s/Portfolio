@@ -10,13 +10,19 @@ const Canvas = () => {
   const canvasRef = useRef(null);
 
   useEffect(() => {
+    // Evita que la página se scrollee en mobile
+    const preventScroll = (e) => {
+      e.preventDefault();
+    };
+    document.body.style.overflow = "hidden";
+    window.addEventListener("touchmove", preventScroll, { passive: false });
+
     const scene = new THREE.Scene();
     const gradientTexture = new THREE.CanvasTexture(generateGradientCanvas());
     scene.background = gradientTexture;
 
     const isMobile = window.innerWidth < 768;
 
-    // Camera setup
     const camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 1, 100);
     const startCamY = isMobile ? 6 : 6;
     const startCamZ = isMobile ? 2 : 2;
@@ -47,7 +53,6 @@ const Canvas = () => {
     bloomPass.radius = 0.55;
     composer.addPass(bloomPass);
 
-    // Lights
     const lights = [
       new THREE.AmbientLight(0xffffff, 0.8),
       new THREE.DirectionalLight(0xfefefe, 0.3),
@@ -67,7 +72,6 @@ const Canvas = () => {
     );
     scene.add(cube);
 
-    // HDRI
     let envMap = null;
     const rgbeLoader = new RGBELoader();
     rgbeLoader.load("/moon_lab_1k.hdr", (texture) => {
@@ -86,7 +90,6 @@ const Canvas = () => {
       }
     });
 
-    // Load model
     const loader = new GLTFLoader();
     let model;
     loader.load(
@@ -125,26 +128,37 @@ const Canvas = () => {
       (error) => console.error("Error loading GLB:", error)
     );
 
-    // Cursor & animation
-    const cursor = { x: 0, y: 0 };
-    window.addEventListener("mousemove", (event) => {
-      cursor.x = (event.clientX / window.innerWidth - 0.5);
-      cursor.y = (event.clientY / window.innerHeight - 0.5);
-    });
+    // Cursor (mouse o touch)
+const cursor = { x: 0, y: 0 };
 
-    const clock = new THREE.Clock();
-let animationProgress = 0;
-let isPageVisible = true;
+const updateCursor = (x, y) => {
+  cursor.x = (x / window.innerWidth - 0.5);
+  cursor.y = (y / window.innerHeight - 0.5);
+};
 
-document.addEventListener("visibilitychange", () => {
-  isPageVisible = !document.hidden;
-  if (isPageVisible) {
-    clock.start(); // reanudar el reloj
-  } else {
-    clock.stop(); // pausa el reloj
-  }
+window.addEventListener("mousemove", (e) => {
+  updateCursor(e.clientX, e.clientY);
 });
 
+window.addEventListener("touchmove", (e) => {
+  if (e.touches.length > 0) {
+    updateCursor(e.touches[0].clientX, e.touches[0].clientY);
+  }
+}, { passive: false });
+
+
+    const clock = new THREE.Clock();
+    let animationProgress = 0;
+    let isPageVisible = true;
+
+    document.addEventListener("visibilitychange", () => {
+      isPageVisible = !document.hidden;
+      if (isPageVisible) {
+        clock.start();
+      } else {
+        clock.stop();
+      }
+    });
 
     function animate() {
       requestAnimationFrame(animate);
@@ -209,13 +223,15 @@ document.addEventListener("visibilitychange", () => {
     return () => {
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("mousemove", () => {});
+      window.removeEventListener("touchmove", preventScroll);
+      document.body.style.overflow = "auto";
       gradientTexture.dispose();
       renderer.dispose();
       composer.dispose();
     };
   }, []);
 
-  return <canvas ref={canvasRef} className="canvas" />;
+  return <canvas ref={canvasRef} className="canvas" style={{ display: "block" }} />;
 };
 
 export default Canvas;

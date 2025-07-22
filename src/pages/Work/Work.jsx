@@ -14,7 +14,7 @@ const Work = () => {
 
   const handleHeaderClick = (event) => {
     event.stopPropagation();
-    navigate(`/project/${workItems[slideIndex].slug}`);
+    // navigate(`/project/${workItems[slideIndex].slug}`);
   };
 
   const splitHeader = (element) => {
@@ -63,10 +63,10 @@ const Work = () => {
 
     const header = document.createElement("h1");
     header.textContent = newSlide.workName;
-    header.addEventListener("click", (event) => {
-      event.stopPropagation();
-      navigate(`/project/${newSlide.slug}`);
-    });
+    // header.addEventListener("click", (event) => {
+    //   event.stopPropagation();
+    //   navigate(`/project/${newSlide.slug}`);
+    // });
 
     splitHeader(header);
     const letters = header.querySelectorAll("span");
@@ -81,30 +81,31 @@ const Work = () => {
   };
 
   const updateInfoPanel = (slideData) => {
-    const workClient = document.querySelector("#work-client");
-    const workRole = document.querySelector("#work-role");
-    const workType = document.querySelector("#work-type");
+  const workClient = document.querySelector("#work-client");
+  const workRole = document.querySelector("#work-role");
+  // const workType = document.querySelector("#work-type"); // Eliminado
 
-    gsap.to([workClient, workRole, workType], {
-      opacity: 0,
-      x: 15,
-      duration: 0.3,
-      stagger: 0.1,
-      onComplete: () => {
-        workClient.textContent = slideData.workClient;
-        workRole.textContent = slideData.workRole;
-        workType.textContent = slideData.workType;
+  const items = [workClient, workRole].filter(Boolean); // Evitás incluir null
 
-        gsap.to([workClient, workRole, workType], {
-          opacity: 1,
-          x: 0,
-          duration: 0.3,
-          stagger: 0.1,
-          delay: 0.3,
-        });
-      },
-    });
-  };
+  gsap.to(items, {
+    opacity: 0,
+    x: 15,
+    duration: 0.3,
+    stagger: 0.1,
+    onComplete: () => {
+      workClient.textContent = slideData.workClient || "—";
+      workRole.textContent = slideData.workRole || "—";
+
+      gsap.to(items, {
+        opacity: 1,
+        x: 0,
+        duration: 0.3,
+        stagger: 0.1,
+        delay: 0.3,
+      });
+    },
+  });
+};
 
   const showSlide = (index, direction = "next") => {
     if (isAnimating) return;
@@ -232,10 +233,10 @@ const Work = () => {
           <p>Role</p>
           <p id="work-role">{workItems[0].workRole}</p>
         </div>
-        <div className="slide-info-row">
+        {/* <div className="slide-info-row">
           <p>Type</p>
           <p id="work-type">{workItems[0].workType}</p>
-        </div>
+        </div> */}
       </div>
 
       <div className="slide-index">
