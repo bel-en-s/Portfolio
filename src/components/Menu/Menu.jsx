@@ -1,5 +1,5 @@
-import React, { useRef, useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useRef, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { gsap } from "gsap";
 
 import "./menu.css";
@@ -11,51 +11,50 @@ const Menu = () => {
     // { path: "/photos", label: "Photos" },
   ];
 
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuContainer = useRef();
-  const menuItemAnimation = useRef();
-
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+  const location = useLocation();
 
   useEffect(() => {
-    gsap.set(".menu-item", { opacity: 0, y: 40 });
-
-    menuItemAnimation.current = gsap
-      .timeline({ paused: true })
-      .to(".menu-item", {
-        opacity: 1,
-        y: 0,
-        stagger: 0.1,
-        duration: 0.5,
+    // Animación suave de entrada para los items del menú
+    gsap.fromTo(".menu-item", 
+      { opacity: 0, y: -20 },
+      { 
+        opacity: 1, 
+        y: 0, 
+        duration: 0.8, 
+        stagger: 0.15, 
         ease: "power3.out",
-      });
+        delay: 0.3
+      }
+    );
   }, []);
 
+  // Efecto para cambiar el estado activo cuando cambia la ruta
   useEffect(() => {
-    if (isMenuOpen) {
-      menuItemAnimation.current.play();
-    } else {
-      menuItemAnimation.current.reverse();
+    const activeLink = document.querySelector(".menu-item-link.active");
+    if (activeLink) {
+      activeLink.classList.remove("active");
     }
-  }, [isMenuOpen]);
+    
+    const currentLink = document.querySelector(`[href="${location.pathname}"]`);
+    if (currentLink) {
+      currentLink.classList.add("active");
+    }
+  }, [location]);
 
   return (
     <>
       <div className="menu" ref={menuContainer}>
-        <div className="menu-toggle" onClick={toggleMenu}>
-          <button>Menu</button>
-        </div>
         <div className="menu-items">
           {menuLinks.map((link, index) => (
             <div
               key={index}
               className="menu-item"
-              ref={menuItemAnimation}
-              onClick={toggleMenu}
             >
-              <Link className="menu-item-link" to={link.path}>
+              <Link 
+                className={`menu-item-link ${location.pathname === link.path ? 'active' : ''}`}
+                to={link.path}
+              >
                 <button>{link.label}</button>
               </Link>
             </div>

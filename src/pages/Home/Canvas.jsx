@@ -56,9 +56,9 @@ const Canvas = () => {
     const lights = [
       new THREE.AmbientLight(0xffffff, 0.8),
       new THREE.DirectionalLight(0xfefefe, 0.3),
-      new THREE.PointLight(0x90ee90, 1.5, 20, 5),
-      new THREE.PointLight(0x7a00e6, 1.5, 20, 5),
-      new THREE.PointLight(0xffccaa, 2, 40, 10),
+      new THREE.PointLight(0xC0C0C0, 1.5, 20, 5), // Silver
+      new THREE.PointLight(0xADD8E6, 1.5, 20, 2), // Light Blue
+      new THREE.PointLight(0xC0C0C0, 2, 40, 5),  // Silver
     ];
     lights[1].position.set(2, 4, 4);
     lights[2].position.set(-2, 2, 3);

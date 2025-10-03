@@ -28,7 +28,7 @@ const Work = () => {
       <div className={`work-gallery ${activeItem !== null ? 'has-active-item' : ''}`}>
         {workItems.map((item) => (
           <Link 
-            to={`/project/${item.slug}`} 
+            // to={`/project/${item.slug}`} 
             key={item.workId} 
             className={`work-item ${activeItem === item.workId ? 'active' : ''}`}
             onTouchStart={() => handleTouchStart(item.workId)}
