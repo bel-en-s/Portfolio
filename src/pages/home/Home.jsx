@@ -91,10 +91,10 @@ const Home = () => {
               </p>
             </div>
             <div className="intro-about-col">
-              <p>
+              {/* <p>
                 With a background in art and code, we direct and shape interactive work that feels crafted, intentional, and alive.
                 We collaborate with teams and clients across luxury, fashion, and art, delivering high-end experiences rooted in aesthetics and meaning.
-              </p>
+              </p> */}
             </div>
           </div>
 {/* 
@@ -127,7 +127,7 @@ const Home = () => {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          paddingTop: "150px",
+          paddingTop: "200px",
         }}
       >
         <div

@@ -1,258 +1,66 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import workItems from "./items";
 import { IoMdArrowBack } from "react-icons/io";
-import { gsap } from "gsap";
 import Transition from "../../components/transition/Transition";
+import ShaderBackground from "./ShaderBackground";
 import "./work.css";
 
 const Work = () => {
-  const carouselRef = useRef(null);
-  const [slideIndex, setSlideIndex] = useState(0);
-  const [isAnimating, setIsAnimating] = useState(false);
-  const navigate = useNavigate();
+  const [activeItem, setActiveItem] = useState(null);
 
-  const handleHeaderClick = (event) => {
-    event.stopPropagation();
-    // navigate(`/project/${workItems[slideIndex].slug}`);
+  const handleTouchStart = (workId) => {
+    setActiveItem(workId);
   };
 
-  const splitHeader = (element) => {
-    let text = element.innerText;
-    let splitText = text
-      .split(" ")
-      .map(
-        (word) =>
-          `<div class="split-word">${[...word]
-            .map((char) => `<span>${char}</span>`)
-            .join("")}</div>`
-      )
-      .join("");
-    element.innerHTML = splitText;
+  const handleTouchEnd = () => {
+    setActiveItem(null);
   };
-
-  const createSlide = (newSlide) => {
-    const slideDiv = document.createElement("div");
-    slideDiv.className = "slide";
-
-    const slideImgDiv = document.createElement("div");
-    slideImgDiv.className = "slide-img";
-
-    let media;
-    if (newSlide.workImg.endsWith(".mp4")) {
-      media = document.createElement("video");
-      media.src = newSlide.workImg;
-      media.autoplay = true;
-      media.muted = true;
-      media.loop = true;
-      media.playsInline = true;
-    } else {
-      media = document.createElement("img");
-      media.src = newSlide.workImg;
-      media.alt = newSlide.workName;
-    }
-    media.className = "work-preview";
-    slideImgDiv.appendChild(media);
-
-    const slideContentDiv = document.createElement("div");
-    slideContentDiv.className = "slide-content";
-    slideContentDiv.style.backgroundColor = newSlide.bgColor;
-
-    const contentHeader = document.createElement("div");
-    contentHeader.className = "slide-content-header";
-
-    const header = document.createElement("h1");
-    header.textContent = newSlide.workName;
-    // header.addEventListener("click", (event) => {
-    //   event.stopPropagation();
-    //   navigate(`/project/${newSlide.slug}`);
-    // });
-
-    splitHeader(header);
-    const letters = header.querySelectorAll("span");
-
-    contentHeader.appendChild(header);
-    slideContentDiv.appendChild(contentHeader);
-
-    slideDiv.appendChild(slideImgDiv);
-    slideDiv.appendChild(slideContentDiv);
-
-    return { slideDiv, slideImgDiv, slideContentDiv, letters };
-  };
-
-  const updateInfoPanel = (slideData) => {
-  const workClient = document.querySelector("#work-client");
-  const workRole = document.querySelector("#work-role");
-  // const workType = document.querySelector("#work-type"); // Eliminado
-
-  const items = [workClient, workRole].filter(Boolean); // Evitás incluir null
-
-  gsap.to(items, {
-    opacity: 0,
-    x: 15,
-    duration: 0.3,
-    stagger: 0.1,
-    onComplete: () => {
-      workClient.textContent = slideData.workClient || "—";
-      workRole.textContent = slideData.workRole || "—";
-
-      gsap.to(items, {
-        opacity: 1,
-        x: 0,
-        duration: 0.3,
-        stagger: 0.1,
-        delay: 0.3,
-      });
-    },
-  });
-};
-
-  const showSlide = (index, direction = "next") => {
-    if (isAnimating) return;
-    setIsAnimating(true);
-
-    const newIndex = (index + workItems.length) % workItems.length;
-    const newSlide = workItems[newIndex];
-    setSlideIndex(newIndex);
-
-    const { slideDiv, slideImgDiv, slideContentDiv, letters } =
-      createSlide(newSlide);
-
-    updateInfoPanel(newSlide);
-
-    // Animations
-    gsap.set(letters, { top: direction === "next" ? "100px" : "-100px" });
-    gsap.to(letters, {
-      top: "0px",
-      duration: 0.5,
-      ease: "power2.out",
-      delay: 0.35,
-      stagger: 0.075,
-    });
-
-    gsap.set([slideImgDiv, slideContentDiv], {
-      clipPath:
-        direction === "next"
-          ? "polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)"
-          : "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)",
-    });
-
-    gsap.to([slideImgDiv, slideContentDiv], {
-      clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
-      duration: 1.5,
-      ease: "power4.out",
-      stagger: 0.125,
-      onComplete: () => {
-        setIsAnimating(false);
-      },
-    });
-
-    carouselRef.current.appendChild(slideDiv);
-
-    if (carouselRef.current.children.length > 5) {
-      Array.from(carouselRef.current.children)
-        .slice(0, -5)
-        .forEach((slide) => {
-          setTimeout(() => {
-            carouselRef.current.removeChild(slide);
-          }, 2000);
-        });
-    }
-  };
-
-  useEffect(() => {
-    const nextBtn = document.querySelector(".next-btn");
-    const prevBtn = document.querySelector(".prev-btn");
-
-    const handleClick = (event) => {
-      if (
-        !document.querySelector(".menu")?.contains(event.target) &&
-        !document.querySelector(".slide-content-header")?.contains(event.target) &&
-        !document.querySelector(".back-btn")?.contains(event.target) &&
-        !isAnimating
-      ) {
-        showSlide(slideIndex + 1, "next");
-      }
-    };
-
-    document.addEventListener("click", handleClick);
-    nextBtn?.addEventListener("click", () => showSlide(slideIndex + 1, "next"));
-    prevBtn?.addEventListener("click", () => showSlide(slideIndex - 1, "back"));
-
-    return () => {
-      document.removeEventListener("click", handleClick);
-      nextBtn?.removeEventListener("click", () => showSlide(slideIndex + 1));
-      prevBtn?.removeEventListener("click", () => showSlide(slideIndex - 1));
-    };
-  }, [slideIndex, isAnimating]);
 
   return (
     <>
+      <ShaderBackground />
+      
       <div className="back-btn">
         <IoMdArrowBack /> <Link to="/">Back</Link>
       </div>
 
-      <div className="work-carousel" ref={carouselRef}>
-        <div className="slide">
-          <div className="slide-img">
-            {workItems[0].workImg.endsWith(".mp4") ? (
-              <video
-                src={workItems[0].workImg}
-                autoPlay
-                muted
-                loop
-                playsInline
-                className="work-preview"
-              />
-            ) : (
-              <img
-                src={workItems[0].workImg}
-                alt={workItems[0].workName}
-                className="work-preview"
-              />
-            )}
-          </div>
-
-          <div
-            className="slide-content"
-            style={{ backgroundColor: workItems[0].bgColor }}
+      <div className={`work-gallery ${activeItem !== null ? 'has-active-item' : ''}`}>
+        {workItems.map((item) => (
+          <Link 
+            to={`/project/${item.slug}`} 
+            key={item.workId} 
+            className={`work-item ${activeItem === item.workId ? 'active' : ''}`}
+            onTouchStart={() => handleTouchStart(item.workId)}
+            onTouchEnd={handleTouchEnd}
           >
-            <div className="slide-content-header">
-              <h1 onClick={handleHeaderClick}>{workItems[0].workName}</h1>
+            <div className="work-media">
+              {item.workImg.endsWith(".mp4") ? (
+                <video
+                  src={item.workImg}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  className="work-preview"
+                />
+              ) : (
+                <img
+                  src={item.workImg}
+                  alt={item.workName}
+                  className="work-preview"
+                />
+              )}
             </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="slide-info">
-        <div className="slide-info-row">
-          <p>With</p>
-          <p id="work-client">{workItems[0].workClient}</p>
-        </div>
-        <div className="slide-info-row">
-          <p>Role</p>
-          <p id="work-role">{workItems[0].workRole}</p>
-        </div>
-        {/* <div className="slide-info-row">
-          <p>Type</p>
-          <p id="work-type">{workItems[0].workType}</p>
-        </div> */}
-      </div>
-
-      <div className="slide-index">
-        <p>{slideIndex + 1}</p>
-        <p>/</p>
-        <p>{workItems.length}</p>
-      </div>
-
-      {/* CONTROLES DE SLIDE */}
-      <div className="slide-controls">
-        <div className="prev-btn">
-          <p>Back</p>
-        </div>
-        <div className="next-btn">
-          <p>Next</p>
-        </div>
+            <div className="work-info">
+              <h3 className="work-title">{item.workName}</h3>
+              <div className="work-meta">
+                <span className="work-client">{item.workClient}</span>
+                <span className="work-role">{item.workRole}</span>
+              </div>
+            </div>
+          </Link>
+        ))}
       </div>
     </>
   );

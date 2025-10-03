@@ -22,13 +22,12 @@ const workItems = [
     bgColor: "#cca459",
     workClient: "DHHN",
     workRole: "Interactive Designer",
-    // workType: "WebGL Landing",
     workDescription: [
       `Together with the team at DHNN, I designed and developed an immersive WebGL landing page for Rauw Alejandro’s tour...`,
       `This is more than a website—it’s real-time visual storytelling...`,
       `The result is a digital scenography that amplifies the tour’s aesthetic...`
     ],
-    images: [ProjectImg1, ProjectImg2, SerenityVideo], // importá antes
+    images: [ProjectImg1, ProjectImg2, SerenityVideo],
     link: "https://rauwalejandro.com/"
   },
   {
@@ -44,7 +43,6 @@ const workItems = [
       `This is more than a website—it’s real-time visual storytelling...`,
       `The result is a digital scenography that amplifies the tour’s aesthetic...`
     ],
-    // workType: "Branding & Web e-commerce",
   },
   {
     workId: 2,
@@ -53,45 +51,7 @@ const workItems = [
     bgColor: "#ca7f88",
     workClient: "Tienda Lizboa",
     workRole: "Developer & Designer",
-    // workType: "UI Design",
   },
-  // {
-  //   workId: 3,
-  //   workName: "Enclave",
-  //   workImg: EnclaveImg,
-  //   bgColor: "#b29d7b",
-  //   workClient: "Utopia Co.",
-  //   workRole: "Specialist",
-  //   workType: "Portfolio",
-  // },
-  // {
-  //   workId: 4,
-  //   workName: "Elegance",
-  //   workImg: EleganceImg,
-  //   bgColor: "#fbcd9c",
-  //   workClient: "Elite Decor",
-  //   workRole: "Designer",
-  //   workType: "Cinema",
-  // },
-  // {
-  //   workId: 5,
-  //   workName: "Legacy",
-  //   workImg: LegacyImg,
-  //   bgColor: "#8d9a78",
-  //   workClient: "Historians",
-  //   workRole: "Artist",
-  //   workType: "Concept Design",
-  // },
-
-  // {
-  //   workId: 6,
-  //   workName: "Whisper",
-  //   workImg: WhisperImg,
-  //   bgColor: "#db7f5e",
-  //   workClient: "Retreaters",
-  //   workRole: "Director",
-  //   workType: "Film Design",
-  // },
 ];
 
 export default workItems;

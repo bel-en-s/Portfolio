@@ -51,7 +51,7 @@
 
 .intro {
   width: 100%;
-  padding: 1em 1em;
+  /* padding: 1em 1em; */
   display: flex;
 }
 
@@ -102,7 +102,8 @@ p.intro-header {
 
 .intro-about-col p,
 .intro-data p {
-  font-size: 13px;
+  padding: 1em;
+  font-size: 1.3rem;
   font-family: "Mulish", sans-serif;
   font-weight: 500;
   text-transform: none;

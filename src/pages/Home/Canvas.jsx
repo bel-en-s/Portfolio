@@ -66,11 +66,11 @@ const Canvas = () => {
     lights[4].position.set(0, 0, 6);
     lights.forEach((light) => scene.add(light));
 
-    const cube = new THREE.Mesh(
-      new THREE.BoxGeometry(1, 1, 1),
-      new THREE.MeshPhongMaterial({ color: 0x000000, shininess: 500 })
-    );
-    scene.add(cube);
+    // const cube = new THREE.Mesh(
+    //   new THREE.BoxGeometry(1, 1, 1),
+    //   new THREE.MeshPhongMaterial({ color: 0xff0000, shininess: 500 })
+    // );
+    // scene.add(cube);
 
     let envMap = null;
     const rgbeLoader = new RGBELoader();
@@ -96,20 +96,33 @@ const Canvas = () => {
       "/landing.glb",
       (gltf) => {
         model = gltf.scene;
-        const scale = isMobile ? [6, 9, 6] : [10, 10, 10];
+        const scale = isMobile ? [8, 11, 8] : [10, 10, 10];
         model.scale.set(...scale);
-        model.position.set(0, isMobile ? -3 : -3.5, 0);
+        if (isMobile) {
+            model.position.set(2.5, -1.3, 3);  // más a la derecha en mobile
+          } else {
+            model.position.set(0, -2.5, 3);  // posición normal en desktop
+          }
 
+        // model.rotate.set( isMobile ? 0 : 0, 0);
+
+        
+        if (isMobile) {
+            model.rotation.z = Math.PI / 2;  // ✅ lo para vertical sin perder el frente
+          } else {
+            model.rotation.set(0, 0, 0);     // orientación normal en desktop
+}
+        
         model.traverse((obj) => {
           if (obj.isMesh) {
             obj.material = new THREE.MeshPhysicalMaterial({
-              color: 0xffffff,
+              color: 0xc0c0c0,
               metalness: 1,
               roughness: 0.1,
-              reflectivity: 1,
+              reflectivity: 10,
               envMap: envMap,
               envMapIntensity: 0.01,
-              clearcoat: 1,
+              clearcoat: 10,
               clearcoatRoughness: 0.05,
             });
           }
@@ -185,11 +198,20 @@ window.addEventListener("touchmove", (e) => {
         });
 
         if (model) {
-          const rotX = cursor.y * 0.15;
-          const rotY = -cursor.x * 0.15;
+          // movimiento base
+          const baseRotX = 0;
+          const baseRotY = 0;
+          const baseRotZ = isMobile ? Math.PI / 2 : 0;  // ✅ rotación vertical en mobile
+
+          const rotX = baseRotX + (cursor.y * 0.15);
+          const rotY = baseRotY + (-cursor.x * 0.15);
+
+          // mantenemos la base Z (vertical en mobile)
           model.rotation.x += (rotX - model.rotation.x) * 1.5 * delta;
           model.rotation.y += (rotY - model.rotation.y) * 1.5 * delta;
+          model.rotation.z = baseRotZ; // fijo en mobile, sin interpolar
         }
+
       }
 
       camera.lookAt(0, -0.5, 0);
