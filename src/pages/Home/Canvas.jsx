@@ -2,258 +2,263 @@ import React, { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader.js";
+
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
 import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass.js";
+import { FilmPass } from "three/examples/jsm/postprocessing/FilmPass.js";
+import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass.js";
+import { VignetteShader } from "three/examples/jsm/shaders/VignetteShader.js";
 
-const Canvas = () => {
+export default function Canvas() {
   const canvasRef = useRef(null);
 
   useEffect(() => {
-    // Evita que la página se scrollee en mobile
-    const preventScroll = (e) => {
-      e.preventDefault();
-    };
-    document.body.style.overflow = "hidden";
-    window.addEventListener("touchmove", preventScroll, { passive: false });
+    const canvas = canvasRef.current;
+    if (!canvas) return;
 
+    // ---------------------------
+    // Helpers: Iridescent BG (claro pero no blanco puro)
+    // ---------------------------
+    function makeIridescentBgTexture() {
+      const c = document.createElement("canvas");
+      c.width = 1024;
+      c.height = 1024;
+      const ctx = c.getContext("2d");
+
+      // base perla MÁS gris (para evitar “blanco quemado”)
+      const g = ctx.createLinearGradient(0, 0, 0, c.height);
+      g.addColorStop(0.0, "#f0f2f4");
+      g.addColorStop(0.45, "#e6eaee");
+      g.addColorStop(1.0, "#dde3ea");
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, c.width, c.height);
+
+      // tornasol sutil
+      const blobs = [
+        { x: 0.18, y: 0.28, r: 0.62, col: "rgba(165, 205, 255, 0.18)" },
+        { x: 0.78, y: 0.22, r: 0.72, col: "rgba(255, 205, 235, 0.12)" },
+        { x: 0.58, y: 0.80, r: 0.78, col: "rgba(200, 255, 230, 0.10)" },
+      ];
+
+      for (const b of blobs) {
+        const rg = ctx.createRadialGradient(
+          c.width * b.x,
+          c.height * b.y,
+          0,
+          c.width * b.x,
+          c.height * b.y,
+          c.width * b.r
+        );
+        rg.addColorStop(0, b.col);
+        rg.addColorStop(1, "rgba(255,255,255,0)");
+        ctx.fillStyle = rg;
+        ctx.fillRect(0, 0, c.width, c.height);
+      }
+
+      // micro grain MUY leve (si está demasiado, bajá el *6 a *4)
+      const img = ctx.getImageData(0, 0, c.width, c.height);
+      const d = img.data;
+      for (let i = 0; i < d.length; i += 4) {
+        const n = (Math.random() - 0.5) * 6;
+        d[i] += n;
+        d[i + 1] += n;
+        d[i + 2] += n;
+      }
+      ctx.putImageData(img, 0, 0);
+
+      const tex = new THREE.CanvasTexture(c);
+      tex.needsUpdate = true;
+      return tex;
+    }
+
+    // ---------------------------
+    // Scene / Camera / Renderer
+    // ---------------------------
     const scene = new THREE.Scene();
-    const gradientTexture = new THREE.CanvasTexture(generateGradientCanvas());
-    scene.background = gradientTexture;
+    const bgTex = makeIridescentBgTexture();
+    scene.background = bgTex;
 
     const isMobile = window.innerWidth < 768;
 
-    const camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 1, 100);
-    const startCamY = isMobile ? 6 : 6;
-    const startCamZ = isMobile ? 2 : 2;
-    const finalCamY = isMobile ? 2.8 : 2.4;
-    const finalCamZ = isMobile ? 12 : 8.8;
-    camera.position.set(0, startCamY, startCamZ);
+    const camera = new THREE.PerspectiveCamera(
+      35,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      200
+    );
+
+    const startCam = { y: 6, z: 2 };
+    const finalCam = { y: isMobile ? 2.8 : 2.4, z: isMobile ? 12 : 8.8 };
+    camera.position.set(0, startCam.y, startCam.z);
     scene.add(camera);
 
     const renderer = new THREE.WebGLRenderer({
-      canvas: canvasRef.current,
-      alpha: true,
+      canvas,
       antialias: true,
+      alpha: true,
     });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1));
-    renderer.outputEncoding = THREE.sRGBEncoding;
 
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+
+    if ("outputColorSpace" in renderer) renderer.outputColorSpace = THREE.SRGBColorSpace;
+    else renderer.outputEncoding = THREE.sRGBEncoding;
+
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 0.78; // ✅ baja exposición = no quema
+
+    // ---------------------------
+    // Lights: más “gloom”, menos potencia
+    // ---------------------------
+    const ambient = new THREE.AmbientLight(0xffffff, 0.12);
+    scene.add(ambient);
+
+    const key = new THREE.DirectionalLight(0xfff0dc, 0.28);
+    key.position.set(2.5, 4, 3.5);
+    scene.add(key);
+
+    const fill = new THREE.DirectionalLight(0xdde8ff, 0.08);
+    fill.position.set(-3, 1.2, 1.5);
+    scene.add(fill);
+
+    // ---------------------------
+    // Post: bloom MUY controlado + grain + vignette leve
+    // ---------------------------
     const composer = new EffectComposer(renderer);
     composer.addPass(new RenderPass(scene, camera));
-    const bloomPass = new UnrealBloomPass(
+
+    const bloom = new UnrealBloomPass(
       new THREE.Vector2(window.innerWidth, window.innerHeight),
-      0.8,
-      0.6,
-      0.85
+      0.12, // ✅ menos glow (antes 0.22)
+      0.55,
+      0.97  // ✅ threshold alto = casi solo brillos del modelo
     );
-    bloomPass.threshold = 0.2;
-    bloomPass.strength = 0.9;
-    bloomPass.radius = 0.55;
-    composer.addPass(bloomPass);
+    composer.addPass(bloom);
 
-    const lights = [
-      new THREE.AmbientLight(0xffffff, 0.8),
-      new THREE.DirectionalLight(0xfefefe, 0.3),
-      new THREE.PointLight(0xC0C0C0, 1.5, 20, 5), // Silver
-      new THREE.PointLight(0xADD8E6, 1.5, 20, 2), // Light Blue
-      new THREE.PointLight(0xC0C0C0, 2, 40, 5),  // Silver
-    ];
-    lights[1].position.set(2, 4, 4);
-    lights[2].position.set(-2, 2, 3);
-    lights[3].position.set(2, -2, -3);
-    lights[4].position.set(0, 0, 6);
-    lights.forEach((light) => scene.add(light));
+    const film = new FilmPass(
+      0.18, // noise
+      0.06, // scanlines
+      720,
+      false
+    );
+    composer.addPass(film);
 
-    // const cube = new THREE.Mesh(
-    //   new THREE.BoxGeometry(1, 1, 1),
-    //   new THREE.MeshPhongMaterial({ color: 0xff0000, shininess: 500 })
-    // );
-    // scene.add(cube);
+    const vignette = new ShaderPass(VignetteShader);
+    vignette.uniforms.offset.value = 1.03;
+    vignette.uniforms.darkness.value = 1.04; // ✅ muy leve (antes oscurecía/ensuciaba)
+    composer.addPass(vignette);
 
+    // ---------------------------
+    // HDRI env + GLB
+    // ---------------------------
     let envMap = null;
-    const rgbeLoader = new RGBELoader();
-    rgbeLoader.load("/moon_lab_1k.hdr", (texture) => {
+    let model = null;
+
+    const applyEnvToModelMaterials = (root, texture) => {
+      root.traverse((obj) => {
+        if (!obj.isMesh) return;
+
+        const mats = Array.isArray(obj.material) ? obj.material : [obj.material];
+        mats.forEach((mat) => {
+          if (!mat) return;
+
+          mat.envMap = texture;
+
+          // ✅ clave anti-quemado: baja intensidad del HDRI
+          if ("envMapIntensity" in mat) mat.envMapIntensity = 0.55;
+
+          // ❌ NO tocar roughness (eso te estaba “espejando” y quemando)
+          mat.needsUpdate = true;
+        });
+      });
+    };
+
+    new RGBELoader().load("/moon_lab_1k.hdr", (texture) => {
       texture.mapping = THREE.EquirectangularReflectionMapping;
       scene.environment = texture;
       envMap = texture;
-
-      if (model) {
-        model.traverse((obj) => {
-          if (obj.isMesh) {
-            obj.material.envMap = envMap;
-            obj.material.envMapIntensity = 2.5;
-            obj.material.needsUpdate = true;
-          }
-        });
-      }
+      if (model) applyEnvToModelMaterials(model, envMap);
     });
 
-    const loader = new GLTFLoader();
-    let model;
-    loader.load(
-      "/landing.glb",
+    new GLTFLoader().load(
+      "/caballo.glb",
       (gltf) => {
         model = gltf.scene;
-        const scale = isMobile ? [8, 11, 8] : [10, 10, 10];
-        model.scale.set(...scale);
+        model.scale.set(1, 1, 1);
+
         if (isMobile) {
-            model.position.set(2.5, -1.3, 3);  // más a la derecha en mobile
-          } else {
-            model.position.set(0, -2.5, 3);  // posición normal en desktop
-          }
-
-        // model.rotate.set( isMobile ? 0 : 0, 0);
-
-        
-        if (isMobile) {
-            model.rotation.z = Math.PI / 2;  // ✅ lo para vertical sin perder el frente
-          } else {
-            model.rotation.set(0, 0, 0);     // orientación normal en desktop
-}
-        
-        model.traverse((obj) => {
-          if (obj.isMesh) {
-            obj.material = new THREE.MeshPhysicalMaterial({
-              color: 0xc0c0c0,
-              metalness: 1,
-              roughness: 0.1,
-              reflectivity: 10,
-              envMap: envMap,
-              envMapIntensity: 0.01,
-              clearcoat: 10,
-              clearcoatRoughness: 0.05,
-            });
-          }
-        });
-
-        scene.add(model);
-        scene.remove(cube);
-
-        lights.forEach((light) => {
-          if (light instanceof THREE.PointLight || light instanceof THREE.DirectionalLight) {
-            light.lookAt(model.position);
-          }
-        });
-      },
-      undefined,
-      (error) => console.error("Error loading GLB:", error)
-    );
-
-    // Cursor (mouse o touch)
-const cursor = { x: 0, y: 0 };
-
-const updateCursor = (x, y) => {
-  cursor.x = (x / window.innerWidth - 0.5);
-  cursor.y = (y / window.innerHeight - 0.5);
-};
-
-window.addEventListener("mousemove", (e) => {
-  updateCursor(e.clientX, e.clientY);
-});
-
-window.addEventListener("touchmove", (e) => {
-  if (e.touches.length > 0) {
-    updateCursor(e.touches[0].clientX, e.touches[0].clientY);
-  }
-}, { passive: false });
-
-
-    const clock = new THREE.Clock();
-    let animationProgress = 0;
-    let isPageVisible = true;
-
-    document.addEventListener("visibilitychange", () => {
-      isPageVisible = !document.hidden;
-      if (isPageVisible) {
-        clock.start();
-      } else {
-        clock.stop();
-      }
-    });
-
-    function animate() {
-      requestAnimationFrame(animate);
-      const delta = clock.getDelta();
-
-      if (animationProgress < 1) {
-        animationProgress += delta * 0.5;
-        const ease = animationProgress * (2 - animationProgress);
-        camera.position.y = THREE.MathUtils.lerp(startCamY, finalCamY, ease);
-        camera.position.z = THREE.MathUtils.lerp(startCamZ, finalCamZ, ease);
-      } else if (isPageVisible) {
-        const camTargetX = cursor.x * 0.3;
-        const camTargetY = finalCamY + cursor.y * 0.3;
-        const camTargetZ = finalCamZ + cursor.y * 0.2;
-        camera.position.x += (camTargetX - camera.position.x) * 1 * delta;
-        camera.position.y += (camTargetY - camera.position.y) * 1 * delta;
-        camera.position.z += (camTargetZ - camera.position.z) * 1 * delta;
-
-        lights.forEach((light) => {
-          if (light instanceof THREE.PointLight) {
-            light.position.x += (cursor.x * 6 - light.position.x) * 2 * delta;
-            light.position.y += (-cursor.y * 6 - light.position.y + 2) * 2 * delta;
-          }
-        });
-
-        if (model) {
-          // movimiento base
-          const baseRotX = 0;
-          const baseRotY = 0;
-          const baseRotZ = isMobile ? Math.PI / 2 : 0;  // ✅ rotación vertical en mobile
-
-          const rotX = baseRotX + (cursor.y * 0.15);
-          const rotY = baseRotY + (-cursor.x * 0.15);
-
-          // mantenemos la base Z (vertical en mobile)
-          model.rotation.x += (rotX - model.rotation.x) * 1.5 * delta;
-          model.rotation.y += (rotY - model.rotation.y) * 1.5 * delta;
-          model.rotation.z = baseRotZ; // fijo en mobile, sin interpolar
+          model.position.set(2.5, -1.3, 3);
+          model.rotation.z = Math.PI / 2;
+        } else {
+          model.position.set(0, -2.5, 3);
+          model.rotation.set(0, 0, 0);
         }
 
+        if (envMap) applyEnvToModelMaterials(model, envMap);
+        scene.add(model);
+      },
+      undefined,
+      (err) => console.error("Error loading GLB:", err)
+    );
+
+    // ---------------------------
+    // Render loop + intro
+    // ---------------------------
+    const clock = new THREE.Clock();
+    let rafId = 0;
+    let t = 0;
+
+    const easeOutQuad = (x) => 1 - (1 - x) * (1 - x);
+
+    const animate = () => {
+      rafId = requestAnimationFrame(animate);
+
+      const dt = clock.getDelta();
+
+      if (t < 1) {
+        t = Math.min(1, t + dt * 0.5);
+        const e = easeOutQuad(t);
+        camera.position.y = THREE.MathUtils.lerp(startCam.y, finalCam.y, e);
+        camera.position.z = THREE.MathUtils.lerp(startCam.z, finalCam.z, e);
       }
 
       camera.lookAt(0, -0.5, 0);
       composer.render();
-    }
+    };
+
     animate();
 
-    const handleResize = () => {
-      const isMobile = window.innerWidth < 768;
+    // ---------------------------
+    // Resize
+    // ---------------------------
+    const onResize = () => {
+      const mob = window.innerWidth < 768;
+
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
+
       renderer.setSize(window.innerWidth, window.innerHeight);
       composer.setSize(window.innerWidth, window.innerHeight);
-      camera.position.set(0, isMobile ? 2.8 : 2.4, isMobile ? 12 : 8.8);
-    };
-    window.addEventListener("resize", handleResize);
+      bloom.setSize(window.innerWidth, window.innerHeight);
 
-    function generateGradientCanvas() {
-      const canvas = document.createElement("canvas");
-      canvas.width = 512;
-      canvas.height = 512;
-      const ctx = canvas.getContext("2d");
-      const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-      gradient.addColorStop(0, "#2a2a2a");
-      gradient.addColorStop(1, "#4a4a4a");
-      ctx.fillStyle = gradient;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      return canvas;
-    }
+      camera.position.y = mob ? 2.8 : 2.4;
+      camera.position.z = mob ? 12 : 8.8;
+    };
+
+    window.addEventListener("resize", onResize);
 
     return () => {
-      window.removeEventListener("resize", handleResize);
-      window.removeEventListener("mousemove", () => {});
-      window.removeEventListener("touchmove", preventScroll);
-      document.body.style.overflow = "auto";
-      gradientTexture.dispose();
-      renderer.dispose();
+      cancelAnimationFrame(rafId);
+      window.removeEventListener("resize", onResize);
+
       composer.dispose();
+      renderer.dispose();
+
+      bgTex.dispose?.();
+      envMap?.dispose?.();
     };
   }, []);
 
   return <canvas ref={canvasRef} className="canvas" style={{ display: "block" }} />;
-};
-
-export default Canvas;
+}
