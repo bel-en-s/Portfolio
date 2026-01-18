@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 
 import Menu from "./components/Menu/Menu";
-import Home from "./pages/Home/Home";
+import Home from "./pages/home/Home";
 import ProjectDetail from "./pages/Project/ProjectDetail";
 import Work from "./pages/Work/Work";
 import Photos from "./pages/Photos/Photos";

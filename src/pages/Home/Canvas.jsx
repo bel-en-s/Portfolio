@@ -191,7 +191,7 @@ export default function Canvas() {
           model.position.set(2.5, -1.3, 3);
           model.rotation.z = Math.PI / 2;
         } else {
-          model.position.set(0, -2.5, 3);
+          model.position.set(0, 0, 0);
           model.rotation.set(0, 0, 0);
         }
 
