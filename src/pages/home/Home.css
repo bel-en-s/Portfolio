@@ -191,3 +191,151 @@ canvas.canvas {
   touch-action: none; /* desactiva gestos del sistema en mobile */
   z-index: 0;
 }
+
+/* =========================
+   SERVICES KEYWORDS (below paragraph)
+========================= */
+.services-keywords {
+  padding: 0 1em 1em;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.services-keywords .sk {
+  font-family: "Mulish", sans-serif;
+  font-weight: 500;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+
+  padding: 8px 10px;
+  border-radius: 999px;
+
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(6px);
+}
+
+/* =========================
+   WORK SECTION (simple horizontal)
+========================= */
+.work-section {
+  width: 100%;
+  margin-top: 80px;
+  padding: 70px 0 90px;
+  background: #000;
+  color: #fff;
+  position: relative;
+  z-index: 2;
+}
+
+.work-head {
+  padding: 0 1.5rem 20px;
+  max-width: 980px;
+}
+
+.work-kicker {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  opacity: 0.75;
+  margin: 0 0 10px 0;
+}
+
+.work-title {
+  font-family: "Playfair Display", serif;
+  font-style: italic;
+  font-size: clamp(28px, 4vw, 48px);
+  line-height: 1;
+  margin: 0 0 12px 0;
+}
+
+.work-sub {
+  font-family: "Mulish", sans-serif;
+  font-size: 13px;
+  opacity: 0.8;
+  margin: 0;
+  text-transform: none;
+}
+
+/* horizontal row */
+.work-row {
+  display: flex;
+  gap: 18px;
+  padding: 18px 1.5rem 0;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+
+  scroll-snap-type: x mandatory;
+  scroll-padding-left: 1.5rem;
+}
+
+.work-row::-webkit-scrollbar {
+  height: 8px;
+}
+.work-row::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.22);
+  border-radius: 999px;
+}
+.work-row::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.work-card {
+  scroll-snap-align: start;
+  min-width: min(78vw, 420px);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* square placeholder (video later) */
+.work-thumb {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+/* meta under square */
+.work-meta {
+  padding: 0 6px;
+}
+
+.work-name {
+  margin: 0;
+  font-family: "Mulish", sans-serif;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  opacity: 0.9;
+}
+
+.work-desc {
+  margin: 6px 0 0 0;
+  font-family: "Mulish", sans-serif;
+  font-size: 13px;
+  text-transform: none;
+  opacity: 0.75;
+}
+
+/* mobile spacing */
+@media screen and (max-width: 768px) {
+  .work-section {
+    padding: 60px 0 70px;
+  }
+  .work-head {
+    padding: 0 1.2rem 16px;
+  }
+  .work-row {
+    padding: 14px 1.2rem 0;
+    gap: 14px;
+  }
+  .work-card {
+    min-width: 84vw;
+  }
+}

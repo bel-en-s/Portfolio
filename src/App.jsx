@@ -23,7 +23,7 @@ function App() {
 
   return (
     <>
-      <Menu />
+      {/* <Menu /> */}
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
           <Route index element={<Home />} />

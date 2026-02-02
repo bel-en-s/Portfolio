@@ -16,7 +16,7 @@ const Home = () => {
       let text = element.innerText;
       let splitText = text
         .split("")
-        .map((char) => `<span>${char === " " ? "  " : char}</span>`)
+        .map((char) => `<span>${char === " " ? "  " : char}</span>`)
         .join("");
 
       element.innerHTML = splitText;
@@ -53,75 +53,99 @@ const Home = () => {
   return (
     <>
       <Canvas />
+
       <div className="header">
         <div className="header-1">
           <h1>bel-en-s</h1>
         </div>
         <div className="header-2">
-          <h1>Self<span style={{color: "rgba(255, 255, 255, 0.5)"}}>*</span>design<br />studio</h1>
-        </div>
-      </div>
-      <div className="intro">
-        {/* <div className="intro-col">
-          <div className="intro-sub-col">
-            <p className="intro-header">About</p>
-            <p>Read More</p>
+          <h1>
+            Self<span style={{ color: "rgba(255, 255, 255, 0.5)" }}>*</span>design
             <br />
-            <p className="intro-header">Contact</p>
-            <p>Email Address</p>
-          </div>
-          <div className="intro-sub-col">
-            <p className="intro-header">Social</p>
-            <p>Instagram</p>
-            <p>Savee</p>
-            <p>LinkedIn</p>
-          </div>
-        </div> */}
-        <div className="intro-col">
-          {/* <div className="intro-img">
-       
-          </div> */}
-          <div className="intro-about">
-            <div className="intro-about-col">
-              <p>
-                We create digital experiences that feel like scenes from a dream—blending art direction, 
-                fantasy, and multimedia into spaces that elevate.
-                We believe in the power of the imaginary, of building interfaces and worlds that go beyond 
-                function—toward emotion, presence, and beauty.
-              </p>
-            </div>
-            <div className="intro-about-col">
-              {/* <p>
-                With a background in art and code, we direct and shape interactive work that feels crafted, intentional, and alive.
-                We collaborate with teams and clients across luxury, fashion, and art, delivering high-end experiences rooted in aesthetics and meaning.
-              </p> */}
-            </div>
-          </div>
-{/* 
-          <div className="intro-data">
-            <p className="intro-header">Clients</p>
-            <p>
-              Apple, Spotify, Nike, Amazon, Adobe, Tesla, Microsoft, Uber,
-              Peloton, Samsung, Airbnb, LEGO, BBC, Red Bull.
-            </p>
-            <br />
-            <p className="intro-header">Senior Visual Designer - ThinkMotive</p>
-            <p>March 2022 - Current</p>
-            <br />
-            <p className="intro-header">Lead Designer - Creative Labs</p>
-            <p>June 2018 - March 2022</p>
-            <br />
-            <p className="intro-header">Graphic Designer - MediaMonks</p>
-            <p>April 2015 - June 2018</p>
-            <br />
-            <p className="intro-header">Recognition</p>
-            <p>Awwwards Site of the Day - Horizon UI</p>
-            <p>Featured on CSS Design Awards - Horizon UI</p>
-            <p>Cannes Lions, Silver, Digital Craft - NextGen Retail</p>
-          </div> */}
+            studio
+          </h1>
         </div>
       </div>
 
+      <div className="intro">
+        <div className="intro-col">
+          <div className="intro-about">
+            <div className="intro-about-col">
+              <p>
+                We create digital experiences that feel like scenes from a dream—blending art direction,
+                fantasy, and multimedia into spaces that elevate. We believe in the power of the imaginary,
+                of building interfaces and worlds that go beyond function—toward emotion, presence, and beauty.
+              </p>
+
+              {/* ✅ NEW: Services / keywords (debajo del párrafo, sin cambiar nada más) */}
+              <div className="services-keywords">
+                <span className="sk">Interactive Websites</span>
+                <span className="sk">Web Motion (GSAP)</span>
+                <span className="sk">3D / WebGL</span>
+                <span className="sk">Branding & Visual Systems</span>
+                <span className="sk">UI Design</span>
+                <span className="sk">Prototyping</span>
+                <span className="sk">Art direction + illustration</span>
+              </div>
+            </div>
+
+            <div className="intro-about-col">
+              {/* (tu segunda columna se mantiene vacía / comentada) */}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ✅ NEW: Work section (vertical scroll llega acá) */}
+      <section className="work-section">
+        <div className="work-head">
+          <p className="work-kicker">Work</p>
+          <h2 className="work-title">Selected projects</h2>
+          <p className="work-sub">
+            Scroll horizontally to preview. Videos will live inside each square.
+          </p>
+        </div>
+
+        <div className="work-row">
+          {/* Card 1 */}
+          <article className="work-card">
+            <div className="work-thumb" />
+            <div className="work-meta">
+              <p className="work-name">AWAKE</p>
+              <p className="work-desc">Interactive studio site · Motion + WebGL</p>
+            </div>
+          </article>
+
+          {/* Card 2 */}
+          <article className="work-card">
+            <div className="work-thumb" />
+            <div className="work-meta">
+              <p className="work-name">RTS</p>
+              <p className="work-desc">B2B website · Systems + UX</p>
+            </div>
+          </article>
+
+          {/* Card 3 */}
+          <article className="work-card">
+            <div className="work-thumb" />
+            <div className="work-meta">
+              <p className="work-name">Despierta Candela</p>
+              <p className="work-desc">Brand + Web · Editorial aesthetic</p>
+            </div>
+          </article>
+
+          {/* Card 4 */}
+          <article className="work-card">
+            <div className="work-thumb" />
+            <div className="work-meta">
+              <p className="work-name">R3F Experiments</p>
+              <p className="work-desc">Three.js · Materials + post</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      {/* ✅ Footer fixed (queda igual, no lo toco) */}
       <footer
         style={{
           display: "flex",
@@ -141,11 +165,7 @@ const Home = () => {
             href="mailto:belen.seoane.palmieri@gmail.com"
             style={{ marginBottom: "10px", padding: "10px" }}
           >
-            <img
-              src={emailIcon}
-              alt="Email Icon"
-              style={{ width: "24px", height: "24px" }}
-            />
+            <img src={emailIcon} alt="Email Icon" style={{ width: "24px", height: "24px" }} />
           </a>
           <a
             href="https://www.instagram.com/bel.en.s"
@@ -153,11 +173,7 @@ const Home = () => {
             rel="noopener noreferrer"
             style={{ padding: "10px" }}
           >
-            <img
-              src={instagramIcon}
-              alt="Instagram"
-              style={{ width: "24px", height: "24px" }}
-            />
+            <img src={instagramIcon} alt="Instagram" style={{ width: "24px", height: "24px" }} />
           </a>
           <a
             href="https://www.behance.net/bel-en-s"
@@ -165,11 +181,7 @@ const Home = () => {
             rel="noopener noreferrer"
             style={{ padding: "10px" }}
           >
-            <img
-              src={behanceIcon}
-              alt="Behance"
-              style={{ width: "24px", height: "24px" }}
-            />
+            <img src={behanceIcon} alt="Behance" style={{ width: "24px", height: "24px" }} />
           </a>
         </div>
       </footer>
