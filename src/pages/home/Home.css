@@ -53,6 +53,15 @@
   top: 120px;
 }
 
+.intro {
+    min-height: 60vh;
+    padding: 1em;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 18px;
+}
+
 @media (max-width: 900px) {
   .intro {
     top: 1px;
@@ -112,7 +121,7 @@ p.intro-header {
 
 .intro-about-col p,
 .intro-data p {
-  padding: 0 1em;
+  /* padding: 0 1em; */
   font-size: 1.5rem;
   font-weight: 500;
   text-transform: none;

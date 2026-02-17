@@ -16,8 +16,10 @@ export default function Menu() {
 
   const links = useMemo(
     () => [
-      { path: "/work", label: "Trabajos\nComerciales" },
-      { path: "/bio", label: "Bio" },
+      { path: "/work", label: "portfolio" },
+      { path: "/bio", label: "bio" },
+       { path: "/bio", label: "obras" },
+      //  { path: "/bio", label: "Alquimia /nTecnològica" },
     ],
     []
   );

@@ -185,16 +185,16 @@ export default function Canvas() {
     };
 
     new GLTFLoader().load(
-      "/.glb",
+      "/landing.glb",
       (gltf) => {
         model = gltf.scene;
-        model.scale.set(5, 5, 5);
+        model.scale.set(20, 15, 5);
 
         if (isMobile) {
-          model.position.set(2.5, -1.3, 3);
-          model.rotation.z = Math.PI / 2;
+          model.position.set(2.5, -3.8, 3);
+          // model.rotation.z = Math.PI / 2;
         } else {
-          model.position.set(0, 0, 0);
+          model.position.set(0, -5, 0);
           model.rotation.set(0, 0, 0);
         }
 
