@@ -4,7 +4,7 @@
 
 .header-1,
 .header-2 {
-  padding: 0.5em 0em;
+  padding: 0.8em 0em;
   clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
 }
 
@@ -32,11 +32,21 @@
 .header h1 {
   position: relative;
   font-family: 'Playfair Display', serif;
-  font-size: 80px;
+  font-size: 70px;
   font-style: italic;
   margin: 0;
   line-height: 100%;
 }
+
+.header h2 {
+  position: relative;
+  font-family: 'Playfair Display', serif;
+  font-size: 40px;
+  font-style: italic;
+  margin: 0;
+  line-height: 100%;
+}
+
 
 .header h1 span {
   position: relative;
@@ -102,9 +112,8 @@ p.intro-header {
 
 .intro-about-col p,
 .intro-data p {
-  padding: 1em;
-  font-size: 1.3rem;
-  font-family: "Mulish", sans-serif;
+  padding: 0 1em;
+  font-size: 1.5rem;
   font-weight: 500;
   text-transform: none;
    /* mix-blend-mode: difference; */
@@ -160,7 +169,7 @@ footer {
 @media screen and (max-width: 768px) {
 
   .intro-about {
-    padding-left: 1.5rem;
+    /* padding-left: 1.5rem; */
     padding-right: 1.5rem;
   }
 

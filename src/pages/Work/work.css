@@ -1,204 +1,157 @@
-.back-btn {
-  position: fixed;
-  top: 2rem;
-  left: 2rem;
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: white;
-  text-decoration: none;
-  font-family: var(--font-primary);
-  font-size: 1rem;
-  background: rgba(0, 0, 0, 0.4);
-  padding: 0.75rem 1.25rem;
-  border-radius: 30px;
-  backdrop-filter: blur(15px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+.workPage {
+  min-height: 100vh;
+  color: #111;
 }
 
-.back-btn:hover {
-  background: rgba(0, 0, 0, 0.6);
-  transform: translateX(-8px);
-  border-color: rgba(255, 255, 255, 0.25);
+.workHeader {
+  padding: 110px 22px 0 22px;
 }
 
-.back-btn a {
-  color: inherit;
-  text-decoration: none;
+.workHeader-1 h1 span,
+.workHeader-2 h2 span {
+  position: relative;
+  top: 24px;
 }
 
-.work-gallery {
+.workIntro {
+  padding: 18px 22px 34px 22px;
+  max-width: 860px;
+}
+
+.workIntro p {
+  margin: 0;
+  opacity: 0.9;
+  line-height: 1.5;
+}
+
+.spotlight {
+  position: relative;
+  padding: 22px;
+  height: 100vh;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 3rem;
-  padding: 8rem 3rem 3rem;
-  max-width: 1600px;
-  margin: 0 auto;
+  grid-template-columns: 120px minmax(320px, 1.4fr) minmax(240px, 0.9fr);
+  gap: 22px;
+  align-items: start;
+}
+
+.spotIndex {
+  position: sticky;
+  top: 22px;
+  align-self: start;
+}
+
+.spotIndex h3 {
+  margin: 0;
+  font-size: 18px;
+  letter-spacing: 0.06em;
+  font-weight: 500;
+  opacity: 0.9;
+}
+
+.spotImages {
   position: relative;
-  z-index: 2;
-}
-
-.work-item {
-  text-decoration: none;
-  color: inherit;
-  transition: filter 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  position: relative;
-  isolation: isolate;
-}
-
-/* Apply blur to all work items when gallery is hovered */
-.work-gallery:hover .work-item {
-  filter: blur(5px);
-}
-
-/* Remove blur from the specific hovered item */
-.work-item:hover {
-  filter: none !important;
-}
-
-.work-item::before {
-  content: '';
-  position: absolute;
-  top: -12px;
-  left: -12px;
-  right: -12px;
-  bottom: -12px;
-  background: linear-gradient(135deg, 
-    rgba(255, 255, 255, 0.1) 0%,
-    rgba(255, 255, 255, 0.05) 50%,
-    rgba(255, 255, 255, 0.08) 100%);
-  border-radius: 20px;
-  opacity: 0;
-  transition: opacity 0.5s ease;
-  z-index: -1;
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.work-item:hover::before {
-  opacity: 1;
-}
-
-.work-media {
-  position: relative;
-  width: 100%;
-  height: 500px;
+  height: calc(100vh - 44px);
   overflow: hidden;
-  box-shadow: 
-    0 25px 50px rgba(0, 0, 0, 0.5),
-    0 0 0 1px rgba(255, 255, 255, 0.08);
-  transition: box-shadow 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  border-radius: 18px;
+  background: rgba(0,0,0,0.03);
 }
 
-.work-item:hover .work-media {
-  box-shadow: 
-    0 40px 80px rgba(0, 0, 0, 0.7),
-    0 0 0 1px rgba(255, 255, 255, 0.15);
+.spotImg {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  text-decoration: none;
 }
 
-.work-preview {
+.spotImg img,
+.spotImg video {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: filter 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  display: block;
 }
 
-.work-info {
-  padding: 1.5rem 0.5rem;
+.spotImg video {
+  position: absolute;
+  inset: 0;
+}
+
+.spotImg {
+  opacity: 0.35;
+  transform: translateZ(0);
+  transition: opacity 220ms ease;
+}
+
+.spotImg.is-active {
+  opacity: 1;
+}
+
+.spotNames {
   position: relative;
+  height: calc(100vh - 44px);
+  overflow: hidden;
+  padding-top: 2px;
 }
 
-.work-title {
-  font-family: var(--font-primary);
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: white;
-  margin: 0 0 0.75rem 0;
-  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.8);
-  letter-spacing: -0.01em;
-  transition: filter 0.3s ease;
+.nameRow {
+  display: block;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+  text-decoration: none;
+  color: inherit;
+  opacity: 0.55;
+  transition: opacity 220ms ease;
 }
 
-.work-meta {
+.nameRow.is-active {
+  opacity: 1;
+}
+
+.nameTitle {
+  font-size: 18px;
+  line-height: 1.15;
+  letter-spacing: 0.01em;
+}
+
+.nameMeta {
+  margin-top: 6px;
   display: flex;
-  gap: 1.5rem;
-  font-family: var(--font-secondary);
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.9);
+  gap: 10px;
+  flex-wrap: wrap;
+  font-size: 13px;
+  opacity: 0.85;
 }
 
-.work-client::before {
-  content: "With ";
-  opacity: 0.6;
-  font-weight: 300;
+.workOutro {
+  padding: 60px 22px 120px 22px;
+  opacity: 0.8;
 }
 
-.work-role::before {
-  content: "Role ";
-  opacity: 0.6;
-  font-weight: 300;
-}
-
-/* Mobile Styles */
-@media (max-width: 768px) {
-  .work-gallery {
+@media (max-width: 980px) {
+  .spotlight {
     grid-template-columns: 1fr;
-    gap: 2rem;
-    padding: 6rem 1.5rem 1.5rem;
+    height: auto;
   }
 
-  .work-media {
-    height: 350px;
+  .spotIndex {
+    position: relative;
+    top: auto;
+    margin-bottom: 10px;
   }
 
-  .back-btn {
-    top: 1rem;
-    left: 1rem;
-    padding: 0.6rem 1rem;
-    font-size: 0.9rem;
-  }
-}
-
-/* Tablet Styles */
-@media (max-width: 1024px) and (min-width: 769px) {
-  .work-gallery {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 2.5rem;
-    padding: 7rem 2rem 2rem;
+  .spotImages,
+  .spotNames {
+    height: auto;
+    overflow: visible;
   }
 
-  .work-media {
-    height: 400px;
+  .spotImg {
+    opacity: 1;
   }
-}
 
-/* Large Desktop */
-@media (min-width: 1600px) {
-  .work-gallery {
-    max-width: 1800px;
-    gap: 4rem;
+  .nameRow {
+    opacity: 1;
   }
-  
-  .work-media {
-    height: 550px;
-  }
-}
-
-/* Fondo base adicional para mejor contraste */
-body::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: 
-    radial-gradient(circle at 20% 80%, rgba(26, 26, 46, 0.4) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(15, 52, 96, 0.3) 0%, transparent 50%),
-    linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
-  z-index: -2;
-  pointer-events: none;
 }

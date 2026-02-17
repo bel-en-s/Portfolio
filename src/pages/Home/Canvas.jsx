@@ -17,9 +17,6 @@ export default function Canvas() {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    // ---------------------------
-    // Helpers: Iridescent BG
-    // ---------------------------
     function makeIridescentBgTexture() {
       const c = document.createElement("canvas");
       c.width = 1024;
@@ -188,7 +185,7 @@ export default function Canvas() {
     };
 
     new GLTFLoader().load(
-      "/caballo.glb",
+      "/.glb",
       (gltf) => {
         model = gltf.scene;
         model.scale.set(5, 5, 5);

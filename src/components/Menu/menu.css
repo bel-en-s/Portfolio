@@ -1,104 +1,288 @@
-.menu {
+/* menu.css */
+
+/* =========================
+   MENU — FULL CSS
+   Mobile: burger + panel
+   Desktop: row right, icon arriba de cada item
+========================= */
+
+/* ---------- MOBILE DEFAULTS (forzar) ---------- */
+.menuDesktop {
+  display: none !important;
+}
+.menuTop {
+  display: flex !important;
+}
+
+
+.menuDesktopRow {
+  position: fixed;
+  top: 22px;
+  left: 22px;
+  right: 22px;
+  z-index: 25000;
+
+  font-family: "Metropolis", "Mulish", sans-serif;
+  color: #111;
+  mix-blend-mode: multiply;
+
+  pointer-events: none;
+}
+
+.menuDesktopLinks {
+  display: flex;
+  gap: 26px;
+  align-items: flex-start;
+  justify-content: flex-end;
+  width: 100%;
+  pointer-events: auto;
+}
+
+
+.menuDesktopItem {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+
+  text-decoration: none;
+  color: inherit;
+  opacity: 0.95;
+  pointer-events: auto;
+}
+
+.menuDesktopItem:hover {
+  opacity: 1;
+}
+
+.menuDesktopIcon {
+  width: 22px;
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+}
+
+.menuDesktopLabel {
+  font-size: 18px;
+  line-height: 1.1;
+  letter-spacing: 0.08em;
+
+  width: 100%;
+  text-align: center;
+
+  min-height: calc(2 * 1.1em); 
+  display: flex;
+  align-items: center;          
+  justify-content: center;   
+}
+
+.menuDesktopItem.isActive .menuDesktopLabel {
+  text-decoration: underline;
+  text-underline-offset: 6px;
+}
+
+@media (min-width: 900px) {
+  .menuDesktopRow {
+    top: 26px;
+    left: 28px;
+    right: 28px;
+  }
+  .menuDesktopIcon {
+    width: 24px;
+  }
+}
+
+/* =========================
+   TOP BUTTON (hamburger)
+========================= */
+.menuTop {
+  position: fixed;
+  top: 22px;
+  right: 22px;
+  z-index: 25000;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  font-family: "Metropolis", "Mulish", sans-serif;
+  color: #111;
+  mix-blend-mode: multiply;
+}
+
+.menuBack {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  margin: 0;
+
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  opacity: 0.85;
+}
+
+.menuBack:hover {
+  opacity: 1;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* burger minimal */
+.menuBurger {
+  width: 44px;
+  height: 44px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  padding: 10px;
+  display: grid;
+  gap: 6px;
+  align-content: center;
+}
+
+.menuBurger span {
+  height: 2px;
+  width: 100%;
+  background: #111;
+  border-radius: 999px;
+  transform-origin: center;
+  opacity: 0.9;
+}
+
+/* micro anim (CSS) cuando está abierto */
+.menuBurger.isOpen span:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+.menuBurger.isOpen span:nth-child(2) {
+  opacity: 0;
+}
+.menuBurger.isOpen span:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+/* =========================
+   BACKDROP
+========================= */
+.menuBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 24000;
+  background: rgba(0, 0, 0, 0.08); /* apenas */
+  backdrop-filter: blur(2px);
+}
+
+/* =========================
+   PANEL
+========================= */
+.menuPanel {
   position: fixed;
   top: 0;
   right: 0;
-  padding: 2em;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  z-index: 20000;
-  font-family: var(--font-primary);
-}
+  height: 100vh;
+  width: min(360px, 86vw);
+  z-index: 24500;
 
-.menu-items {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 0.8rem;
-}
-
-.menu-item {
-  position: relative;
-}
-
-.menu-item-link button {
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: white;
-  padding: 0.8rem 1.5rem;
-  border-radius: 25px;
-  font-family: inherit;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
+  background: rgba(245, 245, 245, 0.65);
   backdrop-filter: blur(10px);
-  position: relative;
-  overflow: hidden;
+  border-left: 1px solid rgba(0, 0, 0, 0.08);
+
+  font-family: "Metropolis", "Mulish", sans-serif;
+  color: #111;
+  mix-blend-mode: multiply;
 }
 
-.menu-item-link button::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
+.menuPanelInner {
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-  transition: left 0.5s ease;
+  padding: 22px 18px;
+  display: flex;
+  flex-direction: column;
 }
 
-.menu-item-link button:hover {
-  background: rgba(0, 0, 0, 0.5);
-  border-color: rgba(255, 255, 255, 0.2);
-  transform: translateX(-5px);
+.menuPanelHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
 }
 
-.menu-item-link button:hover::before {
-  left: 100%;
+.menuPanelKicker {
+  margin: 0;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  opacity: 0.7;
 }
 
-.menu-item-link.active button {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.3);
-  color: #fff;
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+.menuPanelNav {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-top: 10px;
 }
 
-/* Efecto de subrayado para el item activo */
-.menu-item-link.active button::after {
-  content: '';
-  position: absolute;
-  bottom: 5px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 60%;
-  height: 1px;
-  background: rgba(255, 255, 255, 0.8);
+.menuPanelItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 10px 10px;
+  border-radius: 12px;
+
+  text-decoration: none;
+  color: inherit;
+  opacity: 0.95;
 }
 
-/* Responsive */
+.menuPanelItem:hover {
+  background: rgba(0, 0, 0, 0.05);
+  opacity: 1;
+}
+
+.menuPanelItem.isActive .menuPanelLabel {
+  text-decoration: underline;
+  text-underline-offset: 6px;
+}
+
+.menuPanelLabel {
+  font-size: 12px;
+  line-height: 1.15;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.menuPanelArrow {
+  font-size: 14px;
+  opacity: 0.7;
+}
+
+/* Mobile: que no tape tanto */
 @media (max-width: 768px) {
-  .menu {
-    padding: 1.5rem;
+  .menuTop {
+    top: 18px;
+    right: 16px;
   }
-
-  .menu-items {
-    gap: 0.6rem;
-  }
-
-  .menu-item-link button {
-    padding: 0.7rem 1.2rem;
-    font-size: 0.85rem;
-  }
-
-  .menu-item-link button:hover {
-    transform: translateX(-3px);
+  .menuPanelInner {
+    padding: 18px 14px;
   }
 }
 
-/* Para tablets */
-@media (max-width: 1024px) and (min-width: 769px) {
-  .menu {
-    padding: 1.8rem;
+/* =========================
+   BREAKPOINT: DESKTOP ONLY
+========================= */
+@media (min-width: 920px) {
+  .menuDesktop {
+    display: block !important;
+  }
+  .menuTop {
+    display: none !important;
+  }
+
+  /* blindar panel/backdrop en desktop */
+  .menuBackdrop {
+    display: none !important;
+  }
+  .menuPanel {
+    display: none !important;
   }
 }
