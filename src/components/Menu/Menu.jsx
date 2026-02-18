@@ -143,9 +143,9 @@ export default function Menu() {
       {/* panel (mobile) */}
       <aside ref={panelRef} className="menuPanel" aria-label="Menú">
         <div className="menuPanelInner">
-          <div className="menuPanelHeader">
+          {/* <div className="menuPanelHeader">
             <p className="menuPanelKicker">MENU</p>
-          </div>
+          </div> */}
 
           <nav className="menuPanelNav">
             {links.map((l) => {

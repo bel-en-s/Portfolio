@@ -190,8 +190,105 @@ body {
   .wkThumb {
     aspect-ratio: 16 / 10;
   }
-
+.wkBack {
+  display: none;
+}
   .wkName {
     font-size: 30px;
+  }
+}
+
+/* src/pages/Work/Work.css */
+
+/* Base */
+.wk {
+  position: relative;
+  min-height: 100vh;
+  padding: 90px 22px 80px;
+}
+
+/* Si tu Transition mete un overlay full-screen arriba, esto lo neutraliza
+   (y NO rompe clicks en la página). Si tu clase real es otra, aplicalo ahí. */
+.transitionOverlay,
+.transition-overlay,
+.pageTransitionOverlay {
+  pointer-events: none !important;
+}
+
+/* =========================
+   BACK BUTTON (FIX CLICK + CURSOR)
+========================= */
+.wkBack {
+  position: fixed;
+  top: 22px;
+  left: 22px;
+  z-index: 999999;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+
+  border: 0;
+  background: transparent;
+  padding: 8px 10px;
+
+  cursor: pointer;
+  pointer-events: auto;
+
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* Importante: evita que el SVG o el span “roben” el click */
+.wkBackIcon,
+.wkBackText {
+  pointer-events: none;
+}
+
+/* Si tenés algún contenedor padre que tenga pointer-events: none,
+   esto asegura que el botón igual sea clickeable */
+.wkBack {
+  pointer-events: auto !important;
+}
+
+.wkBack:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
+}
+
+/* Header */
+.wkHeader {
+  max-width: 980px;
+  margin: 0 auto 40px;
+}
+
+.wkTitle {
+  margin: 0 0 12px;
+  font-size: clamp(36px, 6vw, 70px);
+  line-height: 1;
+  font-style: italic;
+}
+
+.wkKws {
+  margin: 0;
+  opacity: 0.85;
+  line-height: 1.4;
+}
+
+/* Grid */
+.wkGrid {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.wkEmpty {
+  padding: 28px 0;
+  opacity: 0.7;
+}
+
+@media (max-width: 900px) {
+  .wkBack {
+    display: none !important;
   }
 }
