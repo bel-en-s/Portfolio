@@ -1,10 +1,7 @@
-/* src/pages/Work/Work.css */
-
 :root {
   --wk-bg: #cbc9c9;
   --wk-fg: #000000;
-  --wk-muted: rgba(255, 255, 255, 0.62);
-  --wk-dim: rgba(255, 255, 255, 0.10);
+  --wk-muted: rgba(0, 0, 0, 0.55);
 }
 
 html,
@@ -24,38 +21,47 @@ body {
   padding: clamp(18px, 3vw, 44px);
 }
 
-/* back */
+.transitionOverlay,
+.transition-overlay,
+.pageTransitionOverlay {
+  pointer-events: none !important;
+}
+
 .wkBack {
   position: fixed;
   top: 18px;
   left: 18px;
-  z-index: 50;
-
+  z-index: 9999;
   display: inline-flex;
   align-items: center;
   gap: 10px;
-
   padding: 8px 10px;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgba(0, 0, 0, 0.35);
-  color: #000000;
-
+  border: 0;
+  background: transparent;
+  color: #000;
   cursor: pointer;
-  backdrop-filter: blur(10px);
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
-.wkBack span {
+.wkBackIcon,
+.wkBackText {
+  pointer-events: none;
+}
+
+.wkBackText {
   font-size: 13px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
-/* header */
 .wkHeader {
-  width: min(1100px, 100%);
+  width: min(980px, 100%);
   margin: 0 auto;
   padding-top: clamp(62px, 10vh, 110px);
   padding-bottom: clamp(18px, 3vw, 34px);
+  text-align: center;
 }
 
 .wkTitle {
@@ -69,61 +75,77 @@ body {
 
 .wkKws {
   margin: 18px 0 0 0;
-  font-size: 12px;
+  font-size: 11px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: rgba(0, 0, 0, 1);
+  line-height: 1.5;
 }
 
-.wkAbout {
-  margin-top: 18px;
-  max-width: 74ch;
-  color: rgba(0, 0, 0, 0.74);
-  font-size: 16px;
-  line-height: 1.75;
-}
-
-
-.wkGrid {
-  width: min(1100px, 100%);
+.wkStack {
+  width: min(980px, 100%);
   margin: 0 auto;
   display: grid;
   grid-template-columns: 1fr;
-  gap: clamp(26px, 3.2vw, 44px);
+  gap: clamp(22px, 3.8vh, 44px);
+  padding-bottom: clamp(44px, 7vh, 90px);
 }
 
-
-.wkCard {
+.wkItem {
   display: grid;
-  grid-template-rows: auto 1fr;
-  gap: 12px;
+  grid-template-rows: auto auto;
+  gap: 10px;
 }
 
-.wkCardHead {
-  min-width: 0;
+.wkThumb {
+  position: relative;
+  width: min(760px, 100%);
+  margin: 0 auto;
+  aspect-ratio: 16 / 9;
+  height: auto;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.22);
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.08);
+  text-decoration: none;
+}
+
+.wkMedia {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  opacity: 0;
+  transform: translateZ(0);
+  will-change: opacity, transform, filter;
+  transition: none;
+}
+
+.wkCardFoot {
   text-align: center;
+  padding: 0 8px;
 }
 
 .wkName {
   margin: 0;
-  /* font-family: "Playfair Display", serif; */
-  /* font-style: italic; */
-  font-weight: 00;
-  font-size: 30px;
-  text-align: center;
-  line-height: 1;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.05;
+  letter-spacing: 0.01em;
 }
 
 .wkMeta {
-  margin: 10px 0 0 0;
-  display: flex;
+  margin: 8px 0 0 0;
+  display: inline-flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 10px;
-
-  font-size: 12px;
+  font-size: 11px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: rgba(0, 0, 0, 0.55);
+  color: var(--wk-muted);
 }
 
 .wkMeta span {
@@ -139,156 +161,30 @@ body {
   opacity: 0.7;
 }
 
-/* ✅ rectángulo (sensación "cinemática") */
-.wkThumb {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 21 / 9; /* cambiá a 16/9 si querés más alto */
-  display: block;
-  overflow: hidden;
-
-  border: 1px solid rgba(255, 255, 255, 0.10);
-  background: rgba(255, 255, 255, 0.03);
-  text-decoration: none;
-}
-
-/* media */
-.wkMedia {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  display: block;
-  object-fit: cover;
-  opacity: 0;
-  transition: opacity 140ms linear;
-}
-
-.wkMedia.is-on {
-  opacity: 1;
-}
-
-.wkThumb:hover .wkMedia {
-  opacity: 1;
-}
-
-/* footer */
-.wkFooter {
-  width: min(1100px, 100%);
-  margin: clamp(34px, 6vw, 70px) auto 22px;
-  color: rgba(0, 0, 0, 0.62);
-}
-
-.wkFooter a {
-  color: #000000;
-  text-decoration: underline;
-  text-underline-offset: 4px;
-}
-
-/* mobile */
 @media (max-width: 900px) {
-  .wkThumb {
-    aspect-ratio: 16 / 10;
+  .wk {
+    padding: 18px 16px 44px;
   }
-.wkBack {
-  display: none;
-}
-  .wkName {
-    font-size: 30px;
-  }
-}
 
-/* src/pages/Work/Work.css */
-
-/* Base */
-.wk {
-  position: relative;
-  min-height: 100vh;
-  padding: 90px 22px 80px;
-}
-
-/* Si tu Transition mete un overlay full-screen arriba, esto lo neutraliza
-   (y NO rompe clicks en la página). Si tu clase real es otra, aplicalo ahí. */
-.transitionOverlay,
-.transition-overlay,
-.pageTransitionOverlay {
-  pointer-events: none !important;
-}
-
-/* =========================
-   BACK BUTTON (FIX CLICK + CURSOR)
-========================= */
-.wkBack {
-  position: fixed;
-  top: 22px;
-  left: 22px;
-  z-index: 999999;
-
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-
-  border: 0;
-  background: transparent;
-  padding: 8px 10px;
-
-  cursor: pointer;
-  pointer-events: auto;
-
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
-}
-
-/* Importante: evita que el SVG o el span “roben” el click */
-.wkBackIcon,
-.wkBackText {
-  pointer-events: none;
-}
-
-/* Si tenés algún contenedor padre que tenga pointer-events: none,
-   esto asegura que el botón igual sea clickeable */
-.wkBack {
-  pointer-events: auto !important;
-}
-
-.wkBack:focus-visible {
-  outline: 2px solid currentColor;
-  outline-offset: 4px;
-}
-
-/* Header */
-.wkHeader {
-  max-width: 980px;
-  margin: 0 auto 40px;
-}
-
-.wkTitle {
-  margin: 0 0 12px;
-  font-size: clamp(36px, 6vw, 70px);
-  line-height: 1;
-  font-style: italic;
-}
-
-.wkKws {
-  margin: 0;
-  opacity: 0.85;
-  line-height: 1.4;
-}
-
-/* Grid */
-.wkGrid {
-  max-width: 1100px;
-  margin: 0 auto;
-}
-
-.wkEmpty {
-  padding: 28px 0;
-  opacity: 0.7;
-}
-
-@media (max-width: 900px) {
   .wkBack {
     display: none !important;
+  }
+
+  .wkHeader {
+    width: 100%;
+  }
+
+  .wkStack {
+    width: 100%;
+    gap: 22px;
+  }
+
+  .wkThumb {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+  }
+
+  .wkKws br {
+    display: none;
   }
 }
