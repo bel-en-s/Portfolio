@@ -92,7 +92,7 @@ const workItems = [
     slug: "tienda-lizboa",
     bgColor: "#ca7f88",
     workClient: "Lizboa Store",
-    workRole: "3D Interactive Experience- 2024",
+    workRole: "3D Interactive Experience- 2023",
     workDescription: [
       `Created an immersive 3D interactive landing page for Tienda Lizboa...`,
       `Utilized WebGL and Three.js to build a captivating visual experience...`,

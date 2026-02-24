@@ -17,6 +17,15 @@ export default function Canvas() {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
+    // ---------------------------
+    // Scroll lock (como tu primer código)
+    // ---------------------------
+    const preventScroll = (e) => e.preventDefault();
+    document.body.style.overflow = "hidden";
+
+    // ---------------------------
+    // Background iridiscente (del segundo)
+    // ---------------------------
     function makeIridescentBgTexture() {
       const c = document.createElement("canvas");
       c.width = 1024;
@@ -51,6 +60,7 @@ export default function Canvas() {
         ctx.fillRect(0, 0, c.width, c.height);
       }
 
+      // grano sutil
       const img = ctx.getImageData(0, 0, c.width, c.height);
       const d = img.data;
       for (let i = 0; i < d.length; i += 4) {
@@ -67,30 +77,37 @@ export default function Canvas() {
     }
 
     // ---------------------------
-    // Scene / Camera / Renderer
+    // Scene / Camera
     // ---------------------------
     const scene = new THREE.Scene();
     const bgTex = makeIridescentBgTexture();
     scene.background = bgTex;
 
-    const isMobile = window.matchMedia?.("(pointer: coarse)")?.matches || window.innerWidth < 768;
+    const isMobile =
+      window.matchMedia?.("(pointer: coarse)")?.matches || window.innerWidth < 768;
 
     const camera = new THREE.PerspectiveCamera(
       35,
       window.innerWidth / window.innerHeight,
-      0.1,
-      200
+      1,
+      100
     );
 
-    const startCam = { y: 6, z: 2 };
-    const finalCam = { y: isMobile ? 2.8 : 2.4, z: isMobile ? 12 : 8.8 };
-    camera.position.set(0, startCam.y, startCam.z);
+    const startCamY = isMobile ? 6 : 6;
+    const startCamZ = isMobile ? 2 : 2;
+    const finalCamY = isMobile ? 2.8 : 2.4;
+    const finalCamZ = isMobile ? 12 : 8.8;
+
+    camera.position.set(0, startCamY, startCamZ);
     scene.add(camera);
 
+    // ---------------------------
+    // Renderer (tone mapping del segundo)
+    // ---------------------------
     const renderer = new THREE.WebGLRenderer({
       canvas,
-      antialias: true,
       alpha: true,
+      antialias: true,
     });
 
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -103,55 +120,72 @@ export default function Canvas() {
     renderer.toneMappingExposure = 0.78;
 
     // ---------------------------
-    // Lights (key seguirá al mouse)
+    // Post FX (bloom + film + vignette del segundo)
     // ---------------------------
-    const ambient = new THREE.AmbientLight(0xffffff, 0.012);
-    scene.add(ambient);
+    const composer = new EffectComposer(renderer);
+    composer.addPass(new RenderPass(scene, camera));
 
-    // key: lo vamos a mover con el mouse
-    const key = new THREE.DirectionalLight(0xfff0dc, 0.18);
-    key.position.set(2.5, 4, 3.5);
-    scene.add(key);
+    const bloomPass = new UnrealBloomPass(
+      new THREE.Vector2(window.innerWidth, window.innerHeight),
+      0.12, // strength (suave)
+      0.55, // radius
+      0.97  // threshold
+    );
+    composer.addPass(bloomPass);
 
-    // target del key (apunta al modelo)
+    const filmPass = new FilmPass(0.18, 0.06, 720, false);
+    composer.addPass(filmPass);
+
+    const vignettePass = new ShaderPass(VignetteShader);
+    vignettePass.uniforms.offset.value = 1.03;
+    vignettePass.uniforms.darkness.value = 1.04;
+    composer.addPass(vignettePass);
+
+    // ---------------------------
+    // Lights (conservar tu vibe pero más soft como el segundo)
+    // ---------------------------
+    const lights = [
+      new THREE.AmbientLight(0xffffff, 0.012),
+      new THREE.DirectionalLight(0xfff0dc, 0.18), // key
+      new THREE.DirectionalLight(0xdde8ff, 0.08), // fill
+      new THREE.PointLight(0xffffff, 0.06, 50),   // rim suave
+      // si querés mantener tus point lights “neón”, dejalos muy bajitos:
+      new THREE.PointLight(0x90ee90, 0.25, 20, 5),
+      new THREE.PointLight(0x7a00e6, 0.22, 20, 5),
+      new THREE.PointLight(0xffccaa, 0.28, 40, 10),
+    ];
+
+    // posiciones base
+    lights[1].position.set(2.5, 4, 3.5);
+    lights[2].position.set(-3, 1.2, 1.5);
+    lights[3].position.set(-2, 2.5, 6);
+
+    lights[4].position.set(-2, 2, 3);
+    lights[5].position.set(2, -2, -3);
+    lights[6].position.set(0, 0, 6);
+
+    lights.forEach((l) => scene.add(l));
+
+    // target para key light
+    const key = lights[1];
     const keyTarget = new THREE.Object3D();
     keyTarget.position.set(0, -0.5, 0);
     scene.add(keyTarget);
     key.target = keyTarget;
 
-    const fill = new THREE.DirectionalLight(0xdde8ff, 0.08);
-    fill.position.set(-3, 1.2, 1.5);
-    scene.add(fill);
-
-    // Opcional: un point light súper suave para “cuerpo” (queda lindo con parallax)
-    const rim = new THREE.PointLight(0xffffff, 0.06, 50);
-    rim.position.set(-2, 2.5, 6);
-    scene.add(rim);
+    const rim = lights[3];
 
     // ---------------------------
-    // Post
+    // Dummy cube (como tu primero, pero lo sacamos al cargar model)
     // ---------------------------
-    const composer = new EffectComposer(renderer);
-    composer.addPass(new RenderPass(scene, camera));
-
-    const bloom = new UnrealBloomPass(
-      new THREE.Vector2(window.innerWidth, window.innerHeight),
-      0.12,
-      0.55,
-      0.97
+    const cube = new THREE.Mesh(
+      new THREE.BoxGeometry(1, 1, 1),
+      new THREE.MeshPhongMaterial({ color: 0x000000, shininess: 500 })
     );
-    composer.addPass(bloom);
-
-    const film = new FilmPass(0.18, 0.06, 720, false);
-    composer.addPass(film);
-
-    const vignette = new ShaderPass(VignetteShader);
-    vignette.uniforms.offset.value = 1.03;
-    vignette.uniforms.darkness.value = 1.04;
-    composer.addPass(vignette);
+    scene.add(cube);
 
     // ---------------------------
-    // HDRI env + GLB
+    // HDRI env (igual que tu primero)
     // ---------------------------
     let envMap = null;
     let model = null;
@@ -159,13 +193,11 @@ export default function Canvas() {
     const applyEnvToModelMaterials = (root, texture) => {
       root.traverse((obj) => {
         if (!obj.isMesh) return;
-
         const mats = Array.isArray(obj.material) ? obj.material : [obj.material];
         mats.forEach((mat) => {
           if (!mat) return;
-
           mat.envMap = texture;
-          if ("envMapIntensity" in mat) mat.envMapIntensity = 0.55;
+          if ("envMapIntensity" in mat) mat.envMapIntensity = 2.5; // tu look “reflexivo”
           mat.needsUpdate = true;
         });
       });
@@ -175,161 +207,164 @@ export default function Canvas() {
       texture.mapping = THREE.EquirectangularReflectionMapping;
       scene.environment = texture;
       envMap = texture;
+
       if (model) applyEnvToModelMaterials(model, envMap);
     });
 
-    // Guardamos transform base para parallax estable
+    // ---------------------------
+    // GLB (tu material físico como antes)
+    // ---------------------------
+    const loader = new GLTFLoader();
+
+    // base transform para parallax estable
     const base = {
       pos: new THREE.Vector3(0, 0, 0),
       rot: new THREE.Euler(0, 0, 0),
     };
 
-    new GLTFLoader().load(
+    loader.load(
       "/landing.glb",
       (gltf) => {
         model = gltf.scene;
-        model.scale.set(20, 15, 5);
 
-        if (isMobile) {
-          model.position.set(2.5, -3.8, 3);
-          // model.rotation.z = Math.PI / 2;
-        } else {
-          model.position.set(0, -5, 0);
-          model.rotation.set(0, 0, 0);
-        }
+        // mantené tus escalas / posiciones originales
+        const scale = isMobile ? [14, 12, 6] : [10, 10, 10];
+        model.scale.set(...scale);
+        model.position.set(0, isMobile ? -4.5 : -3.5, 0);
 
         base.pos.copy(model.position);
         base.rot.copy(model.rotation);
 
-        if (envMap) applyEnvToModelMaterials(model, envMap);
-        scene.add(model);
+        model.traverse((obj) => {
+          if (!obj.isMesh) return;
 
-        // apuntamos la luz al modelo (mejor que un punto fijo)
+          obj.material = new THREE.MeshPhysicalMaterial({
+            color: 0xffffff,
+            metalness: 1,
+            roughness: 0.1,
+            reflectivity: 1,
+            envMap: envMap,
+            envMapIntensity: 2.5,
+            clearcoat: 1,
+            clearcoatRoughness: 0.05,
+          });
+        });
+
+        scene.add(model);
+        scene.remove(cube);
+
+        // key light apunta al modelo
         keyTarget.position.set(model.position.x, model.position.y + 0.2, model.position.z);
       },
       undefined,
-      (err) => console.error("Error loading GLB:", err)
+      (error) => console.error("Error loading GLB:", error)
     );
 
     // ---------------------------
-    // Mouse tracking (normalized)
+    // Cursor (tu lógica, pero arreglada + 1 solo touchmove)
     // ---------------------------
-    const pointer = { x: 0, y: 0 };       // target (-1..1)
-    const pointerSm = { x: 0, y: 0 };     // smoothed (-1..1)
+    const cursor = { x: 0, y: 0 };
 
-    const getNDCFromEvent = (e) => {
-      const rect = canvas.getBoundingClientRect();
-      const cx = (e.clientX - rect.left) / rect.width;
-      const cy = (e.clientY - rect.top) / rect.height;
-      return {
-        x: (cx - 0.5) * 2,
-        y: (cy - 0.5) * 2,
-      };
+    const updateCursorFromClient = (clientX, clientY) => {
+      cursor.x = clientX / window.innerWidth - 0.5;
+      cursor.y = clientY / window.innerHeight - 0.5;
     };
 
     const onMouseMove = (e) => {
-      const n = getNDCFromEvent(e);
-      pointer.x = THREE.MathUtils.clamp(n.x, -1, 1);
-      pointer.y = THREE.MathUtils.clamp(n.y, -1, 1);
+      updateCursorFromClient(e.clientX, e.clientY);
     };
 
-    // Touch (suave y opcional)
     const onTouchMove = (e) => {
-      if (!e.touches?.length) return;
-      const t = e.touches[0];
-      const n = getNDCFromEvent(t);
-      pointer.x = THREE.MathUtils.clamp(n.x, -1, 1);
-      pointer.y = THREE.MathUtils.clamp(n.y, -1, 1);
+      // bloquea scroll + actualiza cursor
+      if (e.touches && e.touches.length > 0) {
+        const t = e.touches[0];
+        updateCursorFromClient(t.clientX, t.clientY);
+      }
+      e.preventDefault();
     };
 
     window.addEventListener("mousemove", onMouseMove, { passive: true });
-    window.addEventListener("touchmove", onTouchMove, { passive: true });
+    window.addEventListener("touchmove", onTouchMove, { passive: false });
+    window.addEventListener("touchmove", preventScroll, { passive: false }); // redundante pero consistente con tu primer approach
 
     // ---------------------------
-    // Render loop + intro + parallax
+    // Animación (tu loop original, con un toque de suavizado de luz del 2do)
     // ---------------------------
     const clock = new THREE.Clock();
-    let rafId = 0;
-    let tIntro = 0;
+    let animationProgress = 0;
+    let isPageVisible = true;
 
-    const easeOutQuad = (x) => 1 - (1 - x) * (1 - x);
+    const onVis = () => {
+      isPageVisible = !document.hidden;
+      if (isPageVisible) clock.start();
+      else clock.stop();
+    };
+    document.addEventListener("visibilitychange", onVis);
 
-    // targets para luz
+    // para suavizar la luz key como en el segundo
     const keyBasePos = key.position.clone();
     const keyPos = key.position.clone();
     const tmpVec = new THREE.Vector3();
 
+    let rafId = 0;
+
     const animate = () => {
       rafId = requestAnimationFrame(animate);
-      const dt = clock.getDelta();
+      const delta = clock.getDelta();
 
-      // intro cámara
-      if (tIntro < 1) {
-        tIntro = Math.min(1, tIntro + dt * 0.5);
-        const e = easeOutQuad(tIntro);
-        camera.position.y = THREE.MathUtils.lerp(startCam.y, finalCam.y, e);
-        camera.position.z = THREE.MathUtils.lerp(startCam.z, finalCam.z, e);
-      }
+      if (animationProgress < 1) {
+        animationProgress += delta * 0.5;
+        const ease = animationProgress * (2 - animationProgress);
+        camera.position.y = THREE.MathUtils.lerp(startCamY, finalCamY, ease);
+        camera.position.z = THREE.MathUtils.lerp(startCamZ, finalCamZ, ease);
+      } else if (isPageVisible) {
+        const camTargetX = cursor.x * 0.3;
+        const camTargetY = finalCamY + cursor.y * 0.3;
+        const camTargetZ = finalCamZ + cursor.y * 0.2;
 
-      // suavizado pointer (evita “terremoto”)
-      const smooth = 1 - Math.pow(0.0001, dt); // frame-rate independent
-      pointerSm.x = THREE.MathUtils.lerp(pointerSm.x, pointer.x, smooth);
-      pointerSm.y = THREE.MathUtils.lerp(pointerSm.y, pointer.y, smooth);
+        camera.position.x += (camTargetX - camera.position.x) * 1 * delta;
+        camera.position.y += (camTargetY - camera.position.y) * 1 * delta;
+        camera.position.z += (camTargetZ - camera.position.z) * 1 * delta;
 
-      // ---------------------------
-      // Luz sigue mouse
-      // ---------------------------
-      // amplitud del movimiento de luz (en world units)
-      const lightAmpX = isMobile ? 0.7 : 1.6;
-      const lightAmpY = isMobile ? 0.5 : 1.2;
-      const lightAmpZ = isMobile ? 0.4 : 0.8;
+        // key light sigue el cursor (suave)
+        const lightAmpX = isMobile ? 0.7 : 1.6;
+        const lightAmpY = isMobile ? 0.5 : 1.2;
+        const lightAmpZ = isMobile ? 0.4 : 0.8;
 
-      const targetLightPos = tmpVec.set(
-        keyBasePos.x + pointerSm.x * lightAmpX,
-        keyBasePos.y + (-pointerSm.y) * lightAmpY,
-        keyBasePos.z + (Math.abs(pointerSm.x) + Math.abs(pointerSm.y)) * lightAmpZ
-      );
+        const targetLightPos = tmpVec.set(
+          keyBasePos.x + cursor.x * 2 * lightAmpX,
+          keyBasePos.y + (-cursor.y) * 2 * lightAmpY,
+          keyBasePos.z + (Math.abs(cursor.x) + Math.abs(cursor.y)) * lightAmpZ
+        );
 
-      // lerp suave de la luz
-      keyPos.lerp(targetLightPos, smooth * 0.65);
-      key.position.copy(keyPos);
+        // lerp dependiente de delta (estable)
+        const smooth = 1 - Math.pow(0.0001, delta);
+        keyPos.lerp(targetLightPos, smooth * 0.65);
+        key.position.copy(keyPos);
 
-      // target de la luz siempre al modelo (o al centro)
-      if (model) {
-        keyTarget.position.set(model.position.x, model.position.y + 0.2, model.position.z);
-      } else {
-        keyTarget.position.set(0, -0.5, 0);
-      }
+        // tus point lights “neón” (si querés conservar el movimiento)
+        lights.forEach((light) => {
+          if (light instanceof THREE.PointLight && light !== rim) {
+            light.position.x += (cursor.x * 6 - light.position.x) * 2 * delta;
+            light.position.y += (-cursor.y * 6 - light.position.y + 2) * 2 * delta;
+          }
+        });
 
-      // ---------------------------
-      // Parallax del modelo
-      // ---------------------------
-      if (model) {
-        // rotación desde el centro (tilt)
-        const rotAmp = isMobile ? 0.08 : 0.18; // rad
-        const rollAmp = isMobile ? 0.03 : 0.07;
+        if (model) {
+          const rotX = cursor.y * 0.15;
+          const rotY = -cursor.x * 0.15;
+          model.rotation.x += (rotX - model.rotation.x) * 1.5 * delta;
+          model.rotation.y += (rotY - model.rotation.y) * 1.5 * delta;
 
-        const targetRx = base.rot.x + (-pointerSm.y) * rotAmp;
-        const targetRy = base.rot.y + (pointerSm.x) * rotAmp;
-        const targetRz = base.rot.z + (pointerSm.x) * rollAmp;
+          // rim acompaña un poquito (depth)
+          rim.position.x += (-2 + cursor.x * 0.8 - rim.position.x) * 0.35 * delta * 60;
+          rim.position.y += (2.5 + (-cursor.y) * 0.6 - rim.position.y) * 0.35 * delta * 60;
 
-        model.rotation.x = THREE.MathUtils.lerp(model.rotation.x, targetRx, smooth * 0.7);
-        model.rotation.y = THREE.MathUtils.lerp(model.rotation.y, targetRy, smooth * 0.7);
-        model.rotation.z = THREE.MathUtils.lerp(model.rotation.z, targetRz, smooth * 0.7);
-
-        // micro desplazamiento (parallax position)
-        const posAmpX = isMobile ? 0.10 : 0.25;
-        const posAmpY = isMobile ? 0.06 : 0.18;
-
-        const targetPx = base.pos.x + pointerSm.x * posAmpX;
-        const targetPy = base.pos.y + (-pointerSm.y) * posAmpY;
-
-        model.position.x = THREE.MathUtils.lerp(model.position.x, targetPx, smooth * 0.55);
-        model.position.y = THREE.MathUtils.lerp(model.position.y, targetPy, smooth * 0.55);
-
-        // acompañamos un poquito el rim light para “depth”
-        rim.position.x = THREE.MathUtils.lerp(rim.position.x, -2 + pointerSm.x * 0.8, smooth * 0.35);
-        rim.position.y = THREE.MathUtils.lerp(rim.position.y, 2.5 + (-pointerSm.y) * 0.6, smooth * 0.35);
+          // target del key siempre al modelo
+          keyTarget.position.set(model.position.x, model.position.y + 0.2, model.position.z);
+        } else {
+          keyTarget.position.set(0, -0.5, 0);
+        }
       }
 
       camera.lookAt(0, -0.5, 0);
@@ -339,35 +374,39 @@ export default function Canvas() {
     animate();
 
     // ---------------------------
-    // Resize
+    // Resize (tu handleResize + tamaños de post)
     // ---------------------------
-    const onResize = () => {
-      const mob = window.matchMedia?.("(pointer: coarse)")?.matches || window.innerWidth < 768;
+    const handleResize = () => {
+      const mob =
+        window.matchMedia?.("(pointer: coarse)")?.matches || window.innerWidth < 768;
 
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
 
       renderer.setSize(window.innerWidth, window.innerHeight);
       composer.setSize(window.innerWidth, window.innerHeight);
-      bloom.setSize(window.innerWidth, window.innerHeight);
+      bloomPass.setSize(window.innerWidth, window.innerHeight);
 
-      camera.position.y = mob ? 2.8 : 2.4;
-      camera.position.z = mob ? 12 : 8.8;
+      camera.position.set(0, mob ? 2.8 : 2.4, mob ? 12 : 8.8);
     };
-
-    window.addEventListener("resize", onResize);
+    window.addEventListener("resize", handleResize);
 
     return () => {
       cancelAnimationFrame(rafId);
-      window.removeEventListener("resize", onResize);
+
+      window.removeEventListener("resize", handleResize);
       window.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("touchmove", onTouchMove);
+      window.removeEventListener("touchmove", preventScroll);
 
-      composer.dispose();
-      renderer.dispose();
+      document.removeEventListener("visibilitychange", onVis);
+      document.body.style.overflow = "auto";
 
       bgTex.dispose?.();
       envMap?.dispose?.();
+
+      composer.dispose();
+      renderer.dispose();
     };
   }, []);
 

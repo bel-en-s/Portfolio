@@ -129,7 +129,7 @@ p.intro-header {
 }
 
 .intro-data p.intro-header {
-  font-family: "PP Neue Montreal";
+  /* font-family: "PP Neue Montreal"; */
   font-size: 11px;
   font-weight: 500;
   text-transform: uppercase;
@@ -140,6 +140,7 @@ p.intro-header {
 @media (max-width: 900px) {
   .header h1 {
     font-size: 40px;
+    margin-top: 80px;
   }
 
   .intro {
@@ -221,7 +222,7 @@ canvas.canvas {
 }
 
 .services-keywords .sk {
-  font-family: "Mulish", sans-serif;
+  /* font-family: "Mulish", sans-serif; */
   font-weight: 500;
   font-size: 11px;
   text-transform: uppercase;
@@ -262,7 +263,7 @@ canvas.canvas {
 }
 
 .work-title {
-  font-family: "Playfair Display", serif;
+  /* font-family: "Playfair Display", serif; */
   font-style: italic;
   font-size: clamp(28px, 4vw, 48px);
   line-height: 1;
@@ -270,7 +271,7 @@ canvas.canvas {
 }
 
 .work-sub {
-  font-family: "Mulish", sans-serif;
+  /* font-family: "Mulish", sans-serif; */
   font-size: 13px;
   opacity: 0.8;
   margin: 0;

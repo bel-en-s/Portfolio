@@ -14,15 +14,14 @@ export default function Menu() {
   const navigate = useNavigate();
   const isHome = location.pathname === "/";
 
-  const links = useMemo(
-    () => [
-      { path: "/work", label: "portfolio" },
-      { path: "/bio", label: "bio" },
-       { path: "/bio", label: "obras" },
-      //  { path: "/bio", label: "Alquimia /nTecnològica" },
-    ],
-    []
-  );
+const links = useMemo(
+  () => [
+    { path: "/work", label: "portfolio", icon: "11.png" },
+    { path: "/bio", label: "bio", icon: "22.png" },
+    { path: "/bio", label: "obras", icon: "33.png" },
+  ],
+  []
+);
 
   const [open, setOpen] = useState(false);
 
@@ -89,11 +88,11 @@ export default function Menu() {
                   aria-current={active ? "page" : undefined}
                 >
                   <img
-                    className="menuDesktopIcon"
-                    src={withBase("star.png")}
-                    alt=""
-                    aria-hidden="true"
-                  />
+  className="menuDesktopIcon"
+  src={withBase(l.icon)}
+  alt=""
+  aria-hidden="true"
+/>
                   <span className="menuDesktopLabel">
                     {String(l.label)
                       .split("\n")

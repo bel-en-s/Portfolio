@@ -86,8 +86,7 @@ const Home = () => {
           <div className="intro-about">
             <div className="intro-about-col">
               <p>
-                Artista multimedial y disenadora web creativa.
-                <br />
+                Artista multimedial y diseñadora web creativa.
                 Buenos Aires, Argentina
                 <br />
                 <ContactButton

@@ -56,7 +56,7 @@
 }
 
 .menuDesktopIcon {
-  width: 22px;
+  width: 52px;
   height: auto;
   pointer-events: none;
   user-select: none;
@@ -87,9 +87,9 @@
     left: 28px;
     right: 28px;
   }
-  .menuDesktopIcon {
+  /* .menuDesktopIcon {
     width: 24px;
-  }
+  } */
 }
 
 /* =========================
@@ -168,7 +168,7 @@
   position: fixed;
   inset: 0;
   z-index: 24000;
-  background: rgba(0, 0, 0, 0.08); /* apenas */
+  background: rgb(233, 231, 231); /* apenas */
   backdrop-filter: blur(2px);
 }
 
