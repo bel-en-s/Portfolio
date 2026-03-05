@@ -46,3 +46,17 @@
   outline: 2px solid currentColor;
   outline-offset: 4px;
 }
+
+.intro,
+.intro-about,
+.intro-about-col {
+position: relative;
+z-index: 10;
+}
+@media (max-width: 768px) {
+.contact-btn {
+width: 100%;
+padding: 10px 0px;
+font-size: 1.2rem;
+}
+}

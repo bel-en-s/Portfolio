@@ -92,6 +92,7 @@ const Home = () => {
                 <ContactButton
                   label="contacto"
                   href="#contact"
+                  className="contact-btn"
                   underlineOffset={4}
                   underlineThickness={1}
                   uppercase={true}

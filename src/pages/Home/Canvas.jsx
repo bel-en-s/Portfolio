@@ -230,7 +230,7 @@ export default function Canvas() {
         // mantené tus escalas / posiciones originales
         const scale = isMobile ? [14, 12, 6] : [10, 10, 10];
         model.scale.set(...scale);
-        model.position.set(0, isMobile ? -4.5 : -3.5, 0);
+        model.position.set(0, isMobile ? -5 : -3.5, 0);
 
         base.pos.copy(model.position);
         base.rot.copy(model.rotation);
