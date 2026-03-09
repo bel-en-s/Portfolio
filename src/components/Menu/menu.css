@@ -103,7 +103,7 @@
   display: flex;
   align-items: center;
   gap: 14px;
-
+  z-index: 999999999999999999999999999;
   font-family: "Metropolis", "Mulish", sans-serif;
   color: #111;
   mix-blend-mode: multiply;
@@ -120,6 +120,7 @@
   text-transform: uppercase;
   cursor: pointer;
   opacity: 0.85;
+  z-index: 999999999999999999999999999;
 }
 
 .menuBack:hover {

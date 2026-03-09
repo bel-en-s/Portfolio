@@ -33,11 +33,11 @@ body {
   position: fixed;
   top: 18px;
   left: 18px;
-  z-index: 999999;
+  z-index: 99999999999999999999999999;
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  padding: 8px 10px;
+  padding: 100px 100px;
   border: 0;
   background: transparent;
   color: #000;
@@ -51,6 +51,7 @@ body {
 .wkBackIcon,
 .wkBackText {
   pointer-events: none;
+    z-index: 99999999999999999999999999;
 }
 
 .wkBackText {
@@ -194,4 +195,28 @@ body {
   .wkKws br {
     display: none;
   }
+}
+
+
+.wkSide {
+  margin-top: 50px;
+  margin-bottom: 44px;
+  font-size: 22px;
+  letter-spacing: 0.14em;
+  opacity: 0.7;
+    font-family: "Playfair Display", serif;
+      border-bottom: 1px solid currentColor;
+}
+
+.wkSideLink {
+  margin-left: 6px;
+  text-decoration: none;
+  color: #000;
+
+  padding-bottom: 1px;
+  transition: opacity 0.25s ease;
+}
+
+.wkSideLink:hover {
+  opacity: 0.5;
 }

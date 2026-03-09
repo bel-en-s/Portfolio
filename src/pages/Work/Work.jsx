@@ -329,13 +329,28 @@ const goBack = () => {
           <IoMdArrowBack className="wkBackIcon" />
           <span className="wkBackText">Back</span>
         </button>
+        
 
         <header className="wkHeader">
+           <p className="wkSide">
+    side project —
+    <a
+      href="https://divinodivino.com.ar"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="wkSideLink"
+    >
+      DIVINO DIVINO STUDIO
+    </a>
+  </p>
+  
           <h1 className="wkTitle">selected works</h1>
           <p className="wkKws">
             Creative web design · Interactive experiences · Motion design · 3D · <br />
             WebGL · Three.js · GSAP · Art direction · Branding · UX/UI
           </p>
+
+          
         </header>
 
         <section className="wkStack" aria-label="Projects">
