@@ -5,11 +5,13 @@ import "./ContactButton.css";
 export default function ContactButton({
   label = "contacto",
   email = "belen.seoane.palmieri@gmail.com",
+  href,
   className = "",
   underlineOffset = 3,
   underlineThickness = 1,
   uppercase = true,
 }) {
+
   const rootRef = useRef(null);
   const tlRef = useRef(null);
 
@@ -46,11 +48,16 @@ export default function ContactButton({
     };
   }, []);
 
+  const finalHref = href ? href : `mailto:${email}`;
+  const isExternal = href && href.startsWith("http");
+
   return (
     <a
       ref={rootRef}
       className={`cb ${uppercase ? "cb--upper" : ""} ${className}`}
-      href={`mailto:${email}`}
+      href={finalHref}
+      target={isExternal ? "_blank" : undefined}
+      rel={isExternal ? "noopener noreferrer" : undefined}
       style={{
         "--cb-underline-offset": `${underlineOffset}px`,
         "--cb-underline-thickness": `${underlineThickness}px`,

@@ -91,7 +91,19 @@ const Home = () => {
                 <br />
                 <ContactButton
                   label="contacto"
-                  href="#contact"
+                  email="belen.seoane.palmieri@gmail.com"
+                  className="contact-btn"
+                  underlineOffset={4}
+                  underlineThickness={1}
+                  uppercase={true}
+                />
+                <br />
+                <br />
+                Diseño web creativo en
+                <br />
+                <ContactButton
+                  label="divino divino"
+                  href="https://divinodivino.com.ar/"
                   className="contact-btn"
                   underlineOffset={4}
                   underlineThickness={1}

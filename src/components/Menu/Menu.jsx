@@ -2,7 +2,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { gsap } from "gsap";
-import "./menu.css";
+import "./Menu.css";
 
 const withBase = (p) => {
   const base = import.meta?.env?.BASE_URL ?? "/";
@@ -14,14 +14,14 @@ export default function Menu() {
   const navigate = useNavigate();
   const isHome = location.pathname === "/";
 
-const links = useMemo(
-  () => [
-    { path: "/work", label: "portfolio", icon: "11.png" },
-    { path: "/bio", label: "bio", icon: "22.png" },
-    { path: "/bio", label: "obras", icon: "33.png" },
-  ],
-  []
-);
+  const links = useMemo(
+    () => [
+      { path: "/work", label: "portfolio", icon: "11.png" },
+      { path: "/bio", label: "bio", icon: "22.png" },
+      { path: "/bio", label: "obras", icon: "33.png" },
+    ],
+    []
+  );
 
   const [open, setOpen] = useState(false);
 
@@ -88,11 +88,11 @@ const links = useMemo(
                   aria-current={active ? "page" : undefined}
                 >
                   <img
-  className="menuDesktopIcon"
-  src={withBase(l.icon)}
-  alt=""
-  aria-hidden="true"
-/>
+                    className="menuDesktopIcon"
+                    src={withBase(l.icon)}
+                    alt=""
+                    aria-hidden="true"
+                  />
                   <span className="menuDesktopLabel">
                     {String(l.label)
                       .split("\n")
@@ -140,7 +140,10 @@ const links = useMemo(
       />
 
       {/* panel (mobile) */}
-      <aside ref={panelRef} className="menuPanel" aria-label="Menú">
+      <aside
+        ref={panelRef}
+        className={`menuPanel ${open ? "isOpen" : ""}`}
+      >
         <div className="menuPanelInner">
           {/* <div className="menuPanelHeader">
             <p className="menuPanelKicker">MENU</p>

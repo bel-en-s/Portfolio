@@ -10,6 +10,7 @@
 .menuDesktop {
   display: none !important;
 }
+
 .menuTop {
   display: flex !important;
 }
@@ -70,10 +71,10 @@
   width: 100%;
   text-align: center;
 
-  min-height: calc(2 * 1.1em); 
+  min-height: calc(2 * 1.1em);
   display: flex;
-  align-items: center;          
-  justify-content: center;   
+  align-items: center;
+  justify-content: center;
 }
 
 .menuDesktopItem.isActive .menuDesktopLabel {
@@ -87,6 +88,7 @@
     left: 28px;
     right: 28px;
   }
+
   /* .menuDesktopIcon {
     width: 24px;
   } */
@@ -155,9 +157,11 @@
 .menuBurger.isOpen span:nth-child(1) {
   transform: translateY(8px) rotate(45deg);
 }
+
 .menuBurger.isOpen span:nth-child(2) {
   opacity: 0;
 }
+
 .menuBurger.isOpen span:nth-child(3) {
   transform: translateY(-8px) rotate(-45deg);
 }
@@ -169,7 +173,8 @@
   position: fixed;
   inset: 0;
   z-index: 24000;
-  background: rgb(233, 231, 231); /* apenas */
+  background: rgb(233, 231, 231);
+  /* apenas */
   backdrop-filter: blur(2px);
 }
 
@@ -264,6 +269,7 @@
     top: 18px;
     right: 16px;
   }
+
   .menuPanelInner {
     padding: 18px 14px;
   }
@@ -276,6 +282,7 @@
   .menuDesktop {
     display: block !important;
   }
+
   .menuTop {
     display: none !important;
   }
@@ -284,9 +291,28 @@
   .menuBackdrop {
     display: none !important;
   }
+
   .menuPanel {
     display: none !important;
   }
 }
 
 
+
+.menuPanel {
+  transform: translateX(100%);
+  will-change: transform;
+}
+
+.menuBackdrop {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.menuPanel {
+  transform: translateX(100%);
+}
+
+.menuPanel.isOpen {
+  transform: translateX(0);
+}
