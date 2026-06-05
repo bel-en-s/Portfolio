@@ -65,12 +65,27 @@ html {
 }
 
 body {
-  /* font-family: 'Poppins', sans-serif; */
   background: linear-gradient(180deg, #ffffff 0%, #f5f1ec 50%, #e3ddd5 100%);
   background-attachment: fixed;
   color: #000000;
   overflow-x: hidden;
   min-height: 100vh;
+}
+
+.index-page {
+  overflow: hidden;
+  height: 100vh;
+  min-height: 100vh;
+}
+
+@media (max-width: 768px) {
+  .index-page .header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 2;
+  }
 }
 
 .canvas {
@@ -232,9 +247,15 @@ footer img {
 
 @media (max-width: 900px) {
   .header h1 {
-    font-size: 40px;
+    font-size: 30px;
     margin-top: 80px;
   }
+
+  .header h2 {
+
+    font-size: 15px;
+
+}
 
   .intro {
     flex-direction: column-reverse;
@@ -353,14 +374,14 @@ footer img {
 
   .construction {
     position: fixed;
-    top: 240px;
+    top: 190px;
     left: 50%;
     transform: translateX(-50%);
   }
 
   .star-grid {
     position: fixed;
-    top: 280px;
+    top: 230px;
     bottom: auto;
     left: 5%;
     width: 90%;
@@ -382,7 +403,9 @@ footer img {
     justify-content: center;
     gap: 0.5rem;
     left: 50%;
-    transform: translate(-50%, 50%);
+    bottom: 0;
+    top: auto;
+    transform: translate(-50%, 0);
   }
 
   .intro-about {
