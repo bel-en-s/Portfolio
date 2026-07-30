@@ -339,6 +339,10 @@ footer img {
 }
 
 @media (min-width: 769px) {
+  .header {
+    padding: 0 2.5em;
+  }
+
   .star-grid {
     width: 60%;
     height: 70%;
@@ -557,6 +561,11 @@ footer img {
   padding: 0 1.5em;
 }
 
+.works-grid-small {
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  max-width: 600px;
+}
+
 .work-item {
   text-decoration: none;
   color: inherit;
@@ -570,6 +579,15 @@ footer img {
   background: #e8e3dd;
   overflow: hidden;
   transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.work-item-tall .work-thumb {
+  aspect-ratio: 4 / 5;
+}
+
+.work-item-tall .work-thumb video {
+  height: 100%;
+  object-fit: cover;
 }
 
 .work-thumb video,

@@ -86,7 +86,9 @@ links.forEach((link) => {
       rotation: 0,
       duration: 0.15,
       ease: 'power2.out',
-      onComplete: () => navigateTo(link.dataset.href),
+      onComplete: () => {
+        if (link.dataset.href) navigateTo(link.dataset.href);
+      },
     });
   });
 });
