@@ -1,14 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="assets/star.png" />
+    <link rel="icon" type="image/png" href="assets/star3.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Belén Seoane Palmieri – Artista multimedial, músico y diseñadora web creativa. Obra digital, 3D interactivo, música y diseño web." />
+    <meta property="og:title" content="Belén Seoane Palmieri" />
+    <meta property="og:description" content="Artista multimedial, músico y diseñadora web creativa. Obra digital, 3D interactivo, música y diseño web." />
+    <meta property="og:image" content="assets/star3.png" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Belén Seoane Palmieri" />
+    <meta name="twitter:description" content="Artista multimedial, músico y diseñadora web creativa." />
+    <meta name="twitter:image" content="assets/star3.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital@1&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
     <title>Belén Seoane Palmieri – Artista Multimedial & Diseñadora Web Creativa</title>
   </head>
@@ -16,81 +24,74 @@
 
     <div id="curtain"></div>
 
-    <div class="canvas"></div>
-    <!-- <div class="announcment">
-     <p>*ੈ✩‧₊˚༺☆༻*ੈ✩‧₊˚    web en proceso   *ੈ✩‧₊˚༺☆༻*ੈ✩‧₊˚</p>
-    </div> -->
-    <div class="header">
-      <div class="header-1">
-        <h1>belén seoane palmieri</h1>
-      </div>
-      <div class="header-2">
-        <h2>creative web designer<br class="mobile-break">& multimedia artist </h2>
-      </div>
-    </div>
+    <audio id="bg-audio" src="audio.m4a" loop preload="none"></audio>
 
-    <div class="intro">
-      <div class="construction">(sitio en construcción)</div>
-      <div class="star-grid">
-        <div class="star-cell">
-          <div class="star-link">
-            <img src="assets/star.png" class="star" data-index="0" />
-            <!-- <span class="star-label">OBRAS </span> -->
-          </div>
-        </div>
-        <div class="star-cell">
-          <div class="star-link">
-            <img src="assets/star2.png" class="star" data-index="1" />
-            <!-- <span class="star-label">MUSICA</span> -->
-          </div>
-        </div>
-        <div class="star-cell">
-          <div class="star-link">
-            <img src="assets/star3.png" class="star" data-index="2" />
-            <!-- <span class="star-label">WEB</span> -->
-          </div>
-        </div>
-        <div class="star-cell">
-          <div class="star-link">
-            <img src="assets/star4.png" class="star" data-index="3" />
-            <!-- <span class="star-label">BIO</span> -->
-          </div>
-        </div>
+    <div class="canvas"></div>
+
+    <header class="header">
+      <div class="header-title">
+        <h1>belén seoane palmieri</h1>
+        <h2>creative web designer &amp; multimedia artist</h2>
       </div>
-      <div class="intro-col">
-        <div class="intro-about">
-          <div class="intro-about-col">
-            <!-- <p>
-              Artista multimedial y diseñadora web creativa.
-              Buenos Aires, Argentina
-            </p> -->
-          </div>
-          <div class="intro-about-col"></div>
-        </div>
+    </header>
+
+    <!--     <main>
+      <div class="star-center" aria-hidden="true">
+        <div id="star-3d" class="star star-3d" data-index="0"></div>
       </div>
-    </div>
+    </main> -->
+
+    <a href="https://divinodivino.com.ar/" target="_blank" rel="noopener noreferrer" class="dd-logo" aria-label="divino divino">
+      <img src="assets/logo-dd.png" alt="divino divino" />
+    </a>
 
     <footer>
-      <a href="mailto:belen.seoane.palmieri@gmail.com">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="2" y="4" width="20" height="16" rx="2" />
-          <path d="M22 4L12 13L2 4" />
-        </svg>
+      <button id="audio-toggle" aria-label="Reproducir / pausar audio" aria-pressed="false">
+        <span class="footer-item-inner" aria-hidden="true">
+          <svg class="footer-ring" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="24" cy="24" r="14" />
+          </svg>
+          <canvas class="audio-toggle-wave"></canvas>
+        </span>
+      </button>
+      <a href="mailto:belen.seoane.palmieri@gmail.com" aria-label="Enviar email">
+        <span class="footer-item-inner" aria-hidden="true">
+          <svg class="footer-ring" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="24" cy="24" r="14" />
+          </svg>
+          <svg class="footer-glyph" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="4" width="20" height="16" rx="2" />
+            <path d="M22 4L12 13L2 4" />
+          </svg>
+        </span>
       </a>
-      <a href="https://www.instagram.com/bel.en.s" target="_blank" rel="noopener noreferrer">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="2" y="2" width="20" height="20" rx="5" />
-          <circle cx="12" cy="12" r="5" />
-          <circle cx="17.5" cy="6.5" r="1.5" />
-        </svg>
-      </a>
-      <a href="https://www.behance.net/bel-en-s" target="_blank" rel="noopener noreferrer">
-        <img src="behance-svgrepo-com.svg" alt="Behance" width="24" height="24" />
+      <a href="https://www.instagram.com/belisbel_/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+        <span class="footer-item-inner" aria-hidden="true">
+          <svg class="footer-ring" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="24" cy="24" r="14" />
+          </svg>
+          <svg class="footer-glyph" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="5" />
+            <circle cx="12" cy="12" r="5" />
+            <circle cx="17.5" cy="6.5" r="1.5" />
+          </svg>
+        </span>
       </a>
     </footer>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script src="main.js"></script>
+    <div id="three-container"></div>
+
+    <div class="star-titles">
+      <a class="scene-star-label" href="bio.html">Bio</a>
+      <a class="scene-star-label" href="musica.html">Música</a>
+      <a class="scene-star-label" href="visual-art.html">Visual art</a>
+      <a class="scene-star-label" href="https://divinodivino.com.ar/work.html" target="_blank" rel="noopener noreferrer">Web</a>
+    </div>
+
+    <script type="module" src="three-scene.js"></script>
+    <!-- <script type="module" src="star.js"></script> -->
+    <script type="module" src="main.js"></script>
+    <script type="module" src="audio-wave.js"></script>
 
   </body>
 </html>

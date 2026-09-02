@@ -1,0 +1,317 @@
+@font-face {
+  font-family: "PP Neue Montreal";
+  src: url("assets/fonts/NeueMontreal-Light.otf") format("opentype");
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "PP Neue Montreal";
+  src: url("assets/fonts/NeueMontreal-LightItalic.otf") format("opentype");
+  font-weight: 300;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "PP Neue Montreal";
+  src: url("assets/fonts/NeueMontreal-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "PP Neue Montreal";
+  src: url("assets/fonts/NeueMontreal-RegularItalic.otf") format("opentype");
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "PP Neue Montreal";
+  src: url("assets/fonts/NeueMontreal-Medium.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "PP Neue Montreal";
+  src: url("assets/fonts/NeueMontreal-MediumItalic.otf") format("opentype");
+  font-weight: 500;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "PP Neue Montreal";
+  src: url("assets/fonts/NeueMontreal-Bold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "PP Neue Montreal";
+  src: url("assets/fonts/NeueMontreal-BoldItalic.otf") format("opentype");
+  font-weight: 700;
+  font-style: italic;
+}
+
+body.work-page-body {
+  background: #f5efe2;
+  color: #000;
+  font-family: "PP Neue Montreal", "Helvetica Neue", Arial, sans-serif;
+}
+
+body.work-page-body a {
+  text-decoration: none;
+  color: #000;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+body.work-page-body a:hover {
+  text-decoration: none;
+}
+
+body.work-page-body a#a-underline {
+  text-decoration: underline;
+}
+
+body.work-page-body p {
+  font-size: 16px;
+  line-height: 125%;
+}
+
+body.work-page-body h1 {
+  font-weight: 500;
+  font-size: 60px;
+  margin: 0;
+}
+
+body.work-page-body h1.section-title {
+  font-size: 64px;
+  line-height: 85%;
+}
+
+body.work-page-body img,
+body.work-page-body video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.container {
+  margin: 0 auto;
+  max-width: 1200px;
+  padding: 0 20px;
+}
+
+.divider {
+  width: 100%;
+  height: 1px;
+  background: #000;
+  margin: 10px 0 15px 0;
+}
+
+.work-page {
+  margin-top: 50px;
+}
+
+/* navbar */
+
+.navbar .container {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.navbar-items {
+  display: flex;
+  gap: 10px;
+}
+
+.navbar-item {
+  padding: 10px;
+}
+
+.navbar-logo {
+  font-weight: 500;
+}
+
+/* footer */
+
+.footer {
+  padding-bottom: 20px;
+}
+
+.footer .container {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 20px 20px;
+}
+
+.footer p {
+  line-height: 100%;
+}
+
+/* work section */
+
+.work-section {
+  width: 100%;
+}
+
+.work-section-header {
+  width: 100%;
+  display: flex;
+  margin-bottom: 100px;
+}
+
+.work-section-header > div {
+  flex: 1;
+}
+
+.section-header-copy {
+  display: flex;
+  justify-content: space-between;
+}
+
+.projects {
+  width: 100%;
+}
+
+.projects .row {
+  width: 100%;
+  display: flex;
+  gap: 10px;
+  margin-bottom: 100px;
+}
+
+.projects .row > div {
+  flex: 1;
+}
+
+.projects .row .col {
+  display: flex;
+  gap: 10px;
+}
+
+.projects .row .project-img {
+  height: 400px;
+  overflow: hidden;
+  background: #e8e3dd;
+}
+
+.projects .row .col.sm .project-img {
+  height: 200px;
+}
+
+.projects .row .col > div {
+  flex: 1;
+}
+
+.project-category {
+  color: #a1a1a1;
+  margin-top: 1.5px;
+}
+
+.project-title {
+  margin-top: 5px;
+}
+
+/* bio */
+
+.bio-copy {
+  max-width: 760px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.6em;
+  margin-bottom: 100px;
+}
+
+.bio-copy p {
+  font-size: 22px;
+  line-height: 150%;
+  font-weight: 400;
+}
+
+/* music */
+
+.music {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 100px;
+}
+
+.music-figure {
+  margin: 0;
+}
+
+body.work-page-body .music-figure img {
+  display: block;
+  width: min(320px, 72vw);
+  height: auto;
+  border-radius: 12px;
+}
+
+.music-coming {
+  font-size: 16px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #000;
+}
+
+@media (min-width: 769px) {
+  .music {
+    flex-direction: row;
+    gap: 3.5rem;
+  }
+
+  body.work-page-body .music-figure img {
+    width: min(420px, 40vw);
+  }
+}
+
+@media (max-width: 900px) {
+  .container {
+    width: 100%;
+  }
+
+  .navbar-items {
+    gap: 0;
+  }
+
+  .navbar-item {
+    padding: 5px;
+  }
+
+  .footer .container {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  #footer-contact {
+    margin-top: 25px;
+  }
+
+  .work-section-header {
+    gap: 25px;
+    flex-direction: column;
+  }
+
+  .section-header-copy {
+    padding: 0 2.5px;
+  }
+
+  .projects .row {
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .projects .row .col {
+    flex-direction: column;
+    gap: 40px;
+  }
+}

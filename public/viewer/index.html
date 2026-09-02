@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Viewer — STAR1.glb</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; overflow: hidden; background: #0e0e10; }
+    #app { position: fixed; inset: 0; }
+    canvas { display: block; }
+
+    #hud {
+      position: fixed;
+      top: 14px; left: 14px;
+      z-index: 10;
+      font-family: 'Poppins', system-ui, sans-serif;
+      color: #eee;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      pointer-events: none;
+    }
+    #hud b { color: #fff; }
+    #hud .dim { color: #999; }
+
+    #toolbar {
+      position: fixed;
+      bottom: 16px; left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      display: flex;
+      gap: 8px;
+    }
+    #toolbar button {
+      font-family: 'Poppins', system-ui, sans-serif;
+      font-size: 12px;
+      letter-spacing: 0.05em;
+      color: #eee;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 6px;
+      padding: 8px 14px;
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease;
+      backdrop-filter: blur(6px);
+    }
+    #toolbar button:hover { background: rgba(255,255,255,0.14); }
+    #toolbar button.active { color: #000; background: #fff; }
+
+    #overlay {
+      position: fixed; inset: 0; z-index: 20;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 18px;
+      background: #0e0e10;
+      color: #eee;
+      font-family: 'Poppins', system-ui, sans-serif;
+      transition: opacity 0.4s ease;
+    }
+    #overlay.hidden { opacity: 0; pointer-events: none; }
+    #bar-wrap { width: 220px; height: 3px; background: rgba(255,255,255,0.12); border-radius: 3px; overflow: hidden; }
+    #bar { height: 100%; width: 0%; background: #fff; transition: width 0.2s ease; }
+    #status { font-size: 13px; letter-spacing: 0.05em; color: #bbb; }
+    #error { color: #ff7b7b; font-size: 13px; max-width: 420px; text-align: center; line-height: 1.5; display: none; }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+
+  <div id="hud">
+    <div><b>STAR1.glb</b></div>
+    <div class="dim" id="info">cargando…</div>
+  </div>
+
+  <div id="toolbar">
+    <button id="btn-rotate" class="active">Auto-rotar</button>
+    <button id="btn-wireframe">Wireframe</button>
+    <button id="btn-reset">Reset cámara</button>
+  </div>
+
+  <div id="overlay">
+    <div id="bar-wrap"><div id="bar"></div></div>
+    <div id="status">Cargando modelo…</div>
+    <div id="error"></div>
+  </div>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+        "three/examples/jsm/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+  <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+    import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+    import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
+
+    const app = document.getElementById('app');
+    const overlay = document.getElementById('overlay');
+    const bar = document.getElementById('bar');
+    const status = document.getElementById('status');
+    const errorBox = document.getElementById('error');
+    const info = document.getElementById('info');
+
+    const params = new URLSearchParams(location.search);
+    const file = params.get('file') || '../assets/STAR1.glb';
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x111114);
+
+    const camera = new THREE.PerspectiveCamera(45, innerWidth / innerHeight, 0.01, 1000);
+    camera.position.set(4, 3, 5);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(innerWidth, innerHeight);
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.2;
+    app.appendChild(renderer.domElement);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.08;
+    controls.autoRotate = true;
+    controls.autoRotateSpeed = 1.2;
+
+    // iluminación + entorno
+    const pmrem = new THREE.PMREMGenerator(renderer);
+    pmrem.compileEquirectangularShader();
+    const envTex = pmrem.fromScene(new RoomEnvironment()).texture;
+    scene.environment = envTex;
+    pmrem.dispose();
+
+    const key = new THREE.DirectionalLight(0xffffff, 2.5);
+    key.position.set(5, 8, 6);
+    scene.add(key);
+    const rim = new THREE.DirectionalLight(0xffffff, 1.2);
+    rim.position.set(-5, -2, -4);
+    scene.add(rim);
+
+    // referencias de escala
+    const grid = new THREE.GridHelper(20, 20, 0x444444, 0x222222);
+    grid.visible = false;
+    scene.add(grid);
+
+    let model, originalPos = new THREE.Vector3();
+
+    function fitCamera(object) {
+      const box = new THREE.Box3().setFromObject(object);
+      const size = box.getSize(new THREE.Vector3());
+      const center = box.getCenter(new THREE.Vector3());
+      const maxDim = Math.max(size.x, size.y, size.z) || 1;
+
+      // centrar el modelo en el origen
+      object.position.sub(center);
+      originalPos.copy(object.position);
+
+      const fit = 1.2;
+      const fov = camera.fov * Math.PI / 180;
+      let dist = (maxDim / 2) / Math.tan(fov / 2) * fit;
+      camera.position.set(dist * 0.6, dist * 0.4, dist);
+      camera.near = Math.max(0.001, dist / 100);
+      camera.far = dist * 100;
+      camera.updateProjectionMatrix();
+
+      controls.target.set(0, 0, 0);
+      controls.minDistance = maxDim * 0.05;
+      controls.maxDistance = maxDim * 10;
+      controls.update();
+    }
+
+    const loader = new GLTFLoader();
+    loader.load(
+      file,
+      (gltf) => {
+        model = gltf.scene;
+        scene.add(model);
+        fitCamera(model);
+        overlay.classList.add('hidden');
+
+        let verts = 0, tris = 0;
+        model.traverse((o) => {
+          if (o.isMesh) {
+            const g = o.geometry;
+            if (g.index) tris += g.index.count / 3; else tris += (g.attributes.position?.count || 0) / 3;
+            verts += g.attributes.position?.count || 0;
+          }
+        });
+        info.textContent = `${verts.toLocaleString()} vértices · ${Math.round(tris).toLocaleString()} triángulos`;
+      },
+      (xhr) => {
+        if (xhr.total) {
+          const pct = Math.round((xhr.loaded / xhr.total) * 100);
+          bar.style.width = pct + '%';
+          status.textContent = `Cargando modelo… ${pct}%`;
+        }
+      },
+      (err) => {
+        errorBox.style.display = 'block';
+        errorBox.textContent = 'Error cargando ' + file + ' — ' + (err?.message || err);
+        status.textContent = 'No se pudo cargar';
+      }
+    );
+
+    // toolbar
+    const btnRotate = document.getElementById('btn-rotate');
+    const btnWire = document.getElementById('btn-wireframe');
+    const btnReset = document.getElementById('btn-reset');
+
+    btnRotate.addEventListener('click', () => {
+      controls.autoRotate = !controls.autoRotate;
+      btnRotate.classList.toggle('active', controls.autoRotate);
+    });
+
+    let wire = false;
+    btnWire.addEventListener('click', () => {
+      wire = !wire;
+      btnWire.classList.toggle('active', wire);
+      if (!model) return;
+      model.traverse((o) => { if (o.isMesh) o.material.wireframe = wire; });
+    });
+
+    btnReset.addEventListener('click', () => {
+      if (!model) return;
+      fitCamera(model);
+      grid.visible = false;
+    });
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'g' || e.key === 'G') grid.visible = !grid.visible;
+    });
+
+    addEventListener('resize', () => {
+      camera.aspect = innerWidth / innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(innerWidth, innerHeight);
+    });
+
+    function tick() {
+      requestAnimationFrame(tick);
+      controls.update();
+      renderer.render(scene, camera);
+    }
+    tick();
+  </script>
+</body>
+</html>
