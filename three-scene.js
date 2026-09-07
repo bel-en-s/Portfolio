@@ -19,7 +19,12 @@ function webglSupported() {
 if (!webglSupported()) {
   applyFallback();
 } else {
-  initScene();
+  try {
+    initScene();
+  } catch (err) {
+    console.error('Error inicializando la escena 3D', err);
+    applyFallback();
+  }
 }
 
 function initScene() {
@@ -206,7 +211,7 @@ setTimeout(() => {
     console.warn('Timeout cargando star.glb');
     applyFallback();
   }
-}, 12000);
+}, 6000);
 
 function layoutStars() {
   if (!stars.length) return;
