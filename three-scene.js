@@ -25,6 +25,7 @@ const bgCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
 camera.position.set(0, 0, 5);
+camera.lookAt(0, 0, 0);
 
 const uniforms = {
   uTime: { value: 0 },
@@ -195,8 +196,6 @@ const starBaseRot = [0.18, -0.14, 0.22, -0.2];
 const starBaseRotY = [0.35, -0.5, 0.6, -0.25];
 const starScrollSpeed = [0.5, 1.0, 1.6, 2.2];
 const starBaseY = [0.28, -0.2, 0.12, -0.28];
-const starParallaxX = [0.08, -0.16, 0.24, -0.12];
-const starParallaxY = [0.12, -0.07, 0.18, -0.14];
 
 const stars = [];
 const labelEls = Array.from(document.querySelectorAll('.scene-star-label'));
@@ -241,9 +240,9 @@ gltfLoader.load('star.glb', (gltf) => {
       baseRot: starBaseRot[i],
       baseRotY: starBaseRotY[i],
       scrollSpeed: starScrollSpeed[i],
-      px: starParallaxX[i],
-      py: starParallaxY[i],
       labelOffset: 0,
+      tiltX: 0,
+      tiltY: 0,
     });
   });
 
@@ -268,8 +267,8 @@ function layoutStars() {
     if (narrow) {
       const col = i % 2;
       const row = Math.floor(i / 2);
-      const x = (col - 0.5) * (visWidth * 0.44);
-      const y = row === 0 ? 0.62 : -0.62;
+      const x = (col - 0.5) * (visWidth * 0.38);
+      const y = row === 0 ? 0.48 : -0.48;
       s.baseX = x;
       s.baseY = y;
     } else {
@@ -327,12 +326,44 @@ window.addEventListener('wheel', (e) => {
   targetScrollRot += e.deltaY * 0.002;
 }, { passive: true });
 
+// Touch (móvil): arrastrar gira las estrellas y bloquea el scroll
+let touchActive = false;
+let touchStartX = 0;
+let touchStartY = 0;
+let touchMoved = 0;
+
+window.addEventListener('touchstart', (e) => {
+  if (e.touches.length !== 1) return;
+  const t = e.touches[0];
+  touchActive = true;
+  touchMoved = 0;
+  touchStartX = t.clientX;
+  touchStartY = t.clientY;
+}, { passive: true });
+
+window.addEventListener('touchmove', (e) => {
+  if (!touchActive || e.touches.length !== 1) return;
+  const t = e.touches[0];
+  const dx = t.clientX - touchStartX;
+  const dy = t.clientY - touchStartY;
+  touchStartX = t.clientX;
+  touchStartY = t.clientY;
+  touchMoved += Math.abs(dx) + Math.abs(dy);
+  targetScrollRot += dx * 0.006;
+  if (Math.abs(dx) > 0) e.preventDefault();
+}, { passive: false });
+
+window.addEventListener('touchend', () => {
+  touchActive = false;
+});
+
 // Click en una estrella → navegar a su página
 const starPages = ['bio.html', 'musica.html', 'visual-art.html', 'https://divinodivino.com.ar/work.html'];
 const clickNDC = new THREE.Vector2();
 
 window.addEventListener('click', (e) => {
   if (!stars.length) return;
+  if (touchMoved > 12) return;
   clickNDC.set((e.clientX / window.innerWidth) * 2 - 1, -(e.clientY / window.innerHeight) * 2 + 1);
   raycaster.setFromCamera(clickNDC, camera);
   for (let i = 0; i < stars.length; i++) {
@@ -351,6 +382,7 @@ window.addEventListener('click', (e) => {
 
 // Solo desktop: al pasar el mouse sobre un h3 se reactiva la animación
 let hoverBoost = 0;
+let hoveredIndex = -1;
 
 if (!isMobile) {
   document.querySelectorAll('.header h3').forEach((h3) => {
@@ -395,14 +427,6 @@ function animate() {
     s.group.rotation.z = s.baseRot + scrollRot * s.scrollSpeed;
   });
 
-  // Parallax por estrella: cada una se mueve desde un pivot distinto (suave)
-  stars.forEach((s) => {
-    const tx = s.baseX + pointer.x * s.px;
-    const ty = s.baseY + pointer.y * s.py;
-    s.group.position.x += (tx - s.group.position.x) * 0.06;
-    s.group.position.y += (ty - s.group.position.y) * 0.06;
-  });
-
   // Luz soñadora orbitando con color cambiante
   dreamLight.position.set(
     Math.cos(elapsed * 0.5) * 3.2,
@@ -415,12 +439,6 @@ function animate() {
   // Entorno "respira" (más envolvente)
   scene.environmentIntensity = 1.0 + Math.sin(elapsed * 0.5) * 0.25;
 
-  // Parallax de cámara con el mouse (cinemático, sutil)
-  camera.position.x += (pointer.x * 0.1 - camera.position.x) * 0.05;
-  camera.position.y += (-pointer.y * 0.08 - camera.position.y) * 0.05;
-  camera.lookAt(0, 0, 0);
-  camera.updateMatrixWorld();
-
   // La luz del cursor sigue el mouse sobre la escena
   raycaster.setFromCamera(pointer, camera);
   if (raycaster.ray.intersectPlane(spherePlane, cursorPoint)) {
@@ -429,6 +447,33 @@ function animate() {
   }
   cursorLight.position.z = 2;
   glowSprite.position.set(cursorLight.position.x, cursorLight.position.y, 1.4);
+
+  // Las estrellas se inclinan suavemente hacia el cursor (sin moverse de sitio)
+  stars.forEach((s) => {
+    const dx = cursorPoint.x - s.group.position.x;
+    const dy = cursorPoint.y - s.group.position.y;
+    const targetTiltX = THREE.MathUtils.clamp(-dy * 0.3, -0.55, 0.55);
+    const targetTiltY = THREE.MathUtils.clamp(dx * 0.3, -0.55, 0.55);
+    s.tiltX += (targetTiltX - s.tiltX) * Math.min(delta * 6, 1);
+    s.tiltY += (targetTiltY - s.tiltY) * Math.min(delta * 6, 1);
+    s.group.rotation.x = s.tiltX;
+    s.group.rotation.y = s.baseRotY + s.tiltY;
+  });
+
+  // Hover: subraya la etiqueta de la estrella bajo el cursor (solo desktop)
+  if (!isMobile) {
+    let hoverIdx = -1;
+    for (let i = 0; i < stars.length; i++) {
+      if (raycaster.intersectObject(stars[i].group, true).length) {
+        hoverIdx = i;
+        break;
+      }
+    }
+    if (hoverIdx !== hoveredIndex) {
+      hoveredIndex = hoverIdx;
+      labelEls.forEach((el, i) => el.classList.toggle('is-hovered', i === hoverIdx));
+    }
+  }
 
   // Etiquetas debajo de cada estrella (siguen su posición en pantalla)
   stars.forEach((s, i) => {

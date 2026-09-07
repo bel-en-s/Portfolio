@@ -8,74 +8,97 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
-    <link rel="stylesheet" href="work.css" />
     <title>Belén Seoane Palmieri – Música</title>
   </head>
-  <body class="work-page-body">
+  <body class="index-page bio-page">
 
     <div id="curtain"></div>
 
-    <div class="navbar">
-      <div class="container">
-        <div class="navbar-logo">
-          <div class="navbar-item">
-            <a href="index.html">Belén Seoane Palmieri</a>
-          </div>
-        </div>
-        <div class="navbar-items">
-          <div class="navbar-item">
-            <a href="index.html">Home</a>
-          </div>
-          <div class="navbar-item">
-            <a href="https://divinodivino.com.ar/work.html" target="_blank" rel="noopener noreferrer">Work</a>
-          </div>
-          <div class="navbar-item">
-            <a href="visual-art.html">Visual Art</a>
-          </div>
-          <div class="navbar-item">
-            <a href="bio.html">Bio</a>
-          </div>
-          <div class="navbar-item">
-            <a href="musica.html">Música</a>
-          </div>
-          <div class="navbar-item">
-            <a href="mailto:belen.seoane.palmieri@gmail.com">Contact</a>
-          </div>
-        </div>
+    <audio id="bg-audio" src="audio.m4a" loop preload="none"></audio>
+
+    <header class="header">
+      <div class="header-title">
+        <h1>belén seoane palmieri</h1>
       </div>
+      <nav class="header-nav">
+        <a class="header-nav-item" href="index.html">
+          <img src="assets/nav-star.png" alt="" />
+          <span>home</span>
+        </a>
+        <a class="header-nav-item" href="bio.html">
+          <img src="assets/nav-star.png" alt="" />
+          <span>bio</span>
+        </a>
+        <a class="header-nav-item" href="visual-art.html">
+          <img src="assets/nav-star.png" alt="" />
+          <span>visual art</span>
+        </a>
+        <a class="header-nav-item" href="musica.html">
+          <img src="assets/nav-star.png" alt="" />
+          <span>music</span>
+        </a>
+        <a class="header-nav-item" href="https://divinodivino.com.ar/" target="_blank" rel="noopener noreferrer">
+          <img src="assets/nav-star.png" alt="" />
+          <span>commercial<br />work</span>
+        </a>
+      </nav>
+    </header>
+
+    <main class="bio-main">
+      <h2 class="bio-title">música</h2>
+      <div class="music-block">
+         <p class="music-coming">coming soon</p>
+        <figure class="music-figure">
+          <img src="assets/ceece-9749.jpg" alt="Música" />
+        </figure>
+      </div>
+    </main>
+
+    <div class="dd-brand">
+      <a href="https://divinodivino.com.ar/" target="_blank" rel="noopener noreferrer" class="dd-logo" aria-label="divino divino">
+        <img src="assets/logo-dd.png" alt="divino divino" />
+      </a>
+      <a class="dd-email" href="mailto:belen.seoane.palmieri@gmail.com">belen.seoane.palmieri@gmail.com</a>
     </div>
 
-    <div class="work-page">
-      <div class="divider"></div>
+    <footer>
+      <button id="audio-toggle" aria-label="Reproducir / pausar audio" aria-pressed="false">
+        <span class="footer-item-inner" aria-hidden="true">
+          <svg class="footer-ring" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="24" cy="24" r="14" />
+          </svg>
+          <canvas class="audio-toggle-wave"></canvas>
+        </span>
+      </button>
+      <a href="mailto:belen.seoane.palmieri@gmail.com" aria-label="Enviar email">
+        <span class="footer-item-inner" aria-hidden="true">
+          <svg class="footer-ring" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="24" cy="24" r="14" />
+          </svg>
+          <svg class="footer-glyph" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="4" width="20" height="16" rx="2" />
+            <path d="M22 4L12 13L2 4" />
+          </svg>
+        </span>
+      </a>
+      <a href="https://www.instagram.com/belisbel_/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+        <span class="footer-item-inner" aria-hidden="true">
+          <svg class="footer-ring" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="24" cy="24" r="14" />
+          </svg>
+          <svg class="footer-glyph" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="5" />
+            <circle cx="12" cy="12" r="5" />
+            <circle cx="17.5" cy="6.5" r="1.5" />
+          </svg>
+        </span>
+      </a>
+    </footer>
 
-      <div class="container">
-        <div class="work-section">
-          <div class="work-section-header">
-            <div class="section-header-title">
-              <h1 class="section-title">Música</h1>
-            </div>
-            <div class="section-header-copy">
-              <p>coming soon</p>
-              <p>
-                <a href="index.html" id="a-underline">Back</a>
-              </p>
-              <p>(—)</p>
-            </div>
-          </div>
-
-          <div class="music">
-            <figure class="music-figure">
-              <img src="assets/ceece-9749.jpg" alt="Música" />
-            </figure>
-            <p class="music-coming">coming soon</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="divider"></div>
-    </div>
+    <script type="module" src="main.js"></script>
+    <script type="module" src="audio-wave.js"></script>
 
   </body>
 </html>

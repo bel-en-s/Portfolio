@@ -4,6 +4,62 @@
   box-sizing: border-box;
 }
 
+@font-face {
+  font-family: "PP Neue Montreal";
+  src: url("assets/fonts/NeueMontreal-Light.otf") format("opentype");
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "PP Neue Montreal";
+  src: url("assets/fonts/NeueMontreal-LightItalic.otf") format("opentype");
+  font-weight: 300;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "PP Neue Montreal";
+  src: url("assets/fonts/NeueMontreal-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "PP Neue Montreal";
+  src: url("assets/fonts/NeueMontreal-RegularItalic.otf") format("opentype");
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "PP Neue Montreal";
+  src: url("assets/fonts/NeueMontreal-Medium.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "PP Neue Montreal";
+  src: url("assets/fonts/NeueMontreal-MediumItalic.otf") format("opentype");
+  font-weight: 500;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "PP Neue Montreal";
+  src: url("assets/fonts/NeueMontreal-Bold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "PP Neue Montreal";
+  src: url("assets/fonts/NeueMontreal-BoldItalic.otf") format("opentype");
+  font-weight: 700;
+  font-style: italic;
+}
+
 :focus-visible {
   outline: 2px solid #000;
   outline-offset: 3px;
@@ -152,6 +208,17 @@ body {
   overflow: hidden;
   height: 100vh;
   min-height: 100vh;
+  overscroll-behavior: none;
+}
+
+@media (pointer: coarse) {
+  .index-page {
+    touch-action: none;
+  }
+
+  .index-page .scene-star-label {
+    touch-action: manipulation;
+  }
 }
 
 #three-container {
@@ -228,8 +295,195 @@ body {
   top: 0;
   left: 0;
   width: 100%;
-  padding: clamp(2.5rem, 7vh, 4rem) clamp(1.5rem, 5vw, 3rem) 0;
+  padding: clamp(2.5rem, 3vh, 4rem) clamp(1.5rem, 5vw, 3rem) 0;
   z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.header-nav {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: clamp(1rem, 2.5vw, 2rem);
+}
+
+.header-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  color: #000;
+  text-decoration: none;
+}
+
+.header-nav-item img {
+  width: 26px;
+  height: auto;
+  display: block;
+  transition: transform 0.3s cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+.header-nav-item span {
+  font-family: 'Geist', sans-serif;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 12px;
+  line-height: 100%;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.header-nav-item:hover img {
+  transform: rotate(90deg);
+}
+
+.header-nav-item:hover span {
+  text-decoration: underline;
+}
+
+.index-page.bio-page {
+  height: auto;
+  min-height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.index-page.bio-page .header {
+  position: relative;
+  top: auto;
+  left: auto;
+  align-items: center;
+}
+
+.bio-main {
+  position: relative;
+  z-index: 1;
+  padding: clamp(3rem, 8vh, 6rem) clamp(1.5rem, 5vw, 3rem) clamp(9rem, 20vh, 14rem);
+}
+
+.bio-title {
+  font-family: 'Playfair Display', serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  line-height: 100%;
+  margin: 0 0 1.25em;
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+  text-decoration-thickness: 1px;
+}
+
+.art-subtitles {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: -0.75em 0 2.5em;
+}
+
+.art-subtitle {
+  font-family: 'Playfair Display', serif;
+  font-weight: 400;
+  font-style: italic;
+  font-size: clamp(1rem, 1.6vw, 1.25rem);
+  line-height: 120%;
+}
+
+.bio-columns {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.bio-columns p {
+  font-family: "PP Neue Montreal", "Helvetica Neue", Arial, sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 150%;
+  margin: 0;
+  padding: 0 clamp(1.25rem, 3vw, 2.5rem);
+}
+
+.bio-columns p:first-child {
+  padding-left: 0;
+}
+
+.bio-columns p:last-child {
+  padding-right: 0;
+}
+
+.bio-columns p + p {
+  border-left: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+@media (max-width: 768px) {
+  .bio-columns {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .bio-columns p {
+    padding: 0;
+  }
+
+  .bio-columns p + p {
+    border-left: none;
+  }
+}
+
+.art-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+}
+
+.art-cell {
+  aspect-ratio: 1 / 1;
+  background: #e8e3dd;
+}
+
+.art-cell:nth-child(1) { background: #ffd1dc; }
+.art-cell:nth-child(2) { background: #ffe0b2; }
+.art-cell:nth-child(3) { background: #fff9c4; }
+.art-cell:nth-child(4) { background: #c8e6c9; }
+.art-cell:nth-child(5) { background: #b3e5fc; }
+.art-cell:nth-child(6) { background: #d1c4e9; }
+.art-cell:nth-child(7) { background: #f8bbd0; }
+.art-cell:nth-child(8) { background: #cfd8dc; }
+
+.art-cell img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.music-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.music-figure {
+  margin: 0;
+}
+
+.music-figure img {
+  display: block;
+  width: min(320px, 100vw);
+  height: auto;
+}
+
+.music-coming {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 16px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #000;
 }
 
 .index-page .header h1 {
@@ -415,18 +669,39 @@ footer img {
   display: block;
 }
 
-.dd-logo {
+.dd-brand {
   position: fixed;
   bottom: 1.5rem;
   left: 50%;
   transform: translateX(-50%);
-  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
   z-index: 3;
 }
 
+.dd-logo {
+  display: block;
+  padding: 0;
+}
+
 .dd-logo img {
-  width: 110px;
+  width: 70px;
   height: auto;
+}
+
+.dd-email {
+  font-family: "PP Neue Montreal", "Helvetica Neue", Arial, sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  color: #000;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.dd-email:hover {
+  text-decoration: underline;
 }
 
 .footer-cta {
@@ -455,8 +730,7 @@ footer img {
 
 @media (max-width: 900px) {
   .header h1 {
-    font-size: 24px;
-    margin-top: 40px;
+    font-size: 20px;
   }
 
   .header h2 {
@@ -585,6 +859,24 @@ footer img {
   text-shadow: 0 0 12px rgba(255, 255, 255, 0.5);
 }
 
+.scene-star-label::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -3px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.scene-star-label.is-hovered::after,
+.scene-star-label:hover::after {
+  transform: scaleX(1);
+}
+
 @media (min-width: 769px) {
   .header {
     padding: 0 2.5em;
@@ -667,7 +959,7 @@ footer img {
     transform: translateX(-50%);
   }
 
-  .dd-logo {
+  .dd-brand {
     bottom: 4.5rem;
     transform: translateX(-50%);
   }
