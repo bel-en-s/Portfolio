@@ -229,12 +229,12 @@ const glowSprite = new THREE.Sprite(new THREE.SpriteMaterial({
 glowSprite.scale.setScalar(3.2);
 scene.add(glowSprite);
 
-// --- Estrellas metálicas (4 instancias de star.glb) ---
-const starColors = ['#e3b3bb', '#a9c3ce', '#b3c4a8', '#d4bf9a'];
-const starBaseRot = [0.18, -0.14, 0.22, -0.2];
-const starBaseRotY = [0.35, -0.5, 0.6, -0.25];
-const starScrollSpeed = [0.5, 1.0, 1.6, 2.2];
-const starBaseY = [0.28, -0.2, 0.12, -0.28];
+// --- Estrellas metálicas (3 instancias de star.glb) ---
+const starColors = ['#e3b3bb', '#a9c3ce', '#b3c4a8'];
+const starBaseRot = [0.18, -0.14, 0.22];
+const starBaseRotY = [0.35, -0.5, 0.6];
+const starScrollSpeed = [0.5, 1.0, 1.6];
+const starBaseY = [0.28, -0.2, 0.12];
 
 const stars = [];
 const labelEls = Array.from(document.querySelectorAll('.scene-star-label'));
@@ -310,20 +310,23 @@ function layoutStars() {
   const targetSize = narrow ? 0.48 : 0.85;
   const scale = targetSize / starMaxDim;
 
+  // Distribución piramidal: 2 arriba, 1 abajo centrado
+  const positions = narrow
+    ? [
+        { x: -visWidth * 0.2, y: 0.45 },
+        { x: visWidth * 0.2, y: 0.45 },
+        { x: 0, y: -0.5 },
+      ]
+    : [
+        { x: -1.0, y: 0.4 },
+        { x: 1.0, y: 0.4 },
+        { x: 0, y: -0.65 },
+      ];
+
   stars.forEach((s, i) => {
-    if (narrow) {
-      const col = i % 2;
-      const row = Math.floor(i / 2);
-      const x = (col - 0.5) * (visWidth * 0.38);
-      const y = row === 0 ? 0.48 : -0.48;
-      s.baseX = x;
-      s.baseY = y;
-    } else {
-      const gap = 1.35;
-      const x = (i - (stars.length - 1) / 2) * gap;
-      s.baseX = x;
-      s.baseY = starBaseY[i];
-    }
+    const p = positions[i] || { x: 0, y: 0 };
+    s.baseX = p.x;
+    s.baseY = p.y;
     s.group.scale.setScalar(scale);
     s.group.position.set(s.baseX, s.baseY, 0);
     s.labelOffset = targetSize * 0.58;
@@ -374,7 +377,7 @@ window.addEventListener('wheel', (e) => {
 }, { passive: true });
 
 // Click en una estrella → navegar a su página
-const starPages = ['bio.html', 'musica.html', 'visual-art.html', 'https://divinodivino.com.ar/work.html'];
+const starPages = ['bio.html', 'musica.html', 'visual-art.html'];
 const clickNDC = new THREE.Vector2();
 
 window.addEventListener('click', (e) => {
