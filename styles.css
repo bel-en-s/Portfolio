@@ -218,10 +218,6 @@ body {
 }
 
 @media (pointer: coarse) {
-  .index-page {
-    touch-action: none;
-  }
-
   .index-page .scene-star-label {
     touch-action: manipulation;
   }
@@ -433,6 +429,27 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   overflow-y: auto;
+}
+
+.index-page.bio-page .dd-brand {
+  position: static;
+  left: auto;
+  bottom: auto;
+  transform: none;
+  margin-top: 4rem;
+}
+
+.index-page.bio-page footer {
+  position: static;
+  left: auto;
+  bottom: auto;
+  transform: none;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 2rem 1.5rem 4rem;
+  mix-blend-mode: normal;
 }
 
 .index-page.bio-page .header {
