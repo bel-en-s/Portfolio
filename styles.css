@@ -594,6 +594,15 @@ body {
   color: #000;
 }
 
+.art-link {
+  text-decoration: none;
+  color: #000;
+}
+
+.art-link:hover {
+  text-decoration: underline;
+}
+
 .music-block {
   display: flex;
   flex-direction: column;
