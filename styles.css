@@ -877,6 +877,26 @@ footer img {
   transform: scaleX(1);
 }
 
+/* Fallback sin WebGL / GLB: la navegación sigue visible y clicable */
+.star-titles.is-fallback {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  gap: 2rem 3rem;
+}
+
+.star-titles.is-fallback .scene-star-label {
+  position: static;
+  left: auto;
+  top: auto;
+  transform: none;
+  pointer-events: auto;
+  font-size: 16px;
+  padding: 0.6rem 1.1rem;
+}
+
 @media (min-width: 769px) {
   .header {
     padding: 0 2.5em;

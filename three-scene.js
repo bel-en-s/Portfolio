@@ -1,16 +1,46 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
+function applyFallback() {
+  document.body.classList.add('no-webgl');
+  const titles = document.querySelector('.star-titles');
+  if (titles) titles.classList.add('is-fallback');
+}
+
+function webglSupported() {
+  try {
+    const c = document.createElement('canvas');
+    return !!(window.WebGLRenderingContext && (c.getContext('webgl2') || c.getContext('webgl')));
+  } catch (e) {
+    return false;
+  }
+}
+
+if (!webglSupported()) {
+  applyFallback();
+} else {
+  initScene();
+}
+
+function initScene() {
+
 const container = document.getElementById('three-container');
 
 const isMobile = window.matchMedia('(pointer: coarse)').matches || navigator.maxTouchPoints > 0;
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-const renderer = new THREE.WebGLRenderer({
-  alpha: true,
-  antialias: true,
-  powerPreference: 'high-performance',
-});
+let renderer;
+try {
+  renderer = new THREE.WebGLRenderer({
+    alpha: true,
+    antialias: !isMobile,
+    powerPreference: 'high-performance',
+  });
+} catch (err) {
+  console.error('WebGL no disponible', err);
+  applyFallback();
+  return;
+}
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2));
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -249,7 +279,15 @@ gltfLoader.load('star.glb', (gltf) => {
   layoutStars();
 }, undefined, (error) => {
   console.error('Error cargando star.glb', error);
+  applyFallback();
 });
+
+setTimeout(() => {
+  if (!stars.length) {
+    console.warn('Timeout cargando star.glb');
+    applyFallback();
+  }
+}, 12000);
 
 function layoutStars() {
   if (!stars.length) return;
@@ -500,3 +538,5 @@ window.addEventListener('resize', () => {
   layoutStars();
   if (prefersReducedMotion) animate();
 });
+
+}
