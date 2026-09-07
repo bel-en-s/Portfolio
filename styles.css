@@ -122,6 +122,10 @@
   }
 }
 
+.index-page.bio-page #audio-toggle {
+  display: none;
+}
+
 .footer-item-inner {
   position: relative;
   display: block;
