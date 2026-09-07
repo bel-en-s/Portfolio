@@ -116,6 +116,12 @@
   transition-timing-function: ease-out;
 }
 
+@media (pointer: coarse) {
+  #audio-toggle {
+    display: none;
+  }
+}
+
 .footer-item-inner {
   position: relative;
   display: block;
