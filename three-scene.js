@@ -70,33 +70,40 @@ if (bgAudio) {
   syncCeleste();
 }
 
-// --- Entorno reflectivo ---
-const pmrem = new THREE.PMREMGenerator(renderer);
-pmrem.compileEquirectangularShader();
+// --- Entorno reflectivo (opcional: si falla, las estrellas se ven mate) ---
+let envOk = true;
 
-function setEnvironment(tex) {
-  const envMap = pmrem.fromEquirectangular(tex).texture;
-  scene.environment = envMap;
-  scene.environmentIntensity = 1.0;
+try {
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  pmrem.compileEquirectangularShader();
+
+  function setEnvironment(tex) {
+    const envMap = pmrem.fromEquirectangular(tex).texture;
+    scene.environment = envMap;
+    scene.environmentIntensity = 1.0;
+  }
+
+  const gradient = document.createElement('canvas');
+  gradient.width = 512;
+  gradient.height = 256;
+  const ctx = gradient.getContext('2d');
+  const grad = ctx.createLinearGradient(0, 0, 512, 256);
+  grad.addColorStop(0, '#ff6ec7');
+  grad.addColorStop(0.2, '#ffb56b');
+  grad.addColorStop(0.4, '#fff3a0');
+  grad.addColorStop(0.6, '#6be4ff');
+  grad.addColorStop(0.8, '#8f9bff');
+  grad.addColorStop(1, '#ff6ec7');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, 512, 256);
+  const fallbackTex = new THREE.CanvasTexture(gradient);
+  fallbackTex.mapping = THREE.EquirectangularReflectionMapping;
+  fallbackTex.colorSpace = THREE.SRGBColorSpace;
+  setEnvironment(fallbackTex);
+} catch (err) {
+  console.warn('Entorno reflectivo no disponible, usando material mate', err);
+  envOk = false;
 }
-
-const gradient = document.createElement('canvas');
-gradient.width = 512;
-gradient.height = 256;
-const ctx = gradient.getContext('2d');
-const grad = ctx.createLinearGradient(0, 0, 512, 256);
-grad.addColorStop(0, '#ff6ec7');
-grad.addColorStop(0.2, '#ffb56b');
-grad.addColorStop(0.4, '#fff3a0');
-grad.addColorStop(0.6, '#6be4ff');
-grad.addColorStop(0.8, '#8f9bff');
-grad.addColorStop(1, '#ff6ec7');
-ctx.fillStyle = grad;
-ctx.fillRect(0, 0, 512, 256);
-const fallbackTex = new THREE.CanvasTexture(gradient);
-fallbackTex.mapping = THREE.EquirectangularReflectionMapping;
-fallbackTex.colorSpace = THREE.SRGBColorSpace;
-setEnvironment(fallbackTex);
 
 // --- Luces (escenografía) ---
 const ambient = new THREE.AmbientLight(0xffe6d6, 0.4);
@@ -169,9 +176,9 @@ gltfLoader.load('star.glb', (gltf) => {
 
     const material = new THREE.MeshPhysicalMaterial({
       color: new THREE.Color(hex),
-      metalness: 1,
-      roughness: 0.28,
-      clearcoat: 0.2,
+      metalness: envOk ? 1 : 0.25,
+      roughness: envOk ? 0.28 : 0.65,
+      clearcoat: envOk ? 0.2 : 0,
       clearcoatRoughness: 0.4,
       envMapIntensity: 1.0,
     });
