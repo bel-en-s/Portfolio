@@ -47,27 +47,16 @@ renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.25;
 container.appendChild(renderer.domElement);
 
-// --- Fondo: gradiente animado (shader full-screen) ---
-const bgScene = new THREE.Scene();
-const bgCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-
 // --- Escena principal ---
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
 camera.position.set(0, 0, 5);
 camera.lookAt(0, 0, 0);
 
-const uniforms = {
-  uTime: { value: 0 },
-  uOpacity: { value: 0 },
-  uCeleste: { value: 0 },
-};
-
 const bgAudio = document.getElementById('bg-audio');
-let targetCeleste = 0;
 
 function syncCeleste() {
-  targetCeleste = bgAudio && !bgAudio.paused ? 1 : 0;
+  document.body.classList.toggle('audio-on', !!(bgAudio && !bgAudio.paused));
 }
 
 if (bgAudio) {
@@ -75,76 +64,6 @@ if (bgAudio) {
   bgAudio.addEventListener('pause', syncCeleste);
   syncCeleste();
 }
-
-const vertexShader = `
-  varying vec2 vUv;
-  void main() {
-    vUv = uv;
-    gl_Position = vec4(position.xy, 0.0, 1.0);
-  }
-`;
-
-const fragmentShader = `
-  precision highp float;
-  varying vec2 vUv;
-  uniform float uTime;
-  uniform float uOpacity;
-  uniform float uCeleste;
-
-  void main() {
-    float t = uTime;
-    vec2 p = vUv;
-
-    vec2 c = vec2(0.5, 0.42) + vec2(sin(t * 0.45) * 0.06, cos(t * 0.35) * 0.05);
-
-    vec2 q = p - c;
-    float d = length(q);
-    float a = atan(q.y, q.x);
-
-    float swirl = sin(a * 4.0 - t * 0.6);
-
-    float nd = d / 0.85;
-
-    float core = pow(smoothstep(1.0, 0.0, nd), 1.5);
-
-    float flow = sin(d * 22.0 - t * 1.2 + swirl * 0.6);
-
-    vec3 warm = mix(vec3(1.0, 0.85, 0.66), vec3(0.68, 0.84, 0.92), uCeleste);
-    vec3 lila = vec3(0.78, 0.70, 0.90);
-    vec3 celeste = vec3(0.68, 0.84, 0.92);
-
-    vec3 color = warm;
-
-    float lilaAmt = smoothstep(1.1, 0.3, nd) * 0.5;
-    color = mix(color, lila, lilaAmt * (0.5 + 0.5 * flow));
-
-    float celAmt = smoothstep(1.0, 0.55, nd) * smoothstep(0.15, 0.7, nd) * 0.7;
-    color = mix(color, celeste, celAmt * (0.5 - 0.5 * flow));
-
-    color = mix(color, celeste, uCeleste * 0.22);
-
-    float ripple = sin(d * 14.0 - t * 0.9) * 0.5 + 0.5;
-    float breathe = 0.9 + 0.1 * sin(t * 0.5);
-    float intensity = (core + ripple * 0.25 * smoothstep(1.2, 0.0, nd)) * breathe;
-
-    float alpha = intensity * uOpacity;
-
-    gl_FragColor = vec4(color, alpha);
-  }
-`;
-
-const bgMaterial = new THREE.ShaderMaterial({
-  uniforms,
-  transparent: true,
-  depthWrite: false,
-  depthTest: false,
-  vertexShader,
-  fragmentShader,
-});
-
-const quad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), bgMaterial);
-quad.frustumCulled = false;
-bgScene.add(quad);
 
 // --- Entorno reflectivo ---
 const pmrem = new THREE.PMREMGenerator(renderer);
@@ -323,17 +242,6 @@ function layoutStars() {
 
 // --- Loop ---
 const clock = new THREE.Clock();
-const startTime = performance.now();
-const introDuration = 2000;
-
-const baseSpeed = 1;
-const maxSpeed = 4;
-let targetSpeed = baseSpeed;
-let speed = baseSpeed;
-
-let lastX = 0;
-let lastY = 0;
-let lastMoveTime = 0;
 
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
@@ -342,17 +250,6 @@ const spherePlane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
 const projectV = new THREE.Vector3();
 
 window.addEventListener('pointermove', (e) => {
-  const now = performance.now();
-  const dt = Math.max(now - lastMoveTime, 16);
-  const dx = e.clientX - lastX;
-  const dy = e.clientY - lastY;
-  lastX = e.clientX;
-  lastY = e.clientY;
-  lastMoveTime = now;
-
-  const velocity = Math.hypot(dx, dy) / dt;
-  targetSpeed = Math.min(baseSpeed + velocity * 1.6, maxSpeed);
-
   pointer.x = (e.clientX / window.innerWidth) * 2 - 1;
   pointer.y = -(e.clientY / window.innerHeight) * 2 + 1;
 });
@@ -418,46 +315,19 @@ window.addEventListener('click', (e) => {
   }
 });
 
-// Solo desktop: al pasar el mouse sobre un h3 se reactiva la animación
-let hoverBoost = 0;
+// Solo desktop: subraya la etiqueta de la estrella bajo el cursor
 let hoveredIndex = -1;
-
-if (!isMobile) {
-  document.querySelectorAll('.header h3').forEach((h3) => {
-    h3.addEventListener('mouseenter', () => { hoverBoost = 1; });
-    h3.addEventListener('mouseleave', () => { hoverBoost = 0; });
-  });
-}
-
-renderer.autoClear = false;
 
 function animate() {
   if (!prefersReducedMotion) requestAnimationFrame(animate);
 
   if (prefersReducedMotion) {
-    uniforms.uOpacity.value = 1;
-    renderer.clear();
-    renderer.render(bgScene, bgCamera);
     renderer.render(scene, camera);
     return;
   }
 
   const delta = clock.getDelta();
   const elapsed = clock.getElapsedTime();
-
-  if (hoverBoost) {
-    targetSpeed = maxSpeed;
-  } else {
-    targetSpeed += (baseSpeed - targetSpeed) * Math.min(delta * 1.5, 1);
-  }
-  speed += (targetSpeed - speed) * Math.min(delta * 8, 1);
-
-  uniforms.uTime.value += delta * speed;
-  uniforms.uCeleste.value += (targetCeleste - uniforms.uCeleste.value) * Math.min(delta * 2, 1);
-
-  const introT = Math.min((performance.now() - startTime) / introDuration, 1);
-  const eased = 1 - Math.pow(1 - introT, 4);
-  uniforms.uOpacity.value = eased;
 
   // Rotación por scroll: cada estrella gira a su propia velocidad
   scrollRot += (targetScrollRot - scrollRot) * 0.1;
@@ -524,8 +394,6 @@ function animate() {
     labelEls[i].style.top = `${y}px`;
   });
 
-  renderer.clear();
-  renderer.render(bgScene, bgCamera);
   renderer.render(scene, camera);
 }
 
