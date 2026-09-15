@@ -323,12 +323,36 @@ body {
     touch-action: manipulation;
   }
 
-  .mobile-star img {
-    width: 92px;
-    height: 92px;
+  .mobile-star-view {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 170px;
+    height: 170px;
+  }
+
+  .mobile-star-view img {
+    width: 100%;
+    height: 100%;
     object-fit: contain;
     user-select: none;
     -webkit-user-drag: none;
+    pointer-events: none;
+  }
+
+  .mobile-star-view canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    pointer-events: auto;
+    touch-action: none;
+  }
+
+  .mobile-star-view.is-3d img {
+    display: none;
   }
 
   .mobile-star:nth-child(3) {
@@ -571,9 +595,53 @@ body {
   background: transparent;
 }
 
-.art-cell img {
-  object-fit: cover;
+.art-carousel {
+  position: relative;
   width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+}
+
+.art-carousel .art-slide {
+  display: none;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  cursor: zoom-in;
+}
+
+.art-carousel .art-slide.is-active {
+  display: block;
+}
+
+.art-carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 2rem;
+  line-height: 1;
+  padding: 0;
+  z-index: 2;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.art-carousel-arrow:hover {
+  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.7);
+}
+
+.art-carousel-prev {
+  left: 0.5rem;
+}
+
+.art-carousel-next {
+  right: 0.5rem;
 }
 
 .art-epigrafe {
@@ -590,8 +658,9 @@ body {
 }
 
 .art-buy {
-  display: inline-block;
-  margin-top: 2rem;
+  display: block;
+  width: fit-content;
+  margin: 2rem auto 0;
   padding: 0.7rem 1.4rem;
   border: 1px solid #000;
   font-family: 'Geist', sans-serif;
@@ -599,6 +668,7 @@ body {
   font-weight: 400;
   letter-spacing: 0.06em;
   text-transform: uppercase;
+  text-align: center;
   color: #000;
   text-decoration: none;
   transition: background 0.25s ease, color 0.25s ease;

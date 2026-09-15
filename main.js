@@ -325,3 +325,62 @@ if (document.querySelector('.obras-page')) {
     initCarousel('ocarouselPinturas');
   }, 100);
 }
+
+function initArtCarousels() {
+  const carousels = document.querySelectorAll('.art-carousel');
+  carousels.forEach((carousel) => {
+    const slides = Array.from(carousel.querySelectorAll('.art-slide'));
+    const prevBtn = carousel.querySelector('.art-carousel-prev');
+    const nextBtn = carousel.querySelector('.art-carousel-next');
+    if (!slides.length) return;
+
+    if (slides.length < 2) {
+      if (prevBtn) prevBtn.style.display = 'none';
+      if (nextBtn) nextBtn.style.display = 'none';
+      return;
+    }
+
+    let current = 0;
+    let timer = null;
+
+    function goTo(i) {
+      slides[current].classList.remove('is-active');
+      current = (i + slides.length) % slides.length;
+      slides[current].classList.add('is-active');
+    }
+
+    function startAuto() {
+      if (timer) return;
+      timer = setInterval(() => goTo(current + 1), 3000);
+    }
+
+    function resetAuto() {
+      clearInterval(timer);
+      timer = null;
+      startAuto();
+    }
+
+    if (prevBtn) prevBtn.addEventListener('click', () => { goTo(current - 1); resetAuto(); });
+    if (nextBtn) nextBtn.addEventListener('click', () => { goTo(current + 1); resetAuto(); });
+
+    startAuto();
+
+    slides.forEach((slide) => {
+      slide.addEventListener('click', () => {
+        const overlay = document.createElement('div');
+        overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.92);z-index:10000;display:flex;align-items:center;justify-content:center;cursor:zoom-out;';
+        const img = document.createElement('img');
+        img.src = slide.currentSrc || slide.src;
+        img.alt = slide.alt || '';
+        img.style.cssText = 'max-width:90%;max-height:90%;object-fit:contain;';
+        overlay.appendChild(img);
+        overlay.addEventListener('click', () => overlay.remove());
+        document.body.appendChild(overlay);
+      });
+    });
+  });
+}
+
+if (document.querySelector('.art-carousel')) {
+  initArtCarousels();
+}
