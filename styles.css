@@ -581,7 +581,7 @@ body {
 .art-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  column-gap: 0;
+  column-gap: 2.5rem;
   row-gap: 2.5rem;
 }
 
@@ -612,6 +612,14 @@ body {
   width: 100%;
   aspect-ratio: 4 / 3;
   overflow: hidden;
+}
+
+.art-carousel--tall {
+  aspect-ratio: 3 / 4;
+}
+
+.art-carousel .art-slide--bottom {
+  object-position: center 75%;
 }
 
 .art-carousel .art-slide {
@@ -669,6 +677,17 @@ body {
   color: #000;
 }
 
+.art-epigrafe-title {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: 15px;
+  text-decoration: underline;
+}
+
+.art-epigrafe-year {
+  font-style: italic;
+}
+
 .art-buy {
   display: block;
   width: fit-content;
@@ -694,6 +713,7 @@ body {
 @media (max-width: 768px) {
   .art-grid {
     grid-template-columns: 1fr;
+    column-gap: 0;
   }
 }
 

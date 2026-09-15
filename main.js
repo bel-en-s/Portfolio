@@ -328,6 +328,8 @@ if (document.querySelector('.obras-page')) {
 
 function initArtCarousels() {
   const carousels = document.querySelectorAll('.art-carousel');
+  const allSlides = [];
+
   carousels.forEach((carousel) => {
     const slides = Array.from(carousel.querySelectorAll('.art-slide'));
     const prevBtn = carousel.querySelector('.art-carousel-prev');
@@ -337,47 +339,98 @@ function initArtCarousels() {
     if (slides.length < 2) {
       if (prevBtn) prevBtn.style.display = 'none';
       if (nextBtn) nextBtn.style.display = 'none';
-      return;
-    }
+    } else {
+      let current = 0;
+      let timer = null;
 
-    let current = 0;
-    let timer = null;
+      function goTo(i) {
+        slides[current].classList.remove('is-active');
+        current = (i + slides.length) % slides.length;
+        slides[current].classList.add('is-active');
+      }
 
-    function goTo(i) {
-      slides[current].classList.remove('is-active');
-      current = (i + slides.length) % slides.length;
-      slides[current].classList.add('is-active');
-    }
+      function startAuto() {
+        if (timer) return;
+        timer = setInterval(() => goTo(current + 1), 3000);
+      }
 
-    function startAuto() {
-      if (timer) return;
-      timer = setInterval(() => goTo(current + 1), 3000);
-    }
+      function resetAuto() {
+        clearInterval(timer);
+        timer = null;
+        startAuto();
+      }
 
-    function resetAuto() {
-      clearInterval(timer);
-      timer = null;
+      if (prevBtn) prevBtn.addEventListener('click', () => { goTo(current - 1); resetAuto(); });
+      if (nextBtn) nextBtn.addEventListener('click', () => { goTo(current + 1); resetAuto(); });
+
       startAuto();
     }
 
-    if (prevBtn) prevBtn.addEventListener('click', () => { goTo(current - 1); resetAuto(); });
-    if (nextBtn) nextBtn.addEventListener('click', () => { goTo(current + 1); resetAuto(); });
+    slides.forEach((slide) => allSlides.push(slide));
+  });
 
-    startAuto();
+  if (!allSlides.length) return;
 
-    slides.forEach((slide) => {
-      slide.addEventListener('click', () => {
-        const overlay = document.createElement('div');
-        overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.92);z-index:10000;display:flex;align-items:center;justify-content:center;cursor:zoom-out;';
-        const img = document.createElement('img');
-        img.src = slide.currentSrc || slide.src;
-        img.alt = slide.alt || '';
-        img.style.cssText = 'max-width:90%;max-height:90%;object-fit:contain;';
-        overlay.appendChild(img);
-        overlay.addEventListener('click', () => overlay.remove());
-        document.body.appendChild(overlay);
-      });
-    });
+  function openLightbox(startIndex) {
+    let current = startIndex;
+
+    const overlay = document.createElement('div');
+    overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.92);z-index:10000;display:flex;align-items:center;justify-content:center;cursor:zoom-out;';
+
+    const img = document.createElement('img');
+    img.alt = '';
+    img.style.cssText = 'max-width:90%;max-height:90%;object-fit:contain;';
+
+    function render() {
+      const slide = allSlides[current];
+      img.src = slide.currentSrc || slide.src;
+      img.alt = slide.alt || '';
+    }
+
+    const arrowStyle = 'position:absolute;top:50%;transform:translateY(-50%);background:none;border:none;color:#fff;font-size:3rem;line-height:1;padding:0.25rem 0.5rem;cursor:pointer;z-index:10001;text-shadow:0 1px 3px rgba(0,0,0,0.5);';
+
+    const prevBtn = document.createElement('button');
+    prevBtn.type = 'button';
+    prevBtn.innerHTML = '&lsaquo;';
+    prevBtn.style.cssText = arrowStyle + 'left:1rem;';
+
+    const nextBtn = document.createElement('button');
+    nextBtn.type = 'button';
+    nextBtn.innerHTML = '&rsaquo;';
+    nextBtn.style.cssText = arrowStyle + 'right:1rem;';
+
+    function goTo(i) {
+      current = (i + allSlides.length) % allSlides.length;
+      render();
+    }
+
+    prevBtn.addEventListener('click', (e) => { e.stopPropagation(); goTo(current - 1); });
+    nextBtn.addEventListener('click', (e) => { e.stopPropagation(); goTo(current + 1); });
+
+    overlay.appendChild(img);
+    overlay.appendChild(prevBtn);
+    overlay.appendChild(nextBtn);
+
+    function onKey(e) {
+      if (e.key === 'ArrowLeft') goTo(current - 1);
+      if (e.key === 'ArrowRight') goTo(current + 1);
+      if (e.key === 'Escape') close();
+    }
+
+    function close() {
+      document.removeEventListener('keydown', onKey);
+      overlay.remove();
+    }
+
+    overlay.addEventListener('click', close);
+    document.addEventListener('keydown', onKey);
+
+    document.body.appendChild(overlay);
+    render();
+  }
+
+  allSlides.forEach((slide, index) => {
+    slide.addEventListener('click', () => openLightbox(index));
   });
 }
 
