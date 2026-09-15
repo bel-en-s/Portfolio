@@ -206,7 +206,10 @@ function init() {
     for (const vp of viewports) {
       if (!vp.group) continue;
       if (!vp.dragging && !prefersReducedMotion) {
-        vp.group.rotation.y += 0.0025 + Math.sin(t * 0.6 + vp.baseRotZ) * 0.001;
+        const targetY = vp.baseRotY + Math.sin(t * 0.35) * 0.07;
+        const targetZ = vp.baseRotZ + Math.sin(t * 0.5 + vp.baseRotZ) * 0.05;
+        vp.group.rotation.y += (targetY - vp.group.rotation.y) * 0.04;
+        vp.group.rotation.z += (targetZ - vp.group.rotation.z) * 0.04;
       }
       vp.renderer.render(vp.scene, vp.camera);
     }

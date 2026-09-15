@@ -298,9 +298,12 @@ body {
   .mobile-stars {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 3rem 1.5rem;
+    gap: 2.5rem 1.5rem;
     position: fixed;
-    inset: 0;
+    top: 0;
+    right: 0;
+    bottom: 22vh;
+    left: 0;
     align-content: center;
     justify-items: center;
     padding: 0 1.5rem;
