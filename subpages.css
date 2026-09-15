@@ -178,12 +178,15 @@ button {
 }
 
 .page-title {
-  font-family: "Urbanist", sans-serif;
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 20px;
+  font-family: "Playfair Display", serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 1.2;
   color: var(--text);
-  margin: 0 0 2em;
+  margin: 0 0 0.5em;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
 }
 
 /* ---------- Bio ---------- */
@@ -313,15 +316,14 @@ button {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  margin: 0 0 2.5em;
 }
 
 .art-subtitle {
-  font-family: "JetBrains Mono", monospace;
-  font-weight: 500;
-  font-size: 13px;
+  font-family: "Playfair Display", serif;
+  font-weight: 400;
+  font-size: 18px;
   line-height: 120%;
-  color: var(--text-tertiary);
+  color: var(--text);
 }
 
 .art-buy {
@@ -464,12 +466,11 @@ button {
 }
 
 .music-coming {
-  font-family: "JetBrains Mono", monospace;
-  font-weight: 500;
-  font-size: 13px;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--text-tertiary);
+  font-family: "Playfair Display", serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 18px;
+  color: var(--text);
 }
 
 /* ---------- Footer & dd-brand ---------- */
