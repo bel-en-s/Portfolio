@@ -318,9 +318,9 @@ body {
     gap: 0;
     text-decoration: none;
     color: #000;
-    font-family: 'Geist', sans-serif;
-    font-size: 14px;
-    font-weight: 300;
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-weight: 400;
     letter-spacing: 0.02em;
     pointer-events: auto;
     touch-action: manipulation;
@@ -1150,10 +1150,10 @@ footer img {
   top: 0;
   left: 0;
   transform: translate(-50%, 0);
-  font-family: 'Geist', sans-serif;
+  font-family: 'Playfair Display', serif;
   font-style: normal;
-  font-weight: 300;
-  font-size: 14px;
+  font-weight: 400;
+  font-size: 15px;
   line-height: 100%;
   letter-spacing: 0.02em;
   color: #000;
