@@ -113,7 +113,6 @@ function init() {
       lastMoveTime: 0,
       baseRotY: baseRotY[i],
       baseRotZ: baseRot[i],
-      idleSpeed: 0.8 + i * 0.3,
     };
   }).filter(Boolean);
 
@@ -214,6 +213,7 @@ function init() {
 
   const clock = new THREE.Clock();
   const FRICTION = 3;
+  const RETURN_SPEED = 1.6;
   const VELOCITY_EPS = 0.05;
   let lastFrame = performance.now();
 
@@ -235,7 +235,14 @@ function init() {
         vp.velX *= decay;
         vp.velY *= decay;
       } else {
-        vp.group.rotation.y += dt * vp.idleSpeed;
+        // Vuelve lentamente a la posición original (con un suave balanceo)
+        const restX = Math.cos(t * 0.45 + vp.baseRotZ) * 0.1;
+        const restY = vp.baseRotY + Math.sin(t * 0.55 + vp.baseRotY) * 0.12;
+        const k = 1 - Math.exp(-RETURN_SPEED * dt);
+        const diffX = Math.atan2(Math.sin(restX - vp.group.rotation.x), Math.cos(restX - vp.group.rotation.x));
+        const diffY = Math.atan2(Math.sin(restY - vp.group.rotation.y), Math.cos(restY - vp.group.rotation.y));
+        vp.group.rotation.x += diffX * k;
+        vp.group.rotation.y += diffY * k;
         const targetZ = vp.baseRotZ + Math.sin(t * 0.5 + vp.baseRotZ) * 0.08;
         vp.group.rotation.z += (targetZ - vp.group.rotation.z) * 0.04;
       }
