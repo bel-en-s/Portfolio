@@ -45,8 +45,6 @@ function makeGradientEnv(renderer, scene) {
 }
 
 function init() {
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
   const starLinks = Array.from(nav.querySelectorAll('.mobile-star'));
   const colors = ['#e3b3bb', '#a9c3ce', '#b3c4a8'];
   const baseRot = [0.18, -0.14, 0.22];
@@ -236,7 +234,7 @@ function init() {
         const decay = Math.exp(-FRICTION * dt);
         vp.velX *= decay;
         vp.velY *= decay;
-      } else if (!prefersReducedMotion) {
+      } else {
         vp.group.rotation.y += dt * vp.idleSpeed;
         const targetZ = vp.baseRotZ + Math.sin(t * 0.5 + vp.baseRotZ) * 0.08;
         vp.group.rotation.z += (targetZ - vp.group.rotation.z) * 0.04;

@@ -412,10 +412,18 @@ document.querySelectorAll('.header h3').forEach((h3) => {
 renderer.autoClear = false;
 
 function animate() {
-  if (!prefersReducedMotion) requestAnimationFrame(animate);
+  requestAnimationFrame(animate);
 
   if (prefersReducedMotion) {
+    const elapsed = clock.getElapsedTime();
     uniforms.uOpacity.value = 1;
+    stars.forEach((s) => {
+      const idleRot = Math.sin(elapsed * s.idleSpeed + s.idlePhase) * 0.12;
+      const idleBob = Math.sin(elapsed * s.idleSpeed * 0.8 + s.idlePhase) * 0.05;
+      s.group.rotation.z = s.baseRot + idleRot;
+      s.group.rotation.y = s.baseRotY + elapsed * s.idleSpeed;
+      s.group.position.y = s.baseY + idleBob;
+    });
     renderer.clear();
     renderer.render(bgScene, bgCamera);
     renderer.render(scene, camera);
@@ -518,7 +526,6 @@ window.addEventListener('resize', () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   layoutStars();
-  if (prefersReducedMotion) animate();
 });
 
 }
