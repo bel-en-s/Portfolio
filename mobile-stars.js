@@ -110,6 +110,9 @@ function init() {
       moved: 0,
       lastX: 0,
       lastY: 0,
+      velX: 0,
+      velY: 0,
+      lastMoveTime: 0,
       baseRotY: baseRotY[i],
       baseRotZ: baseRot[i],
     };
@@ -173,20 +176,32 @@ function init() {
     canvas.addEventListener('pointerdown', (e) => {
       vp.dragging = true;
       vp.moved = 0;
+      vp.velX = 0;
+      vp.velY = 0;
       vp.lastX = e.clientX;
       vp.lastY = e.clientY;
+      vp.lastMoveTime = performance.now();
       try { canvas.setPointerCapture(e.pointerId); } catch (_) {}
     });
 
     canvas.addEventListener('pointermove', (e) => {
       if (!vp.dragging || !vp.group) return;
+      const now = performance.now();
       const dx = e.clientX - vp.lastX;
       const dy = e.clientY - vp.lastY;
       vp.moved += Math.abs(dx) + Math.abs(dy);
+
+      const dtSec = Math.max(now - vp.lastMoveTime, 1) / 1000;
+      const instVelX = (dy * 0.012) / dtSec;
+      const instVelY = (dx * 0.012) / dtSec;
+      vp.velX = vp.velX * 0.6 + instVelX * 0.4;
+      vp.velY = vp.velY * 0.6 + instVelY * 0.4;
+
       vp.group.rotation.y += dx * 0.012;
       vp.group.rotation.x += dy * 0.012;
       vp.lastX = e.clientX;
       vp.lastY = e.clientY;
+      vp.lastMoveTime = now;
     });
 
     const endDrag = () => { vp.dragging = false; };
@@ -199,13 +214,28 @@ function init() {
   }
 
   const clock = new THREE.Clock();
+  const FRICTION = 3;
+  const VELOCITY_EPS = 0.05;
+  let lastFrame = performance.now();
 
   function animate() {
     requestAnimationFrame(animate);
+    const now = performance.now();
+    const dt = Math.min((now - lastFrame) / 1000, 0.1);
+    lastFrame = now;
     const t = clock.getElapsedTime();
+
     for (const vp of viewports) {
       if (!vp.group) continue;
-      if (!vp.dragging && !prefersReducedMotion) {
+      if (vp.dragging) {
+        // la rotación se aplica en pointermove
+      } else if (Math.abs(vp.velX) > VELOCITY_EPS || Math.abs(vp.velY) > VELOCITY_EPS) {
+        vp.group.rotation.x += vp.velX * dt;
+        vp.group.rotation.y += vp.velY * dt;
+        const decay = Math.exp(-FRICTION * dt);
+        vp.velX *= decay;
+        vp.velY *= decay;
+      } else if (!prefersReducedMotion) {
         vp.group.rotation.y += 0.003;
         const targetZ = vp.baseRotZ + Math.sin(t * 0.5 + vp.baseRotZ) * 0.08;
         vp.group.rotation.z += (targetZ - vp.group.rotation.z) * 0.04;

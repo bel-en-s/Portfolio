@@ -298,15 +298,15 @@ body {
   .mobile-stars {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 2.5rem 1.5rem;
+    gap: clamp(1rem, 4vh, 2.5rem) clamp(0.5rem, 3vw, 1.5rem);
     position: fixed;
     top: 0;
     right: 0;
-    bottom: 22vh;
+    bottom: 5vh;
     left: 0;
     align-content: center;
     justify-items: center;
-    padding: 0 1.5rem;
+    padding: 0 clamp(1rem, 5vw, 2rem);
     z-index: 1;
     pointer-events: none;
   }
@@ -327,7 +327,7 @@ body {
   }
 
   .mobile-star > span:last-child {
-    margin-top: -0.4rem;
+    margin-top: -1.25rem;
   }
 
   .mobile-star-view {
@@ -335,8 +335,8 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 170px;
-    height: 170px;
+    width: clamp(120px, 40vw, 190px);
+    height: clamp(120px, 40vw, 190px);
   }
 
   .mobile-star-view img {
@@ -363,13 +363,13 @@ body {
   }
 
   .mobile-star:nth-child(2) {
-    transform: translateY(1.25rem);
+    transform: translateY(clamp(0.75rem, 2.5vh, 1.5rem));
   }
 
   .mobile-star:nth-child(3) {
     grid-column: 1 / -1;
     justify-self: center;
-    transform: translateY(-3.5rem);
+    transform: translateY(clamp(-4.5rem, -8vh, -2.5rem));
   }
 }
 
@@ -784,19 +784,21 @@ body {
 }
 
 .index-page .header h1 {
-  font-family: 'Geist', sans-serif;
+  font-family: 'Playfair Display', serif;
   font-style: normal;
-  font-weight: 300;
+  font-weight: 400;
   font-size: 16px;
 }
 
 .index-page .header h2 {
-  font-family: 'Geist', sans-serif;
-  font-style: normal;
-  font-weight: 300;
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-weight: 400;
   font-size: 14px;
   line-height: 100%;
   margin: 0.5em 0 0;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
 }
 
 .star-center {
@@ -989,6 +991,7 @@ footer img {
 }
 
 .dd-email {
+  display: none;
   font-family: "PP Neue Montreal", "Helvetica Neue", Arial, sans-serif;
   font-size: 11px;
   letter-spacing: 0.02em;
@@ -1304,7 +1307,7 @@ footer img {
   }
 
   .dd-brand {
-    bottom: 4.5rem;
+    bottom: 3.5rem;
     transform: translateX(-50%);
   }
 

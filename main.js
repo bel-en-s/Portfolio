@@ -8,7 +8,7 @@ const INLINE_ATOMIC = new Set([
 ]);
 
 const TEXT_SELECTOR =
-  '.header h1, .header h2, .header h3, .intro-about-col p, .work-name, .footer-cta, .footer-email';
+  '.intro-about-col p, .work-name, .footer-cta, .footer-email';
 
 function injectGooeyFilter() {
   if (document.getElementById('blur-matrix')) return;
@@ -330,7 +330,7 @@ function initArtCarousels() {
   const carousels = document.querySelectorAll('.art-carousel');
   const allSlides = [];
 
-  carousels.forEach((carousel) => {
+  carousels.forEach((carousel, index) => {
     const slides = Array.from(carousel.querySelectorAll('.art-slide'));
     const prevBtn = carousel.querySelector('.art-carousel-prev');
     const nextBtn = carousel.querySelector('.art-carousel-next');
@@ -342,6 +342,7 @@ function initArtCarousels() {
     } else {
       let current = 0;
       let timer = null;
+      const intervalMs = 3000 + index * 1200;
 
       function goTo(i) {
         slides[current].classList.remove('is-active');
@@ -351,7 +352,7 @@ function initArtCarousels() {
 
       function startAuto() {
         if (timer) return;
-        timer = setInterval(() => goTo(current + 1), 3000);
+        timer = setInterval(() => goTo(current + 1), intervalMs);
       }
 
       function resetAuto() {

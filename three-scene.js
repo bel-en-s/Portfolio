@@ -377,7 +377,7 @@ window.addEventListener('wheel', (e) => {
 }, { passive: true });
 
 // Click en una estrella → navegar a su página
-const starPages = ['bio.html', 'musica.html', 'visual-art.html'];
+const starPages = ['bio/', 'musica/', 'visual-art/'];
 const clickNDC = new THREE.Vector2();
 
 window.addEventListener('click', (e) => {

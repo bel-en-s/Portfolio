@@ -1,0 +1,630 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  font-family: "Urbanist", system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  --bg: #F8E0C1;
+  --text: #000;
+  --text-secondary: #4a4a4a;
+  --text-tertiary: #7a7a7a;
+  --card-bg: #fff6e8;
+  --card-border: rgba(0, 0, 0, 0.12);
+  --btn-bg: #fff6e8;
+}
+
+html,
+body {
+  width: 100%;
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+body {
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+h1,
+h2,
+h3 {
+  color: var(--text);
+  font-weight: 500;
+  line-height: 20px;
+}
+
+p {
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+}
+
+a {
+  text-decoration: none;
+  color: var(--text);
+}
+
+button {
+  font-family: inherit;
+  border-radius: 8px;
+  background-color: var(--btn-bg);
+  outline: none;
+  border: none;
+  color: var(--text);
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---------- Curtain ---------- */
+
+@keyframes curtainReveal {
+  from { transform: scaleY(1); }
+  to { transform: scaleY(0); }
+}
+
+#curtain {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: #000;
+  transform: scaleY(1);
+  transform-origin: top;
+  animation: curtainReveal 0.75s cubic-bezier(0.83, 0, 0.17, 1) forwards;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+/* ---------- Header nav ---------- */
+
+.header {
+  padding: 2em 1.5em 0;
+  position: relative;
+  z-index: 1;
+}
+
+.header-nav {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-end;
+  gap: clamp(1rem, 2.5vw, 2rem);
+}
+
+.header-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.header-nav-item img {
+  width: 26px;
+  height: auto;
+  display: block;
+  transition: transform 0.3s cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+.header-nav-item span {
+  font-family: "Urbanist", sans-serif;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 100%;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.header-nav-item:hover img {
+  transform: rotate(90deg);
+}
+
+.header-nav-item:hover span {
+  color: var(--text);
+}
+
+/* ---------- Subpage main ---------- */
+
+.subpage-main {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 760px;
+  margin: 5em auto;
+  padding: 0 1em 2rem;
+}
+
+.subpage-main--wide {
+  max-width: 1100px;
+}
+
+@media (max-width: 900px) {
+  .subpage-main {
+    margin: 3em auto;
+  }
+}
+
+.page-title {
+  font-family: "Urbanist", sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+  color: var(--text);
+  margin: 0 0 2em;
+}
+
+/* ---------- Bio ---------- */
+
+.bio-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6em;
+}
+
+.bio-copy p {
+  font-family: "Urbanist", sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--text);
+}
+
+/* ---------- Visual art (work grid) ---------- */
+
+.art-grid {
+  display: flex;
+  gap: 0.5em;
+  width: 100%;
+}
+
+.col {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+}
+
+.art-cell {
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 0.5em;
+  padding: 0.25em;
+}
+
+.art-carousel {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+}
+
+.art-carousel--tall {
+  aspect-ratio: 3 / 4;
+}
+
+.art-carousel .art-slide--bottom {
+  object-position: center 75%;
+}
+
+.art-carousel .art-slide {
+  display: none;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  cursor: zoom-in;
+}
+
+.art-carousel .art-slide.is-active {
+  display: block;
+}
+
+.art-carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 2rem;
+  line-height: 1;
+  padding: 0;
+  z-index: 2;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.art-carousel-arrow:hover {
+  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.7);
+}
+
+.art-carousel-prev {
+  left: 0.5rem;
+}
+
+.art-carousel-next {
+  right: 0.5rem;
+}
+
+.art-epigrafe {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.75em;
+  padding: 0.85em 0.5em 0.6em;
+  font-family: "Urbanist", sans-serif;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--text);
+}
+
+.art-epigrafe-title {
+  font-weight: 500;
+  color: var(--text);
+}
+
+.art-epigrafe-dims {
+  color: var(--text-tertiary);
+  font-size: 12px;
+}
+
+.art-epigrafe-year {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+
+.art-subtitles {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0 0 2.5em;
+}
+
+.art-subtitle {
+  font-family: "JetBrains Mono", monospace;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 120%;
+  color: var(--text-tertiary);
+}
+
+.art-buy {
+  display: none;
+  width: fit-content;
+  margin: 2rem auto 0;
+  padding: 0.8rem 1.4rem;
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  background: var(--btn-bg);
+  font-family: "Urbanist", sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-align: center;
+  color: var(--text);
+  text-decoration: none;
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+.art-lists {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  margin-top: 3rem;
+}
+
+.art-list-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.art-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.art-list li {
+  font-family: "Urbanist", sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 150%;
+  color: var(--text-secondary);
+}
+
+.art-link {
+  text-decoration: none;
+  color: var(--text);
+}
+
+.art-link:hover {
+  color: var(--text);
+  text-decoration: underline;
+}
+
+/* ---------- Projects list (muestras) ---------- */
+
+.project-list {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.project-item {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 1em;
+  border-radius: 10px;
+  gap: 0.5em;
+  overflow: hidden;
+}
+
+.project-title,
+.project-copy {
+  flex-shrink: 0;
+}
+
+.project-title p {
+  color: var(--text);
+}
+
+.project-copy p {
+  color: var(--text-tertiary);
+}
+
+.project-divider {
+  flex-grow: 1;
+  height: 1px;
+  background-color: var(--card-border);
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+}
+
+.project-year {
+  flex-shrink: 0;
+}
+
+.project-year p {
+  color: var(--text-secondary);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 13px;
+}
+
+@media (max-width: 900px) {
+  .project-copy {
+    display: none;
+  }
+}
+
+/* ---------- Music ---------- */
+
+.music-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.music-figure {
+  margin: 0;
+  width: 100%;
+  max-width: 560px;
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.music-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.music-coming {
+  font-family: "JetBrains Mono", monospace;
+  font-weight: 500;
+  font-size: 13px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+/* ---------- Footer & dd-brand ---------- */
+
+.dd-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 4rem;
+}
+
+.dd-logo {
+  display: block;
+  padding: 0;
+}
+
+.dd-logo img {
+  width: 70px;
+  height: auto;
+}
+
+footer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 2rem 1.5rem 4rem;
+  color: #000;
+}
+
+footer a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  padding: 0;
+  color: #000;
+  transition: opacity 0.3s ease;
+}
+
+footer a:hover {
+  opacity: 0.6;
+}
+
+#audio-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: #000;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.22s cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+#audio-toggle:active {
+  transform: scale(0.9);
+  transition-duration: 0.1s;
+  transition-timing-function: ease-out;
+}
+
+@media (pointer: coarse) {
+  #audio-toggle {
+    display: none;
+  }
+}
+
+.footer-item-inner {
+  position: relative;
+  display: block;
+  width: 48px;
+  height: 48px;
+}
+
+.footer-ring {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.footer-ring circle {
+  stroke: currentColor;
+  stroke-width: 1.25;
+  fill: none;
+  opacity: 1;
+}
+
+.footer-glyph {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: block;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.audio-toggle-wave {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: block;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  color: #000;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 900px) {
+  .art-grid {
+    flex-direction: column;
+  }
+}
+
+/* ---------- Bio: todo en 100vh (desktop) ---------- */
+
+@media (min-width: 901px) {
+  body.bio-landing {
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  body.bio-landing .subpage-main {
+    flex: 1;
+    margin: 0 auto;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  body.bio-landing .bio-copy {
+    gap: 1.2em;
+  }
+
+  body.bio-landing .bio-copy p {
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  body.bio-landing .dd-brand {
+    margin-top: 1rem;
+  }
+
+  body.bio-landing footer {
+    padding: 1.5rem 1.5rem 2rem;
+  }
+}

@@ -7,9 +7,9 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: fileURLToPath(new URL('./index.html', import.meta.url)),
-        bio: fileURLToPath(new URL('./bio.html', import.meta.url)),
-        musica: fileURLToPath(new URL('./musica.html', import.meta.url)),
-        'visual-art': fileURLToPath(new URL('./visual-art.html', import.meta.url)),
+        bio: fileURLToPath(new URL('./bio/index.html', import.meta.url)),
+        musica: fileURLToPath(new URL('./musica/index.html', import.meta.url)),
+        'visual-art': fileURLToPath(new URL('./visual-art/index.html', import.meta.url)),
       },
     },
   },
