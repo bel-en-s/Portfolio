@@ -282,6 +282,8 @@ gltfLoader.load('star.glb', (gltf) => {
       labelOffset: 0,
       tiltX: 0,
       tiltY: 0,
+      idlePhase: i * (Math.PI * 2 / 3),
+      idleSpeed: 0.6 + i * 0.25,
     });
   });
 
@@ -440,7 +442,10 @@ function animate() {
   // Rotación por scroll: cada estrella gira a su propia velocidad
   scrollRot += (targetScrollRot - scrollRot) * 0.1;
   stars.forEach((s) => {
-    s.group.rotation.z = s.baseRot + scrollRot * s.scrollSpeed;
+    const idleRot = Math.sin(elapsed * s.idleSpeed + s.idlePhase) * 0.12;
+    const idleBob = Math.sin(elapsed * s.idleSpeed * 0.8 + s.idlePhase) * 0.05;
+    s.group.rotation.z = s.baseRot + idleRot + scrollRot * s.scrollSpeed;
+    s.group.position.y = s.baseY + idleBob;
   });
 
   // Luz soñadora orbitando con color cambiante
@@ -472,8 +477,9 @@ function animate() {
     const targetTiltY = THREE.MathUtils.clamp(dx * 0.3, -0.55, 0.55);
     s.tiltX += (targetTiltX - s.tiltX) * Math.min(delta * 6, 1);
     s.tiltY += (targetTiltY - s.tiltY) * Math.min(delta * 6, 1);
+    const idleSpin = elapsed * 0.35 * s.idleSpeed;
     s.group.rotation.x = s.tiltX;
-    s.group.rotation.y = s.baseRotY + s.tiltY;
+    s.group.rotation.y = s.baseRotY + s.tiltY + idleSpin;
   });
 
   // Hover: subraya la etiqueta de la estrella bajo el cursor (solo desktop)
