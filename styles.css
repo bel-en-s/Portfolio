@@ -358,6 +358,10 @@ body {
     display: none;
   }
 
+  .mobile-star:nth-child(2) {
+    transform: translateY(1.25rem);
+  }
+
   .mobile-star:nth-child(3) {
     grid-column: 1 / -1;
     justify-self: center;
