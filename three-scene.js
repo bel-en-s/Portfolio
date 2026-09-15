@@ -283,7 +283,7 @@ gltfLoader.load('star.glb', (gltf) => {
       tiltX: 0,
       tiltY: 0,
       idlePhase: i * (Math.PI * 2 / 3),
-      idleSpeed: 0.6 + i * 0.25,
+      idleSpeed: 0.8 + i * 0.3,
     });
   });
 
@@ -477,7 +477,7 @@ function animate() {
     const targetTiltY = THREE.MathUtils.clamp(dx * 0.3, -0.55, 0.55);
     s.tiltX += (targetTiltX - s.tiltX) * Math.min(delta * 6, 1);
     s.tiltY += (targetTiltY - s.tiltY) * Math.min(delta * 6, 1);
-    const idleSpin = elapsed * 0.35 * s.idleSpeed;
+    const idleSpin = elapsed * s.idleSpeed;
     s.group.rotation.x = s.tiltX;
     s.group.rotation.y = s.baseRotY + s.tiltY + idleSpin;
   });

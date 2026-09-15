@@ -115,6 +115,7 @@ function init() {
       lastMoveTime: 0,
       baseRotY: baseRotY[i],
       baseRotZ: baseRot[i],
+      idleSpeed: 0.8 + i * 0.3,
     };
   }).filter(Boolean);
 
@@ -236,7 +237,7 @@ function init() {
         vp.velX *= decay;
         vp.velY *= decay;
       } else if (!prefersReducedMotion) {
-        vp.group.rotation.y += 0.003;
+        vp.group.rotation.y += dt * vp.idleSpeed;
         const targetZ = vp.baseRotZ + Math.sin(t * 0.5 + vp.baseRotZ) * 0.08;
         vp.group.rotation.z += (targetZ - vp.group.rotation.z) * 0.04;
       }
