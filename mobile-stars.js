@@ -113,6 +113,10 @@ function init() {
       lastMoveTime: 0,
       baseRotY: baseRotY[i],
       baseRotZ: baseRot[i],
+      idleSpeed: 0.8 + i * 0.3,
+      spinY: 0,
+      userRotX: 0,
+      userRotY: 0,
     };
   }).filter(Boolean);
 
@@ -195,8 +199,8 @@ function init() {
       vp.velX = vp.velX * 0.6 + instVelX * 0.4;
       vp.velY = vp.velY * 0.6 + instVelY * 0.4;
 
-      vp.group.rotation.y += dx * 0.012;
-      vp.group.rotation.x += dy * 0.012;
+      vp.userRotY += dx * 0.012;
+      vp.userRotX += dy * 0.012;
       vp.lastX = e.clientX;
       vp.lastY = e.clientY;
       vp.lastMoveTime = now;
@@ -226,26 +230,33 @@ function init() {
 
     for (const vp of viewports) {
       if (!vp.group) continue;
+
+      const TAU = Math.PI * 2;
       if (vp.dragging) {
         // la rotación se aplica en pointermove
       } else if (Math.abs(vp.velX) > VELOCITY_EPS || Math.abs(vp.velY) > VELOCITY_EPS) {
-        vp.group.rotation.x += vp.velX * dt;
-        vp.group.rotation.y += vp.velY * dt;
+        vp.userRotX += vp.velX * dt;
+        vp.userRotY += vp.velY * dt;
         const decay = Math.exp(-FRICTION * dt);
         vp.velX *= decay;
         vp.velY *= decay;
       } else {
-        // Vuelve lentamente a la posición original (con un suave balanceo)
-        const restX = Math.cos(t * 0.45 + vp.baseRotZ) * 0.1;
-        const restY = vp.baseRotY + Math.sin(t * 0.55 + vp.baseRotY) * 0.12;
+        // Vuelve lentamente a la posición original (por el camino más corto)
         const k = 1 - Math.exp(-RETURN_SPEED * dt);
-        const diffX = Math.atan2(Math.sin(restX - vp.group.rotation.x), Math.cos(restX - vp.group.rotation.x));
-        const diffY = Math.atan2(Math.sin(restY - vp.group.rotation.y), Math.cos(restY - vp.group.rotation.y));
-        vp.group.rotation.x += diffX * k;
-        vp.group.rotation.y += diffY * k;
-        const targetZ = vp.baseRotZ + Math.sin(t * 0.5 + vp.baseRotZ) * 0.08;
-        vp.group.rotation.z += (targetZ - vp.group.rotation.z) * 0.04;
+        const tx = Math.round(vp.userRotX / TAU) * TAU;
+        const ty = Math.round(vp.userRotY / TAU) * TAU;
+        vp.userRotX += (tx - vp.userRotX) * k;
+        vp.userRotY += (ty - vp.userRotY) * k;
       }
+
+      // Giro idle continuo: la estrella rota sola, despacio
+      vp.spinY += dt * vp.idleSpeed;
+
+      vp.group.rotation.x = vp.userRotX;
+      vp.group.rotation.y = vp.baseRotY + vp.spinY + vp.userRotY;
+      const targetZ = vp.baseRotZ + Math.sin(t * 0.5 + vp.baseRotZ) * 0.08;
+      vp.group.rotation.z += (targetZ - vp.group.rotation.z) * 0.04;
+
       vp.renderer.render(vp.scene, vp.camera);
     }
   }
