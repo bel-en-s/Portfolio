@@ -21,7 +21,7 @@ function extractUrl(text) {
 }
 
 function blockToEntry(block) {
-  const entry = { image: '', url: '', comment: '' };
+  const entry = { image: '', url: '', comment: '', date: '' };
 
   if (block.image) {
     entry.image =
@@ -42,7 +42,20 @@ function blockToEntry(block) {
     (block.class === 'Text' ? block.content : '') ||
     '';
 
+  entry.date = block.connected_at || block.created_at || '';
+
   return entry;
+}
+
+function formatDate(iso) {
+  const date = new Date(iso);
+  if (isNaN(date.getTime())) return '';
+  const locale = currentLang() === 'es' ? 'es-AR' : 'en-US';
+  return date.toLocaleDateString(locale, {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  });
 }
 
 function createMedia(entry) {
@@ -83,6 +96,14 @@ function createCard(entry) {
     p.className = 'insp-card-comment';
     p.textContent = comment;
     card.appendChild(p);
+  }
+
+  if (entry.date) {
+    const time = document.createElement('time');
+    time.className = 'insp-card-date';
+    time.dateTime = entry.date;
+    time.textContent = formatDate(entry.date);
+    card.appendChild(time);
   }
 
   return card;

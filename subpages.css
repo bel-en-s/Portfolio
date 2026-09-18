@@ -11,7 +11,7 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  --bg: #F8E0C1;
+  --bg: #ffffff;
   --text: #000;
   --text-secondary: #4a4a4a;
   --text-tertiary: #7a7a7a;
@@ -500,8 +500,27 @@ button {
 }
 
 @media (max-width: 900px) {
-  .project-copy {
+  .project-item {
+    flex-wrap: wrap;
+  }
+
+  .project-title {
+    order: 1;
+  }
+
+  .project-year {
+    order: 2;
+    margin-left: auto;
+  }
+
+  .project-divider {
+    order: 3;
     display: none;
+  }
+
+  .project-copy {
+    order: 4;
+    flex-basis: 100%;
   }
 }
 
@@ -601,9 +620,26 @@ body.tesoros-page .insp-card-media {
   color: var(--text);
 }
 
+.insp-card-date {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.03em;
+  color: var(--text-tertiary);
+}
+
 @media (max-width: 900px) {
   .insp-grid {
     column-count: 1;
+  }
+
+  .insp-card {
+    border-bottom: 1px solid var(--card-border);
+    padding-bottom: 1.25rem;
+  }
+
+  .insp-card:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
   }
 }
 
@@ -625,6 +661,15 @@ body.tesoros-page .insp-card-media {
 .dd-logo img {
   width: 70px;
   height: auto;
+}
+
+@media (max-width: 900px) {
+  .dd-brand {
+    border-top: 1px solid var(--card-border);
+    padding-top: 1.5rem;
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
+  }
 }
 
 footer {

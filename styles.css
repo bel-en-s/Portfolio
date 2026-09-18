@@ -298,11 +298,11 @@ body {
   .mobile-stars {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: clamp(1rem, 4vh, 2.5rem) clamp(0.5rem, 3vw, 1.5rem);
+    gap: clamp(0.5rem, 1.5vh, 1rem) clamp(0.5rem, 2vw, 1rem);
     position: fixed;
     top: 0;
     right: 0;
-    bottom: 5vh;
+    bottom: 6.5rem;
     left: 0;
     align-content: center;
     justify-items: center;
@@ -335,8 +335,8 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: clamp(120px, 40vw, 190px);
-    height: clamp(120px, 40vw, 190px);
+    width: clamp(100px, 30vw, 150px);
+    height: clamp(100px, 30vw, 150px);
   }
 
   .mobile-star-view img {
@@ -363,22 +363,9 @@ body {
     display: none;
   }
 
-  .mobile-star:nth-child(2) {
-    transform: translateY(clamp(0.75rem, 2.5vh, 1.5rem));
-  }
-
-  .mobile-star:nth-child(3) {
-    transform: translateY(clamp(-0.75rem, -2vh, -0.25rem));
-  }
-
-  .mobile-star:nth-child(4) {
-    transform: translateY(clamp(0.25rem, 2vh, 1rem));
-  }
-
   .mobile-star:nth-child(5) {
     grid-column: 1 / -1;
     justify-self: center;
-    transform: translateY(clamp(-0.25rem, -1vh, 0.25rem));
   }
 }
 
