@@ -10,6 +10,7 @@ export default defineConfig({
         bio: fileURLToPath(new URL('./bio/index.html', import.meta.url)),
         musica: fileURLToPath(new URL('./musica/index.html', import.meta.url)),
         'visual-art': fileURLToPath(new URL('./visual-art/index.html', import.meta.url)),
+        tesoros: fileURLToPath(new URL('./tesoros/index.html', import.meta.url)),
       },
     },
   },

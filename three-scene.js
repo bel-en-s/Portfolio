@@ -230,11 +230,12 @@ glowSprite.scale.setScalar(3.2);
 scene.add(glowSprite);
 
 // --- Estrellas metálicas (3 instancias de star.glb) ---
-const starColors = ['#e3b3bb', '#a9c3ce', '#b3c4a8'];
-const starBaseRot = [0.18, -0.14, 0.22];
-const starBaseRotY = [0.35, -0.5, 0.6];
-const starScrollSpeed = [0.5, 1.0, 1.6];
-const starBaseY = [0.28, -0.2, 0.12];
+const starColors = ['#e3b3bb', '#a9c3ce', '#b3c4a8', '#cbb8d6', '#f0c9a0'];
+const starBaseRot = [0.18, -0.14, 0.22, 0.08, -0.22];
+const starBaseRotY = [0.35, -0.5, 0.6, -0.2, 0.15];
+const starScrollSpeed = [0.5, 1.0, 1.6, 1.3, 0.8];
+const starBaseY = [0.28, -0.2, 0.12, 0.0, 0.2];
+const starScale = [1.0, 0.84, 0.96, 0.88, 0.8];
 
 const stars = [];
 const labelEls = Array.from(document.querySelectorAll('.scene-star-label'));
@@ -312,26 +313,31 @@ function layoutStars() {
   const targetSize = narrow ? 0.48 : 0.85;
   const scale = targetSize / starMaxDim;
 
-  // Distribución piramidal: 2 arriba, 1 abajo centrado
+  // Distribución orgánica, centrada (constelación suelta)
   const positions = narrow
     ? [
-        { x: -visWidth * 0.2, y: 0.45 },
-        { x: visWidth * 0.2, y: 0.45 },
-        { x: 0, y: -0.5 },
+        { x: -visWidth * 0.22, y: 0.55 },
+        { x: 0, y: 0.85 },
+        { x: visWidth * 0.22, y: 0.5 },
+        { x: -visWidth * 0.15, y: -0.55 },
+        { x: visWidth * 0.18, y: -0.6 },
       ]
     : [
-        { x: -1.0, y: 0.4 },
-        { x: 1.0, y: 0.4 },
-        { x: 0, y: -0.65 },
+        { x: -1.4, y: 0.35 },
+        { x: 0, y: 0.85 },
+        { x: 1.35, y: 0.45 },
+        { x: -0.75, y: -0.65 },
+        { x: 0.85, y: -0.75 },
       ];
 
   stars.forEach((s, i) => {
     const p = positions[i] || { x: 0, y: 0 };
+    const sScale = starScale[i] ?? 1;
     s.baseX = p.x;
     s.baseY = p.y;
-    s.group.scale.setScalar(scale);
+    s.group.scale.setScalar(scale * sScale);
     s.group.position.set(s.baseX, s.baseY, 0);
-    s.labelOffset = targetSize * 0.58;
+    s.labelOffset = targetSize * sScale * 0.58;
   });
 }
 
@@ -379,7 +385,7 @@ window.addEventListener('wheel', (e) => {
 }, { passive: true });
 
 // Click en una estrella → navegar a su página
-const starPages = ['bio/', 'musica/', 'visual-art/'];
+const starPages = ['bio/', 'musica/', 'visual-art/', 'tesoros/', 'https://www.divinodivino.com.ar/work'];
 const clickNDC = new THREE.Vector2();
 
 window.addEventListener('click', (e) => {

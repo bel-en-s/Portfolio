@@ -368,9 +368,17 @@ body {
   }
 
   .mobile-star:nth-child(3) {
+    transform: translateY(clamp(-0.75rem, -2vh, -0.25rem));
+  }
+
+  .mobile-star:nth-child(4) {
+    transform: translateY(clamp(0.25rem, 2vh, 1rem));
+  }
+
+  .mobile-star:nth-child(5) {
     grid-column: 1 / -1;
     justify-self: center;
-    transform: translateY(clamp(-4.5rem, -8vh, -2.5rem));
+    transform: translateY(clamp(-0.25rem, -1vh, 0.25rem));
   }
 }
 
@@ -473,6 +481,39 @@ body {
 
 .header-nav-item:hover span {
   text-decoration: underline;
+}
+
+.lang-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  cursor: pointer;
+  font-family: 'Geist', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 100%;
+  letter-spacing: 0.02em;
+  color: #000;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.lang-opt {
+  opacity: 0.45;
+  transition: opacity 0.2s ease;
+}
+
+.lang-opt.is-active {
+  opacity: 1;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.lang-sep {
+  opacity: 0.45;
 }
 
 .index-page.bio-page {
@@ -1166,14 +1207,18 @@ footer img {
 }
 
 /* Posiciones por defecto (si el 3D no carga, la navegación no queda apilada) */
-.scene-star-label:nth-child(1) { left: 30%; top: 40%; }
-.scene-star-label:nth-child(2) { left: 70%; top: 40%; }
-.scene-star-label:nth-child(3) { left: 50%; top: 75%; }
+.scene-star-label:nth-child(1) { left: 26%; top: 42%; }
+.scene-star-label:nth-child(2) { left: 50%; top: 34%; }
+.scene-star-label:nth-child(3) { left: 74%; top: 42%; }
+.scene-star-label:nth-child(4) { left: 38%; top: 64%; }
+.scene-star-label:nth-child(5) { left: 62%; top: 64%; }
 
 @media (max-width: 640px) {
-  .scene-star-label:nth-child(1) { left: 25%; top: 40%; }
-  .scene-star-label:nth-child(2) { left: 75%; top: 40%; }
-  .scene-star-label:nth-child(3) { left: 50%; top: 72%; }
+  .scene-star-label:nth-child(1) { left: 24%; top: 40%; }
+  .scene-star-label:nth-child(2) { left: 50%; top: 34%; }
+  .scene-star-label:nth-child(3) { left: 76%; top: 40%; }
+  .scene-star-label:nth-child(4) { left: 34%; top: 62%; }
+  .scene-star-label:nth-child(5) { left: 66%; top: 62%; }
 }
 
 .scene-star-label::after {

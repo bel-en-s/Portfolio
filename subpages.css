@@ -156,6 +156,40 @@ button {
   color: var(--text);
 }
 
+.lang-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  margin-top: 32px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  cursor: pointer;
+  font-family: "Urbanist", sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 100%;
+  letter-spacing: 0.02em;
+  color: var(--text);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.lang-opt {
+  opacity: 0.45;
+  transition: opacity 0.2s ease;
+}
+
+.lang-opt.is-active {
+  opacity: 1;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.lang-sep {
+  opacity: 0.45;
+}
+
 /* ---------- Subpage main ---------- */
 
 .subpage-main {
@@ -169,6 +203,10 @@ button {
 
 .subpage-main--wide {
   max-width: 1100px;
+}
+
+.subpage-main--bio {
+  max-width: 980px;
 }
 
 @media (max-width: 900px) {
@@ -203,6 +241,31 @@ button {
   font-size: 16px;
   line-height: 1.7;
   color: var(--text);
+}
+
+.bio-columns {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 3rem;
+}
+
+.bio-columns .bio-copy {
+  flex: 1.6;
+}
+
+.bio-publicaciones {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+@media (max-width: 900px) {
+  .bio-columns {
+    flex-direction: column;
+    gap: 2rem;
+  }
 }
 
 /* ---------- Visual art (work grid) ---------- */
@@ -471,6 +534,72 @@ button {
   font-weight: 400;
   font-size: 18px;
   color: var(--text);
+}
+
+/* ---------- Tesoros ---------- */
+
+body.tesoros-page {
+  background-color: #ffffff;
+}
+
+body.tesoros-page .insp-card-media {
+  background: #ffffff;
+}
+
+.insp-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.insp-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  text-decoration: none;
+  color: var(--text);
+}
+
+.insp-card-media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border: 1px solid var(--card-border);
+  background: var(--card-bg);
+}
+
+.insp-card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.insp-card-media.is-fallback::after {
+  content: "\2726";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2rem;
+  line-height: 1;
+  color: var(--text-tertiary);
+}
+
+.insp-card-comment {
+  font-family: "Playfair Display", serif;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 1.4;
+  color: var(--text);
+}
+
+@media (max-width: 900px) {
+  .insp-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ---------- Footer & dd-brand ---------- */

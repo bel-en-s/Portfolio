@@ -13,7 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="../subpages.css" />
-    <title>Belén Seoane Palmieri – Música</title>
+    <title data-i18n="title.music">Belén Seoane Palmieri – Música</title>
   </head>
   <body class="index-page bio-page">
 
@@ -25,26 +25,30 @@
       <nav class="header-nav">
         <a class="header-nav-item" href="../">
           <img src="../assets/nav-star.png" alt="" />
-          <span>home</span>
+          <span data-i18n="nav.home">inicio</span>
         </a>
         <a class="header-nav-item" href="../bio/">
           <img src="../assets/nav-star.png" alt="" />
-          <span>bio</span>
+          <span data-i18n="nav.bio">bio</span>
         </a>
         <a class="header-nav-item" href="../visual-art/">
           <img src="../assets/nav-star.png" alt="" />
-          <span>visual art</span>
+          <span data-i18n="nav.visualart">arte visual</span>
         </a>
         <a class="header-nav-item" href="../musica/">
           <img src="../assets/nav-star.png" alt="" />
-          <span>music</span>
+          <span data-i18n="nav.music">música</span>
+        </a>
+        <a class="header-nav-item" href="../tesoros/">
+          <img src="../assets/nav-star.png" alt="" />
+          <span data-i18n="nav.treasures">tesoros</span>
         </a>
       </nav>
     </header>
 
     <main class="subpage-main">
       <div class="music-block">
-        <p class="music-coming">coming soon</p>
+        <p class="music-coming" data-i18n="music.coming">próximamente</p>
         <figure class="music-figure">
           <img src="../assets/ceece-9749.jpg" alt="Música" />
         </figure>
@@ -91,6 +95,7 @@
       </a>
     </footer>
 
+    <script type="module" src="../i18n.js"></script>
     <script type="module" src="../main.js"></script>
     <script type="module" src="../audio-wave.js"></script>
 

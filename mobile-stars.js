@@ -46,9 +46,9 @@ function makeGradientEnv(renderer, scene) {
 
 function init() {
   const starLinks = Array.from(nav.querySelectorAll('.mobile-star'));
-  const colors = ['#e3b3bb', '#a9c3ce', '#b3c4a8'];
-  const baseRot = [0.18, -0.14, 0.22];
-  const baseRotY = [0.35, -0.5, 0.6];
+  const colors = ['#e3b3bb', '#a9c3ce', '#b3c4a8', '#cbb8d6', '#f0c9a0'];
+  const baseRot = [0.18, -0.14, 0.22, 0.08, -0.22];
+  const baseRotY = [0.35, -0.5, 0.6, -0.2, 0.15];
   const fitScale = 2.35;
 
   const viewports = starLinks.map((link, i) => {

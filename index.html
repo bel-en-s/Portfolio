@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>Belén Seoane — Artista Multimedial & Diseñadora Web Creativa</title>
+    <title data-i18n="title.home">Belén Seoane — Artista Multimedial & Diseñadora Web Creativa</title>
     <meta name="description" content="Belén Seoane (Belén Seoane Palmieri), artista multimedial, música y diseñadora web creativa. Obra digital, 3D interactivo, música y diseño web." />
     <link rel="canonical" href="https://www.belenseoanepalmieri.com/" />
 
@@ -57,7 +57,7 @@
     <header class="header">
       <div class="header-title">
         <h1>belén seoane palmieri</h1>
-        <h2>creative web designer &amp; multimedia artist</h2>
+        <h2 data-i18n="home.subtitle">diseñadora web creativa y artista multimedial</h2>
       </div>
     </header>
 
@@ -111,9 +111,11 @@
     <div id="three-container"></div>
 
     <div class="star-titles">
-      <a class="scene-star-label" href="bio/">Bio</a>
-      <a class="scene-star-label" href="musica/">Música</a>
-      <a class="scene-star-label" href="visual-art/">Visual art</a>
+      <a class="scene-star-label" href="bio/" data-i18n="star.bio">Bio & Publicaciones</a>
+      <a class="scene-star-label" href="musica/" data-i18n="star.music">Música</a>
+      <a class="scene-star-label" href="visual-art/" data-i18n="star.visual">Arte visual</a>
+      <a class="scene-star-label" href="tesoros/" data-i18n="star.treasures">Tesoros</a>
+      <a class="scene-star-label" href="https://www.divinodivino.com.ar/work" target="_blank" rel="noopener noreferrer" data-i18n="star.commercial">Trabajo comercial</a>
     </div>
 
     <nav class="mobile-stars" aria-label="Navegación">
@@ -121,22 +123,35 @@
         <span class="mobile-star-view" aria-hidden="true">
           <img src="assets/nav-star-2.png" alt="" draggable="false" />
         </span>
-        <span>Bio</span>
+        <span data-i18n="star.bio">Bio & Publicaciones</span>
       </a>
       <a class="mobile-star" href="musica/">
         <span class="mobile-star-view" aria-hidden="true">
           <img src="assets/nav-star-4.png" alt="" draggable="false" />
         </span>
-        <span>Música</span>
+        <span data-i18n="star.music">Música</span>
       </a>
       <a class="mobile-star" href="visual-art/">
         <span class="mobile-star-view" aria-hidden="true">
           <img src="assets/nav-star-3.png" alt="" draggable="false" />
         </span>
-        <span>Visual art</span>
+        <span data-i18n="star.visual">Arte visual</span>
+      </a>
+      <a class="mobile-star" href="tesoros/">
+        <span class="mobile-star-view" aria-hidden="true">
+          <img src="assets/nav-star.png" alt="" draggable="false" />
+        </span>
+        <span data-i18n="star.treasures">Tesoros</span>
+      </a>
+      <a class="mobile-star" href="https://www.divinodivino.com.ar/work" target="_blank" rel="noopener noreferrer">
+        <span class="mobile-star-view" aria-hidden="true">
+          <img src="assets/nav-star-2.png" alt="" draggable="false" />
+        </span>
+        <span data-i18n="star.commercial">Trabajo comercial</span>
       </a>
     </nav>
 
+    <script type="module" src="i18n.js"></script>
     <script type="module" src="three-scene.js"></script>
     <!-- <script type="module" src="star.js"></script> -->
     <script type="module" src="mobile-stars.js"></script>
