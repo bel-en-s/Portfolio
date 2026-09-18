@@ -41,7 +41,7 @@ const translations = {
     'art.exh.deoffi': 'Curaduría de Francesca Pandolfo, deOFFI',
     'art.exh.videobardo': 'Curaduría de Javier Robledo, Biblioteca Nacional Mariano Moreno',
     'art.exh.balcarce': 'Centro Cultural Balcarce',
-    'art.earlyworks': 'obras tempranas',
+    'art.exh.fragata': 'Nos en Vera',
     'art.buy': 'por interés en adquirir alguna obra comunicarse por mail belen.seoane.palmieri@gmail.com',
 
     // Música
@@ -90,7 +90,7 @@ const translations = {
     'art.exh.deoffi': 'Curated by Francesca Pandolfo, deOFFI',
     'art.exh.videobardo': 'Curated by Javier Robledo, Biblioteca Nacional Mariano Moreno',
     'art.exh.balcarce': 'Centro Cultural Balcarce',
-    'art.earlyworks': 'early works',
+    'art.exh.fragata': 'Nos en Vera',
     'art.buy': 'for inquiries about acquiring a work, email belen.seoane.palmieri@gmail.com',
 
     'music.coming': 'coming soon',

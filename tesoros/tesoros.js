@@ -14,6 +14,12 @@ function commentText(comment) {
 }
 
 // Convierte un "block" de Are.na en la estructura { image, url, comment }.
+function extractUrl(text) {
+  if (!text) return '';
+  const match = String(text).match(/https?:\/\/[^\s"'<>)]+/i);
+  return match ? match[0].replace(/[.,;:]+$/, '') : '';
+}
+
 function blockToEntry(block) {
   const entry = { image: '', url: '', comment: '' };
 
@@ -26,7 +32,8 @@ function blockToEntry(block) {
 
   entry.url =
     (block.source && block.source.url) ||
-    (block.class === 'Link' ? block.content : '') ||
+    extractUrl(block.description) ||
+    extractUrl(block.content) ||
     '';
 
   entry.comment =

@@ -460,7 +460,7 @@ button {
   width: 100%;
   display: flex;
   align-items: center;
-  padding: 1em;
+  padding: 0.3em 1em;
   border-radius: 10px;
   gap: 0.5em;
   overflow: hidden;
@@ -473,10 +473,12 @@ button {
 
 .project-title p {
   color: var(--text);
+  font-family: "Playfair Display", serif;
 }
 
 .project-copy p {
   color: var(--text-tertiary);
+  font-family: "Playfair Display", serif;
 }
 
 .project-divider {
@@ -493,7 +495,7 @@ button {
 
 .project-year p {
   color: var(--text-secondary);
-  font-family: "JetBrains Mono", monospace;
+  font-family: "Playfair Display", serif;
   font-size: 13px;
 }
 
