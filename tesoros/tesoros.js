@@ -13,7 +13,7 @@ function commentText(comment) {
   return comment[currentLang()] || comment.es || comment.en || '';
 }
 
-// Convierte un "block" de Are.na en la estructura { image, url, comment, note, date }.
+// Convierte un "block" de Are.na en la estructura { image, url, comment, date }.
 function extractUrl(text) {
   if (!text) return '';
   const match = String(text).match(/https?:\/\/[^\s"'<>)]+/i);
@@ -21,7 +21,7 @@ function extractUrl(text) {
 }
 
 function blockToEntry(block) {
-  const entry = { image: '', url: '', comment: '', note: '', date: '' };
+  const entry = { image: '', url: '', comment: '', date: '' };
 
   if (block.image) {
     entry.image =
@@ -41,8 +41,6 @@ function blockToEntry(block) {
     block.generated_title ||
     (block.class === 'Text' ? block.content : '') ||
     '';
-
-  entry.note = block.class !== 'Text' ? String(block.content || '').trim() : '';
 
   entry.date = block.connected_at || block.created_at || '';
 
@@ -106,13 +104,6 @@ function createCard(entry) {
     time.dateTime = entry.date;
     time.textContent = formatDate(entry.date);
     card.appendChild(time);
-  }
-
-  if (entry.note) {
-    const note = document.createElement('p');
-    note.className = 'insp-card-note';
-    note.textContent = entry.note;
-    card.appendChild(note);
   }
 
   return card;
