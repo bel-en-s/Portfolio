@@ -13,15 +13,23 @@ function commentText(comment) {
   return comment[currentLang()] || comment.es || comment.en || '';
 }
 
-// Convierte un "block" de Are.na en la estructura { image, url, comment }.
+// Convierte un "block" de Are.na en la estructura { image, url, comment, note, date }.
 function extractUrl(text) {
   if (!text) return '';
   const match = String(text).match(/https?:\/\/[^\s"'<>)]+/i);
   return match ? match[0].replace(/[.,;:]+$/, '') : '';
 }
 
+function stripUrls(text) {
+  if (!text) return '';
+  return String(text)
+    .replace(/https?:\/\/[^\s"'<>)]+/gi, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 function blockToEntry(block) {
-  const entry = { image: '', url: '', comment: '', date: '' };
+  const entry = { image: '', url: '', comment: '', note: '', date: '' };
 
   if (block.image) {
     entry.image =
@@ -41,6 +49,10 @@ function blockToEntry(block) {
     block.generated_title ||
     (block.class === 'Text' ? block.content : '') ||
     '';
+
+  const desc = stripUrls(block.description);
+  const extra = block.class !== 'Text' ? stripUrls(block.content) : '';
+  entry.note = [desc, extra].filter(Boolean).join(' ');
 
   entry.date = block.connected_at || block.created_at || '';
 
@@ -96,6 +108,13 @@ function createCard(entry) {
     p.className = 'insp-card-comment';
     p.textContent = comment;
     card.appendChild(p);
+  }
+
+  if (entry.note) {
+    const note = document.createElement('p');
+    note.className = 'insp-card-note';
+    note.textContent = entry.note;
+    card.appendChild(note);
   }
 
   if (entry.date) {

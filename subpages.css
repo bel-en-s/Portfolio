@@ -261,6 +261,11 @@ button {
   gap: 0.6rem;
 }
 
+.bio-publicaciones .art-list li {
+  font-size: 16px;
+  line-height: 1.7;
+}
+
 @media (max-width: 900px) {
   .bio-columns {
     flex-direction: column;
@@ -618,6 +623,14 @@ body.tesoros-page .insp-card-media {
   font-size: 15px;
   line-height: 1.4;
   color: var(--text);
+}
+
+.insp-card-note {
+  font-family: "Urbanist", sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-secondary);
 }
 
 .insp-card-date {

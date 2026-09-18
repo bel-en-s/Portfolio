@@ -298,7 +298,7 @@ body {
   .mobile-stars {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: clamp(0.5rem, 1.5vh, 1rem) clamp(0.5rem, 2vw, 1rem);
+    gap: clamp(0.5rem, 1.5vh, 1rem) clamp(0.25rem, 1.5vw, 0.75rem);
     position: fixed;
     top: 0;
     right: 0;
@@ -319,7 +319,7 @@ body {
     text-decoration: none;
     color: #000;
     font-family: 'Playfair Display', serif;
-    font-size: 15px;
+    font-size: 13px;
     font-weight: 400;
     letter-spacing: 0.02em;
     pointer-events: auto;
@@ -335,8 +335,8 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: clamp(100px, 30vw, 150px);
-    height: clamp(100px, 30vw, 150px);
+    width: clamp(110px, 33vw, 170px);
+    height: clamp(110px, 33vw, 170px);
   }
 
   .mobile-star-view img {
