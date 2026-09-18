@@ -549,9 +549,8 @@ body.tesoros-page .insp-card-media {
 }
 
 .insp-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
+  column-count: 3;
+  column-gap: 1.5rem;
   width: 100%;
 }
 
@@ -561,12 +560,13 @@ body.tesoros-page .insp-card-media {
   gap: 0.75rem;
   text-decoration: none;
   color: var(--text);
+  break-inside: avoid;
+  margin-bottom: 1.5rem;
 }
 
 .insp-card-media {
   position: relative;
   width: 100%;
-  aspect-ratio: 4 / 3;
   overflow: hidden;
   border: 1px solid var(--card-border);
   background: var(--card-bg);
@@ -574,9 +574,12 @@ body.tesoros-page .insp-card-media {
 
 .insp-card-media img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
   display: block;
+}
+
+.insp-card-media.is-fallback {
+  aspect-ratio: 4 / 3;
 }
 
 .insp-card-media.is-fallback::after {
@@ -600,7 +603,7 @@ body.tesoros-page .insp-card-media {
 
 @media (max-width: 900px) {
   .insp-grid {
-    grid-template-columns: 1fr;
+    column-count: 1;
   }
 }
 
