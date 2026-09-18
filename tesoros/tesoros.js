@@ -20,14 +20,6 @@ function extractUrl(text) {
   return match ? match[0].replace(/[.,;:]+$/, '') : '';
 }
 
-function stripUrls(text) {
-  if (!text) return '';
-  return String(text)
-    .replace(/https?:\/\/[^\s"'<>)]+/gi, '')
-    .replace(/\s+/g, ' ')
-    .trim();
-}
-
 function blockToEntry(block) {
   const entry = { image: '', url: '', comment: '', note: '', date: '' };
 
@@ -50,9 +42,7 @@ function blockToEntry(block) {
     (block.class === 'Text' ? block.content : '') ||
     '';
 
-  const desc = stripUrls(block.description);
-  const extra = block.class !== 'Text' ? stripUrls(block.content) : '';
-  entry.note = [desc, extra].filter(Boolean).join(' ');
+  entry.note = block.class !== 'Text' ? String(block.content || '').trim() : '';
 
   entry.date = block.connected_at || block.created_at || '';
 
@@ -110,19 +100,19 @@ function createCard(entry) {
     card.appendChild(p);
   }
 
-  if (entry.note) {
-    const note = document.createElement('p');
-    note.className = 'insp-card-note';
-    note.textContent = entry.note;
-    card.appendChild(note);
-  }
-
   if (entry.date) {
     const time = document.createElement('time');
     time.className = 'insp-card-date';
     time.dateTime = entry.date;
     time.textContent = formatDate(entry.date);
     card.appendChild(time);
+  }
+
+  if (entry.note) {
+    const note = document.createElement('p');
+    note.className = 'insp-card-note';
+    note.textContent = entry.note;
+    card.appendChild(note);
   }
 
   return card;
