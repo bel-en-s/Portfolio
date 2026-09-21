@@ -131,7 +131,8 @@ if (ARENA_CHANNEL && ARENA_CHANNEL !== 'tu-slug-aqui') {
     .then((data) => {
       const entries = (data.contents || [])
         .map(blockToEntry)
-        .filter((e) => e.image || e.url || e.comment);
+        .filter((e) => e.image || e.url || e.comment)
+        .sort((a, b) => (b.date || '').localeCompare(a.date || ''));
       if (entries.length) {
         currentEntries = entries;
         render(currentEntries);
