@@ -75,7 +75,7 @@ const translations = {
     'title.visual': 'Belén Seoane Palmieri — Visual Art',
     'title.treasures': 'Belén Seoane Palmieri — Treasures',
 
-    'bio.p1': 'Belén is a multimedia visual artist. She trained at the National University of the Arts, completing both the Visual Arts degree and the Multimedia Arts degree.',
+    'bio.p1': 'Belén is a multimedia visual artist. She studied at the National University of the Arts, earning both a degree in Visual Arts and a degree in Multimedia Arts.',
     'bio.p2': 'She was awarded a scholarship to study at the Universitat Politècnica de València, in Spain, as part of an exchange program. There she completed a semester of the Design and Creative Technologies program and took part in various cultural events and group exhibitions. She attended workshops with Marcia Schvartz, Lucía Jazmín Tarela, and Fabiana Barreda.',
     'bio.p3': 'She currently lives and works in Buenos Aires, where she develops her artistic and professional practice independently. Her work is an invitation to imagine the internet as a place worth inhabiting again: playful, magical, slow, and alive.',
     'bio.publications': 'publications',
