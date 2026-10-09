@@ -420,6 +420,12 @@ function initArtCarousels() {
     nextBtn.innerHTML = '&rsaquo;';
     nextBtn.style.cssText = arrowStyle + 'right:1rem;';
 
+    const closeBtn = document.createElement('button');
+    closeBtn.type = 'button';
+    closeBtn.innerHTML = '&times;';
+    closeBtn.setAttribute('aria-label', 'Cerrar');
+    closeBtn.style.cssText = 'position:absolute;top:0.75rem;right:1rem;background:none;border:none;color:#fff;font-size:2.75rem;line-height:1;padding:0.25rem 0.5rem;cursor:pointer;z-index:10001;text-shadow:0 1px 3px rgba(0,0,0,0.5);';
+
     function goTo(i) {
       current = (i + allSlides.length) % allSlides.length;
       render();
@@ -427,11 +433,13 @@ function initArtCarousels() {
 
     prevBtn.addEventListener('click', (e) => { e.stopPropagation(); goTo(current - 1); });
     nextBtn.addEventListener('click', (e) => { e.stopPropagation(); goTo(current + 1); });
+    closeBtn.addEventListener('click', (e) => { e.stopPropagation(); close(); });
 
     mediaHost.addEventListener('click', (e) => e.stopPropagation());
     overlay.appendChild(mediaHost);
     overlay.appendChild(prevBtn);
     overlay.appendChild(nextBtn);
+    overlay.appendChild(closeBtn);
 
     function onKey(e) {
       if (e.key === 'ArrowLeft') goTo(current - 1);
