@@ -345,9 +345,16 @@ function initArtCarousels() {
       const intervalMs = 3000 + index * 1200;
 
       function goTo(i) {
-        slides[current].classList.remove('is-active');
+        const prev = slides[current];
+        prev.classList.remove('is-active');
+        if (prev.tagName === 'VIDEO') prev.pause();
         current = (i + slides.length) % slides.length;
-        slides[current].classList.add('is-active');
+        const active = slides[current];
+        active.classList.add('is-active');
+        if (active.tagName === 'VIDEO') {
+          active.currentTime = 0;
+          active.play().catch(function(){});
+        }
       }
 
       function startAuto() {
@@ -378,14 +385,27 @@ function initArtCarousels() {
     const overlay = document.createElement('div');
     overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.92);z-index:10000;display:flex;align-items:center;justify-content:center;cursor:zoom-out;';
 
-    const img = document.createElement('img');
-    img.alt = '';
-    img.style.cssText = 'max-width:90%;max-height:90%;object-fit:contain;';
+    const mediaHost = document.createElement('div');
+    mediaHost.style.cssText = 'width:90%;height:90%;display:flex;align-items:center;justify-content:center;';
 
     function render() {
       const slide = allSlides[current];
-      img.src = slide.currentSrc || slide.src;
-      img.alt = slide.alt || '';
+      mediaHost.innerHTML = '';
+      if (slide.tagName === 'VIDEO') {
+        const video = document.createElement('video');
+        video.src = slide.currentSrc || slide.src;
+        video.controls = true;
+        video.playsInline = true;
+        video.style.cssText = 'max-width:100%;max-height:100%;object-fit:contain;';
+        mediaHost.appendChild(video);
+        video.play().catch(function(){});
+      } else {
+        const img = document.createElement('img');
+        img.src = slide.currentSrc || slide.src;
+        img.alt = slide.alt || '';
+        img.style.cssText = 'max-width:100%;max-height:100%;object-fit:contain;';
+        mediaHost.appendChild(img);
+      }
     }
 
     const arrowStyle = 'position:absolute;top:50%;transform:translateY(-50%);background:none;border:none;color:#fff;font-size:3rem;line-height:1;padding:0.25rem 0.5rem;cursor:pointer;z-index:10001;text-shadow:0 1px 3px rgba(0,0,0,0.5);';
@@ -408,7 +428,8 @@ function initArtCarousels() {
     prevBtn.addEventListener('click', (e) => { e.stopPropagation(); goTo(current - 1); });
     nextBtn.addEventListener('click', (e) => { e.stopPropagation(); goTo(current + 1); });
 
-    overlay.appendChild(img);
+    mediaHost.addEventListener('click', (e) => e.stopPropagation());
+    overlay.appendChild(mediaHost);
     overlay.appendChild(prevBtn);
     overlay.appendChild(nextBtn);
 
