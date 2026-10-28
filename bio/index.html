@@ -54,13 +54,19 @@
           <p data-i18n="bio.p2">Fue becada para estudiar en la Universidad Politécnica de Valencia, en España, como parte de un programa de intercambio. Allí cursó un semestre de la carrera Diseño y Tecnologías Creativas y participó en diversos eventos culturales y exposiciones colectivas. Realizó talleres con Marcia Schvartz, Lucía Jazmín Tarela y Fabiana Barreda.</p>
           <p data-i18n="bio.p3">Actualmente vive y trabaja en Buenos Aires, donde desarrolla su práctica artística y profesional de manera independiente. Su trabajo es una invitación a imaginar internet como un lugar que vale la pena volver a habitar: lúdico, mágico, lento y vivo.</p>
         </div>
-        <div class="bio-publicaciones">
-          <span class="art-subtitle" data-i18n="bio.publications">publicaciones</span>
-          <ul class="art-list">
-            <li data-i18n="bio.publications.item1">★ “Can We Dream the Internet Again?” — AND/ORs, People, Planet, Digital Futures, UK (2026)</li>
-            <li data-i18n="bio.publications.item2">★ “Alquimia Tecnológica — Proyecto de Tesis” — Universidad Nacional de las Artes, Buenos Aires (2026)</li>
-          </ul>
+        <div class="bio-carousel" role="region" aria-label="Galería de fotos" tabindex="0">
+          <img class="bio-carousel-slide is-active" src="../assets/bio-foto-1.jpg" alt="Belén Seoane" />
+          <img class="bio-carousel-slide" src="../assets/bio-foto-2.jpg" alt="Belén Seoane" />
+          <img class="bio-carousel-slide" src="../assets/bio-foto-3.jpg" alt="Belén Seoane" />
+          <div class="bio-carousel-dots" aria-hidden="true"></div>
         </div>
+      </div>
+      <div class="bio-publicaciones">
+        <span class="art-subtitle" data-i18n="bio.publications">publicaciones</span>
+        <ul class="art-list">
+          <li data-i18n="bio.publications.item1">★ “Can We Dream the Internet Again?” — AND/ORs, People, Planet, Digital Futures, UK (2026)</li>
+          <li data-i18n="bio.publications.item2">★ “Alquimia Tecnológica — Proyecto de Tesis” — Universidad Nacional de las Artes, Buenos Aires (2026)</li>
+        </ul>
       </div>
     </main>
 
@@ -106,6 +112,7 @@
 
     <script type="module" src="../i18n.js"></script>
     <script type="module" src="../main.js"></script>
+    <script type="module" src="../bio-carousel.js"></script>
     <script type="module" src="../audio-wave.js"></script>
 
   </body>

@@ -255,10 +255,10 @@ button {
 }
 
 .bio-publicaciones {
-  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 0.6rem;
+  margin-top: 2.5rem;
 }
 
 .bio-publicaciones .art-list li {
@@ -266,10 +266,77 @@ button {
   line-height: 1.7;
 }
 
+/* ---------- Bio carousel ---------- */
+
+.bio-carousel {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+  height: clamp(280px, 46vh, 460px);
+  overflow: hidden;
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  cursor: ns-resize;
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.bio-carousel:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 3px;
+}
+
+.bio-carousel-slide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+.bio-carousel-slide.is-active {
+  opacity: 1;
+}
+
+.bio-carousel-dots {
+  position: absolute;
+  bottom: 0.75rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.45rem;
+  z-index: 2;
+}
+
+.bio-carousel-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.bio-carousel-dot.is-active {
+  background: #ffffff;
+  transform: scale(1.25);
+}
+
 @media (max-width: 900px) {
   .bio-columns {
     flex-direction: column;
     gap: 2rem;
+  }
+
+  .bio-carousel {
+    flex: none;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 4;
   }
 }
 
@@ -803,6 +870,23 @@ footer a:hover {
   body.bio-landing .bio-copy p {
     font-size: 15px;
     line-height: 1.6;
+  }
+
+  body.bio-landing .bio-carousel {
+    height: clamp(220px, 38vh, 400px);
+  }
+
+  body.bio-landing .bio-publicaciones {
+    margin-top: 1.5rem;
+  }
+
+  body.bio-landing .bio-publicaciones .art-list li {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  body.bio-landing .page-title {
+    margin-bottom: 0.75em;
   }
 
   body.bio-landing .dd-brand {
