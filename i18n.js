@@ -16,6 +16,7 @@ const translations = {
 
     // Home
     'home.subtitle': 'diseñadora web creativa y artista multimedial',
+    'home.coming': 'próximamente',
 
     // Títulos de página
     'title.home': 'Belén Seoane — Artista Multimedial y Diseñadora Web Creativa',
@@ -68,6 +69,7 @@ const translations = {
     'star.commercial': 'Commercial work',
 
     'home.subtitle': 'creative web designer & multimedia artist',
+    'home.coming': 'coming soon',
 
     'title.home': 'Belén Seoane — Multimedia Artist & Creative Web Designer',
     'title.bio': 'Belén Seoane Palmieri — Bio',

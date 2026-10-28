@@ -849,6 +849,36 @@ body {
   height: 280px;
 }
 
+.coming-soon {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  pointer-events: none;
+  text-align: center;
+}
+
+.coming-soon span {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.1rem, 2vw, 1.6rem);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  color: #000;
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+  text-decoration-thickness: 1px;
+}
+
+@media (pointer: coarse) {
+  .coming-soon span {
+    font-size: 1rem;
+    text-shadow: 0 0 14px rgba(255, 255, 255, 0.9);
+  }
+}
+
 .header h2 {
 position: relative;
     font-family: 'Geist', sans-serif;
@@ -1187,8 +1217,8 @@ footer img {
   color: #000;
   white-space: nowrap;
   text-decoration: none;
-  pointer-events: auto;
-  cursor: pointer;
+  pointer-events: none;
+  cursor: default;
   will-change: left, top;
   text-shadow: 0 0 12px rgba(255, 255, 255, 0.5);
 }
